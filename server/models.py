@@ -12,6 +12,7 @@ class User(db.Model, SerializerMixin):
     _password_hash = db.Column(db.String)
 
     decks = db.relationship('Deck', backref='user')
+    cards = db.relationship('Card', backref='user')
 
     @hybrid_property
     def password_hash(self):
@@ -38,4 +39,18 @@ class Deck(db.Model, SerializerMixin):
     def __repr__(self):
         return f'<Deck {id}: {name}'
 
+class Card(db.Model, SerializerMixin):
+    __tablename__ = 'cards'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    front_title = db.Column(db.String, nullable=False)
+    front_description = db.Column(db.String)
+    front_image = db.Column(db.String)
+    back_title = db.Column(db.String)
+    back_description = db.Column(db.String)
+    back_image = db.Column(db.String)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    def __repr__(self):
+        return f'<Card {id}: {front_title}>'
 
