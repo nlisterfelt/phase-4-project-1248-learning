@@ -54,3 +54,18 @@ class Card(db.Model, SerializerMixin):
     def __repr__(self):
         return f'<Card {id}: {front_title}>'
 
+
+'''
+class Review(db.Model, SerializerMixin):
+    __tablename__ = 'reviews'
+
+    id = db.Column(db.Integer, primary_key=True)
+    session = db.Column(db.Integer)
+    level = db.Column(db.Integer)
+    deck_id = db.Column(db.Integer, db.ForeignKey('decks.id'))
+    card_id = db.Column(db.Integer, db.ForeignKey('cards.id'))
+
+    def __repr__(self):
+        return f'<Review {id}>'
+
+'''
