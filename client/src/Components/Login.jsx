@@ -4,16 +4,18 @@ function Login(){
     const [username, setUsername]=useState('')
     const [password, setPassword]=useState('')
 
-    function handleSubmit(e){
+    function handleLoginSubmit(e){
 
     }
+    
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleLoginSubmit}>
             <h3>Login form</h3>
             <div>
                 <label>username</label>
                 <input type='text' id='username' value={username} onChange={e => setUsername(e.target.value)}/>
-
+            </div>
+            <div>
                 <label>password</label>
                 <input type='text' id='password' value={password} onChange={e => setPassword(e.target.value)}/>
             </div>
