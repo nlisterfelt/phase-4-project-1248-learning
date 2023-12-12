@@ -5,7 +5,7 @@ function Login(){
     const [password, setPassword]=useState('')
 
     function handleLoginSubmit(e){
-
+        e.preventDefault()
     }
     
     return (

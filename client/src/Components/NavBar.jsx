@@ -7,7 +7,7 @@ function NavBar({isLoggedIn, onLogin}){
     return (
         <div>
             <h1 className="header">1248 Learning</h1>
-            <nav>
+            <nav id="nav">
                 <NavLink className='navigation-links' to='/'>Home</NavLink>
                 <NavLink className='navigation-links' to='/decks'>Decks</NavLink>
                 <NavLink className='navigation-links' to='/cards'>Cards</NavLink>

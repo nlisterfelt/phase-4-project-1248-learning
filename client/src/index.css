@@ -11,3 +11,12 @@
 .navigation-links:hover {
   color:rgb(76, 76, 196)
 }
+.navigation-links.active {
+  font-weight: bold;
+}
+
+#nav {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: rgb(121, 197, 237);
+}
