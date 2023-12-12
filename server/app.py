@@ -4,7 +4,16 @@ from config import app
 from models import *
 
 def Signup(Resource):
-  pass
+  def post(self):
+    user = User(
+      username = request.get_json().get('username')
+    )
+    user._password_hash = request.get_json().get('password')
+    try:
+      db.session.add(user)
+      db.session.commit()
+    except IntegrityError:
+      return {"error": "422 Unprocessable entity."}, 422
 
 def Login(Resource):
   pass
