@@ -7,7 +7,7 @@ import Deck from './Deck'
 import Login from './Login'
 
 function App() {
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState(true)
     const [showLogin, setShowLogin] = useState(null)
 
     function handleLoginClick(e){
@@ -21,14 +21,17 @@ function App() {
 
     return (
         <div>
-            <button value={'signup'} onClick={handleLoginClick}>Sign Up</button>
-            <button value={'login'} onClick={handleLoginClick}>Log in</button>
             <h1 className="header">1248 Learning</h1>
             { !user ? (
-                <Login showLogin={showLogin}/>
+                <div>
+                    <button value={'signup'} onClick={handleLoginClick}>Sign Up</button>
+                    <button value={'login'} onClick={handleLoginClick}>Log in</button>
+                    <Login showLogin={showLogin} />
+                    <Home />
+                </div>
             ) : (
                 <div>
-                    <NavBar user={user} onLogin={handleLoginClick}/>
+                    <NavBar user={user} setUser={setUser}/>
                     <Routes>
                         <Route path="/" element={<Home user={user}/>} />
                         <Route path="/decks" element={<Deck />} />
@@ -37,7 +40,7 @@ function App() {
                     </Routes>
                 </div>
             )}
-            <Home />
+
         </div>
     )
 }

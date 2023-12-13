@@ -1,8 +1,26 @@
-import React from "react";
+import React, {useState} from "react";
 
 function Signup(){
+    const [username, setUsername]=useState('')
+    const [password, setPassword]=useState('')
+
+    function handleSubmit(e){
+        e.preventDefault()
+    }
+    
     return (
-        <div></div>
+        <form onSubmit={handleSubmit}>
+            <h3>Sign Up form</h3>
+            <div>
+                <label>username</label>
+                <input type='text' id='username' value={username} onChange={e => setUsername(e.target.value)}/>
+            </div>
+            <div>
+                <label>password</label>
+                <input type='text' id='password' value={password} onChange={e => setPassword(e.target.value)}/>
+            </div>
+            <button type='Submit'>Submit</button>
+        </form>
     )
 }
 
