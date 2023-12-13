@@ -3,48 +3,12 @@ from flask_restful import Resource
 from config import app, api, db
 from models import *
 
-'''
-@app.route('/signup', methods=['POST'])
-def signup():
-  if request.method == 'POST':
-    username = request.get_json().get('username')
-    password = request.get_json().get('password')
+@app.before_request
+def is_logged_in():
+  open_access=['login','check_session','signup']
+  if request.endpoint not in open_access and not session.get('user_id'):
+    return {'error': 'unauthorized'}, 401
 
-    new_user = User( username = username )
-    new_user._password_hash = password
-    try:
-      db.session.add(new_user)
-      db.session.commit()
-      session['user_id']=new_user.id
-      return new_user.to_dict(), 201
-    except IntegrityError:
-      return {"error": "422 Unprocessable entity."}, 422
-
-@app.route('/check_session', methods=['GET'])
-def check_session():
-  if request.method == 'GET':
-    user_id = session['user_id']
-    if user_id:
-      user = User.query.filter(User.id==user_id).first()
-      return make_response(user.to_dict(), 200)
-    return make_response({}, 401)
-
-@app.route('/users', methods=['GET'])
-def users():
-  if request.method == 'GET':
-    return make_response([user.to_dict() for user in User.query.all()], 200)
-
-@app.route('/decks', methods=['GET'])
-def decks():
-  if request.method == 'GET':
-    return make_response([deck.to_dict() for deck in Deck.query.all()], 200)
-
-@app.route('/cards', methods=['GET'])
-def cards():
-  if request.method == 'GET':
-    return make_response([card.to_dict() for card in Card.query.all()], 200)
-
-'''
 class Signup(Resource):
   def post(self):
     user = User(
