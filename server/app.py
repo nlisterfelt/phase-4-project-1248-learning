@@ -32,9 +32,18 @@ def users():
   if request.method == 'GET':
     return make_response([user.to_dict() for user in User.query.all()], 200)
 
+@app.route('/decks', methods=['GET'])
+def decks():
+  if request.method == 'GET':
+    return make_response([deck.to_dict() for deck in Deck.query.all()], 200)
+
+@app.route('/cards', methods=['GET'])
+def cards():
+  if request.method == 'GET':
+    return make_response([card.to_dict() for card in Card.query.all()], 200)
 
 '''
-def Signup():
+def Signup(Resource):
   def post(self):
     user = User(
       username = request.get_json().get('username')
