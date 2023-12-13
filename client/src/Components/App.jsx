@@ -39,7 +39,7 @@ function App() {
                 </div>
             ) : (
                 <div>
-                    <NavBar user={user} setUser={setUser}/>
+                    <NavBar setUser={setUser}/>
                     <Routes>
                         <Route path="/" element={<Home user={user}/>} />
                         <Route path="/decks" element={<Deck />} />
