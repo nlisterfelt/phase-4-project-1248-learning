@@ -6,15 +6,16 @@ from models import *
 @app.route('/signup', methods=['POST'])
 def signup():
   if request.method == 'POST':
-    new_user = User(
-      username = request.get_json()['username']
-    )
-    user._password_hash = request.get_json()['password']
+    username = request.get_json().get('username')
+    password = request.get_json().get('password')
+
+    new_user = User( username = username )
+    new_user._password_hash = password
     try:
-      db.session.add(user)
+      db.session.add(new_user)
       db.session.commit()
-      session['user_id']=user.id
-      return user.to_dict(), 201
+      session['user_id']=new_user.id
+      return new_user.to_dict(), 201
     except IntegrityError:
       return make_response({"error": "422 Unprocessable entity."}, 422)
 

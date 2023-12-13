@@ -18,6 +18,7 @@ function App() {
             setShowLogin(null)
         }
     }
+    
 
     return (
         <div>
@@ -26,7 +27,7 @@ function App() {
                 <div>
                     <button value={'signup'} onClick={handleLoginClick}>Sign Up</button>
                     <button value={'login'} onClick={handleLoginClick}>Log in</button>
-                    <Login showLogin={showLogin} />
+                    <Login showLogin={showLogin} onLogin={setUser}/>
                     <Home />
                 </div>
             ) : (
