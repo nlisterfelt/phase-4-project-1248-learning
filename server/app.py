@@ -69,9 +69,8 @@ class Users(Resource):
   def get(self):
     return make_response([user.to_dict() for user in User.query.all()], 200)
 
-@app.route('/decks', methods=['GET'])
-def decks():
-  if request.method == 'GET':
+class Decks(Resource):
+  def get(self):
     return make_response([deck.to_dict() for deck in Deck.query.all()], 200)
 
 @app.route('/cards', methods=['GET'])
@@ -82,7 +81,7 @@ def cards():
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(CheckSession, '/check_session', endpoint='check_session')
 api.add_resource(Users, '/users', endpoint='users')
-
+api.add_resource(Decks, '/decks', endpoint='decks')
 
 if __name__ == "__main__":
   app.run(port=5555, debug=True)
