@@ -35,6 +35,9 @@ function Signup({onLogin}){
                 <input type='text' id='password' value={password} onChange={e => setPassword(e.target.value)}/>
             </div>
             <button type='Submit'>Submit</button>
+            <div>
+                {errors.map(err => (<Error key={err}>{err}</Error>))}
+            </div>
         </form>
     )
 }
