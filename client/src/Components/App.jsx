@@ -13,12 +13,11 @@ function App() {
     useEffect(() => {
         fetch('/check_session').then(r => {
             if (r.ok) {
-                console.log(r.json())
                 r.json().then(user => setUser(user))
             }
         })
     }, [])
-    
+
     function handleLoginClick(e){
         e.preventDefault()
         if (e.target.value === 'login' || e.target.value === 'signup') {

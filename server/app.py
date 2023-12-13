@@ -3,6 +3,7 @@ from flask_restful import Resource
 from config import app, api, db
 from models import *
 
+'''
 @app.route('/signup', methods=['POST'])
 def signup():
   if request.method == 'POST':
@@ -17,7 +18,7 @@ def signup():
       session['user_id']=new_user.id
       return new_user.to_dict(), 201
     except IntegrityError:
-      return make_response({"error": "422 Unprocessable entity."}, 422)
+      return {"error": "422 Unprocessable entity."}, 422
 
 @app.route('/check_session', methods=['GET'])
 def check_session():
@@ -25,8 +26,8 @@ def check_session():
     user_id = session['user_id']
     if user_id:
       user = User.query.filter(User.id==user_id).first()
-      return user.to_dict(), 200
-    return {}, 401
+      return make_response(user.to_dict(), 200)
+    return make_response({}, 401)
 
 @app.route('/users', methods=['GET'])
 def users():
@@ -44,7 +45,7 @@ def cards():
     return make_response([card.to_dict() for card in Card.query.all()], 200)
 
 '''
-def Signup(Resource):
+class Signup(Resource):
   def post(self):
     user = User(
       username = request.get_json().get('username')
@@ -56,7 +57,32 @@ def Signup(Resource):
     except IntegrityError:
       return {"error": "422 Unprocessable entity."}, 422
 
+class CheckSession(Resource):
+  def get(self):
+    user_id = session['user_id']
+    if user_id:
+      user = User.query.filter(User.id==user_id).first()
+      return user.to_dict(), 200
+    return {}, 401
+
+class Users(Resource):
+  def get(self):
+    return make_response([user.to_dict() for user in User.query.all()], 200)
+
+@app.route('/decks', methods=['GET'])
+def decks():
+  if request.method == 'GET':
+    return make_response([deck.to_dict() for deck in Deck.query.all()], 200)
+
+@app.route('/cards', methods=['GET'])
+def cards():
+  if request.method == 'GET':
+    return make_response([card.to_dict() for card in Card.query.all()], 200)
+
 api.add_resource(Signup, '/signup', endpoint='signup')
-'''
+api.add_resource(CheckSession, '/check_session', endpoint='check_session')
+api.add_resource(Users, '/users', endpoint='users')
+
+
 if __name__ == "__main__":
   app.run(port=5555, debug=True)
