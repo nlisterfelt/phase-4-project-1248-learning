@@ -1,9 +1,10 @@
 import React, {useState} from "react";
+import LoginForm from "./LoginForm";
 import Signup from "./Signup";
 
 function Login({showLogin}){
     if (showLogin === 'login') {
-        return <Login />
+        return <LoginForm />
     } else if (showLogin === 'signup') {
         return <Signup />
     }

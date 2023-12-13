@@ -8,14 +8,14 @@ import Login from './Login'
 
 function App() {
     const [user, setUser] = useState(null)
-    const [showLogin, setShowLogin] = useState(false)
+    const [showLogin, setShowLogin] = useState(null)
 
     function handleLoginClick(e){
         e.preventDefault()
         if (e.target.value === 'login' || e.target.value === 'signup') {
-            setShowLogin(true)
+            setShowLogin(e.target.value)
         } else {
-            setShowLogin(false)
+            setShowLogin(null)
         }
     }
 
