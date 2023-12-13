@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Route, Routes} from "react-router-dom";
 import NavBar from './NavBar'
 import Home from './Home'
@@ -7,9 +7,18 @@ import Deck from './Deck'
 import Login from './Login'
 
 function App() {
-    const [user, setUser] = useState(true)
+    const [user, setUser] = useState(null)
     const [showLogin, setShowLogin] = useState(null)
 
+    useEffect(() => {
+        fetch('/check_session').then(r => {
+            if (r.ok) {
+                console.log(r.json())
+                r.json().then(user => setUser(user))
+            }
+        })
+    }, [])
+    
     function handleLoginClick(e){
         e.preventDefault()
         if (e.target.value === 'login' || e.target.value === 'signup') {
