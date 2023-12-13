@@ -7,22 +7,30 @@ import Deck from './Deck'
 import Login from './Login'
 
 function App() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [user, setUser] = useState(null)
+    const [showLogin, setShowLogin] = useState(false)
 
-    function handleLogin(){
-        setIsLoggedIn(!isLoggedIn)
+    function handleLoginClick(e){
+        e.preventDefault()
+        if (e.target.value === 'login' || e.target.value === 'signup') {
+            setShowLogin(true)
+        } else {
+            setShowLogin(false)
+        }
     }
 
     return (
         <div>
+            <button value={'signup'} onClick={handleLoginClick}>Sign Up</button>
+            <button value={'login'} onClick={handleLoginClick}>Log in</button>
             <h1 className="header">1248 Learning</h1>
-            { !isLoggedIn ? (
-                <Login />
+            { !user ? (
+                <Login showLogin={showLogin}/>
             ) : (
                 <div>
-                    <NavBar isLoggedIn={isLoggedIn} onLogin={handleLogin}/>
+                    <NavBar user={user} onLogin={handleLoginClick}/>
                     <Routes>
-                        <Route path="/" element={<Home isLoggedIn={isLoggedIn}/>} />
+                        <Route path="/" element={<Home user={user}/>} />
                         <Route path="/decks" element={<Deck />} />
                         <Route path="/cards" element={<AllCards />} />
                         <Route path="*" element={'404 Not Found'} />
