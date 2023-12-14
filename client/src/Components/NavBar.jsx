@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 function NavBar({setUser}){
     function handleLogoutClick(e){
-        fetch('/logout', {method: 'DELETE'})
+        fetch('/api/logout', {method: 'DELETE'})
         .then(r => {
             if (r.ok){
                 setUser(null)

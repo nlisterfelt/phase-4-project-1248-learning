@@ -11,7 +11,7 @@ function App() {
     const [showLogin, setShowLogin] = useState(null)
 
     useEffect(() => {
-        fetch('/check_session').then(r => {
+        fetch('/api/check_session').then(r => {
             if (r.ok) {
                 r.json().then(user => setUser(user))
             }

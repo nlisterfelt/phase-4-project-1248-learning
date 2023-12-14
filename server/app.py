@@ -16,10 +16,12 @@ class Signup(Resource):
     user = User(
       username = request.get_json().get('username')
     )
-    user._password_hash = request.get_json().get('password')
+    user.password_hash = request.get_json().get('password')
     try:
       db.session.add(user)
       db.session.commit()
+      session['user_id']=user.id
+      return user.to_dict(), 201
     except IntegrityError:
       return {"error": "422 Unprocessable entity."}, 422
 
@@ -48,11 +50,12 @@ class Cards(Resource):
   def get(self):
     return make_response([card.to_dict() for card in Card.query.all()], 200)
 
-api.add_resource(Signup, '/signup', endpoint='signup')
-api.add_resource(CheckSession, '/check_session', endpoint='check_session')
-api.add_resource(Users, '/users', endpoint='users')
-api.add_resource(Decks, '/decks', endpoint='decks')
-api.add_resource(Cards, '/cards', endpoint='cards')
+api.add_resource(Signup, '/api/signup', endpoint='signup')
+api.add_resource(CheckSession, '/api/check_session', endpoint='check_session')
+api.add_resource(Users, '/api/users', endpoint='users')
+api.add_resource(Decks, '/api/decks', endpoint='decks')
+api.add_resource(Cards, '/api/cards', endpoint='cards')
+api.add_resource(Logout, '/api/logout', endpoint='logout')
 
 if __name__ == "__main__":
   app.run(port=5555, debug=True)
