@@ -1,15 +1,13 @@
 import React, {useEffect, useState} from "react";
 
-function Deck(){
+function Deck({user}){
     const [deckName, setDeckName]=useState("")
     const [deckItems, setDeckItems]=useState([])
 
     useEffect(() => {
         fetch('/api/decks')
         .then(r => r.json())
-        .then(data => {
-            
-        })
+        .then(data => {data.map(deck => setDeckItems([...deckItems, deck]))})
     }, [])
 
     function handleSubmit(e){
@@ -17,15 +15,20 @@ function Deck(){
         fetch('/api/decks', {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({name: deckName})
+            body: JSON.stringify({name: deckName, user_id: user.id})
+        })
+        .then(r => r.json())
+        .then(data => {
+            console.log(data)
+            setDeckItems([...deckItems, data])
         })
     }
 
     function handleDeckClick(e){
-        console.log(e.target.value)
+        console.log(e.target.id)
     }
-
-    const deckList = deckItems.map(deck => <li key={deck} onClick={handleDeckClick}>{deck}</li>)
+    console.log(deckItems)
+    const deckList = deckItems.map(deck => <li key={deck.name} id={deck.id} onClick={handleDeckClick}>{deck.name}</li>)
 
     return(
         <div>

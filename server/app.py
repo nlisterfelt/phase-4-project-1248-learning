@@ -46,6 +46,9 @@ class Decks(Resource):
   def get(self):
     return make_response([deck.to_dict() for deck in Deck.query.all()], 200)
 
+  def post(self):
+    return make_response([deck.to_dict() for deck in Deck.query.filter(Deck.user_id==self.id)])
+
 class Cards(Resource):
   def get(self):
     return make_response([card.to_dict() for card in Card.query.all()], 200)
