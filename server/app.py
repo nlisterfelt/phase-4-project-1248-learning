@@ -33,6 +33,18 @@ class CheckSession(Resource):
       return user.to_dict(), 200
     return {}, 401
 
+class Login(Resource):
+  def post(self):
+    username = request.get_json()['username']
+    password = request.get_json()['password']
+
+    user = User.query.filter(User.username == username).first()
+    if user:
+      if user.authenticate(password):
+        session['user_id']=user.id
+        return user.to_dict(), 200
+    return {"error": "unathorized"}, 401
+
 class Logout(Resource):
   def delete(self):
     session['user_id']=None
@@ -59,6 +71,7 @@ api.add_resource(Users, '/api/users', endpoint='users')
 api.add_resource(Decks, '/api/decks', endpoint='decks')
 api.add_resource(Cards, '/api/cards', endpoint='cards')
 api.add_resource(Logout, '/api/logout', endpoint='logout')
+api.add_resource(Login, '/api/login', endpoint='login')
 
 if __name__ == "__main__":
   app.run(port=5555, debug=True)
