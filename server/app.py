@@ -67,6 +67,10 @@ class Decks(Resource):
     except:
       return {"error": "unprocessable entity"}, 422
 
+class DecksById(Resource):
+  def delete(self):
+    pass
+
 class Cards(Resource):
   def get(self):
     return make_response([card.to_dict() for card in Card.query.all()], 200)

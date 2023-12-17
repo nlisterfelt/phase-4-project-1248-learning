@@ -24,19 +24,27 @@ function Deck({user}){
         })
     }
 
-    function handleDeckClick(e){
-        console.log(e.target.id)
+    function handleDeckDelete(e){
+        console.log(e.target.parentNode.id)
+    }
+
+    function handleDeckEdit(e){
+        console.log(e.target.parentNode.id)
     }
     
-    const deckList = deckItems.map(deck => <li key={deck.id} id={deck.id} onClick={handleDeckClick}>{deck.name}</li>)
+    const deckList = deckItems.map(deck => <div key={deck.id} id={deck.id} style={{display: "flex"}}>
+            <li style={{paddingRight: "10px"}}>{deck.name}</li>
+            <button value='edit' onClick={handleDeckEdit} >Edit</button>
+            <button value='delete'onClick={handleDeckDelete} >Delete</button>
+        </div>)
 
     return(
         <div>
+            <div>
+                <h4>Deck of Cards</h4>
+                <ul>{deckList}</ul>
+            </div>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <h4>Deck of Cards</h4>
-                    <ul>{deckList}</ul>
-                </div>
                 <h4>Create a new deck of cards.</h4>
                 <div>
                     <label>Name</label>
