@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-function LoginForm({onLogin}){
+function LoginForm({onLogin, onSetShowLogin}){
     const [username, setUsername]=useState('')
     const [password, setPassword]=useState('')
 
@@ -12,7 +12,10 @@ function LoginForm({onLogin}){
             body: JSON.stringify({username, password})
         }).then(r => {
             if (r.ok) {
-                r.json().then(user => onLogin(user))
+                r.json().then(user => {
+                    onLogin(user)
+                    onSetShowLogin(null)
+                })
             } 
         })
     }

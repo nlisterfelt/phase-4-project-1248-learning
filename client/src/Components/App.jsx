@@ -34,7 +34,7 @@ function App() {
                 <div>
                     <button value={'signup'} onClick={handleLoginClick}>Sign Up</button>
                     <button value={'login'} onClick={handleLoginClick}>Log in</button>
-                    <Login showLogin={showLogin} onLogin={setUser}/>
+                    <Login showLogin={showLogin} onLogin={setUser} onSetShowLogin={setShowLogin}/>
                     <Home />
                 </div>
             ) : (
