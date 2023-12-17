@@ -7,28 +7,28 @@ function Deck({user}){
     useEffect(() => {
         fetch('/api/decks')
         .then(r => r.json())
-        .then(data => {data.map(deck => setDeckItems([...deckItems, deck]))})
+        .then(data => {setDeckItems(data.filter(deck => deck.user_id === user.id))})    
     }, [])
 
     function handleSubmit(e){
         e.preventDefault()
-        fetch('/api/decks', {
+        fetch("/api/decks", {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
+            headers: {"Content-Type": "application/json",},
             body: JSON.stringify({name: deckName, user_id: user.id})
         })
-        .then(r => r.json())
-        .then(data => {
-            console.log(data)
-            setDeckItems([...deckItems, data])
+        .then(r => {
+            if (r.ok) {
+                r.json().then(data => {setDeckItems([...deckItems, data])})
+            } 
         })
     }
 
     function handleDeckClick(e){
         console.log(e.target.id)
     }
-    console.log(deckItems)
-    const deckList = deckItems.map(deck => <li key={deck.name} id={deck.id} onClick={handleDeckClick}>{deck.name}</li>)
+    
+    const deckList = deckItems.map(deck => <li key={deck.id} id={deck.id} onClick={handleDeckClick}>{deck.name}</li>)
 
     return(
         <div>

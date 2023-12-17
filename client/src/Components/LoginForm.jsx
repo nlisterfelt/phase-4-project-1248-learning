@@ -3,7 +3,6 @@ import React, {useState} from "react";
 function LoginForm({onLogin}){
     const [username, setUsername]=useState('')
     const [password, setPassword]=useState('')
-    const [errors, setErrors]=useState([])
 
     function handleSubmit(e){
         e.preventDefault()
@@ -14,9 +13,7 @@ function LoginForm({onLogin}){
         }).then(r => {
             if (r.ok) {
                 r.json().then(user => onLogin(user))
-            } else {
-                r.json().then(err => setErrors(err))
-            }
+            } 
         })
     }
     
@@ -32,9 +29,6 @@ function LoginForm({onLogin}){
                 <input type='text' id='password' value={password} onChange={e => setPassword(e.target.value)}/>
             </div>
             <button type='Submit'>Submit</button>
-            <div>
-                {errors.map(err => (<Error key={err}>{err}</Error>))}
-            </div>
         </form>
     )
 }

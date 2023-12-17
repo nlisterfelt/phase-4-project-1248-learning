@@ -2,7 +2,6 @@ from flask import request, session, make_response
 from flask_restful import Resource
 from config import app, api, db
 from models import *
-
 '''
 @app.before_request
 def is_logged_in():
@@ -10,7 +9,6 @@ def is_logged_in():
   if request.endpoint not in open_access and not session.get('user_id'):
     return {'error': 'unauthorized'}, 401
 '''
-
 class Signup(Resource):
   def post(self):
     user = User(
@@ -37,7 +35,7 @@ class Login(Resource):
   def post(self):
     username = request.get_json()['username']
     password = request.get_json()['password']
-
+    
     user = User.query.filter(User.username == username).first()
     if user:
       if user.authenticate(password):
@@ -59,7 +57,15 @@ class Decks(Resource):
     return make_response([deck.to_dict() for deck in Deck.query.all()], 200)
 
   def post(self):
-    return make_response([deck.to_dict() for deck in Deck.query.filter(Deck.user_id==self.id)])
+    name = request.get_json()['name']
+    user_id = request.get_json()['user_id']
+    try:
+      new_deck = Deck(name=name, user_id=user_id)
+      db.session.add(new_deck)
+      db.session.commit()
+      return new_deck.to_dict(), 200
+    except:
+      return {"error": "unprocessable entity"}, 422
 
 class Cards(Resource):
   def get(self):
