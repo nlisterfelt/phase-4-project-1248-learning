@@ -40,18 +40,17 @@ function Deck({user}){
 
     return(
         <div>
-            <div>
-                <h4>Deck of Cards</h4>
-                <ul>{deckList}</ul>
-            </div>
-            <form onSubmit={handleSubmit}>
-                <h4>Create a new deck of cards.</h4>
+            <form onSubmit={handleSubmit} style={{display: "flex", marginTop: "20px"}}>
                 <div>
-                    <label>Name</label>
+                    <label style={{paddingRight: "10px"}}>New Deck of Cards</label>
                     <input type='text' id='deck_name' value={deckName} onChange={e => setDeckName(e.target.value)}/>
                 </div>
                 <button type="Submit">Create</button>
             </form>
+            <div>
+                <h4>Deck of Cards</h4>
+                <ul>{deckList}</ul>
+            </div>
         </div>
     )
 }
