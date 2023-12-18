@@ -14,17 +14,19 @@ function App() {
     useEffect(() => {
         fetch('/api/check_session').then(r => {
             if (r.ok) {
-                r.json().then(user => {
-                    setUser(user)
-                    fetch('/api/decks').then(r => {
-                        if (r.ok) {
-                            r.json().then(decks=>{setDeckItems(decks.filter(deck=>deck.user_id===user.id))})
-                        }
-                    })
-                })
+                r.json().then(user => userInformation(user))
             }
         })
     }, [])
+
+    function userInformation(user){
+        setUser(user)
+        fetch('/api/decks').then(r => {
+            if (r.ok) {
+                r.json().then(decks=>{setDeckItems(decks.filter(deck=>deck.user_id===user.id))})
+            }
+        })
+    }
 
     function handleLoginClick(e){
         e.preventDefault()
@@ -42,7 +44,7 @@ function App() {
                 <div>
                     <button value={'signup'} onClick={handleLoginClick}>Sign Up</button>
                     <button value={'login'} onClick={handleLoginClick}>Log in</button>
-                    <Login showLogin={showLogin} onLogin={setUser} onSetShowLogin={setShowLogin}/>
+                    <Login showLogin={showLogin} userInformation={userInformation} onSetShowLogin={setShowLogin}/>
                     <Home />
                 </div>
             ) : (

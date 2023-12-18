@@ -2,11 +2,11 @@ import React from "react";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
 
-function Login({showLogin, onLogin, onSetShowLogin}){
+function Login({showLogin, userInformation, onSetShowLogin}){
     if (showLogin === 'login') {
-        return <LoginForm onLogin={onLogin} onSetShowLogin={onSetShowLogin}/>
+        return <LoginForm userInformation={userInformation} onSetShowLogin={onSetShowLogin}/>
     } else if (showLogin === 'signup') {
-        return <SignupForm onLogin={onLogin} onSetShowLogin={onSetShowLogin}/>
+        return <SignupForm userInformation={userInformation} onSetShowLogin={onSetShowLogin}/>
     }
 }
 export default Login;
