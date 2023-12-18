@@ -9,11 +9,17 @@ import Login from './Login'
 function App() {
     const [user, setUser] = useState(null)
     const [showLogin, setShowLogin] = useState(null)
+    const [deckItems, setDeckItems]=useState([])
 
     useEffect(() => {
         fetch('/api/check_session').then(r => {
             if (r.ok) {
                 r.json().then(user => setUser(user))
+            }
+        })
+        fetch('/api/decks').then(r => {
+            if (r.ok) {
+                r.json().then(decks=>{setDeckItems(decks)})
             }
         })
     }, [])
@@ -42,7 +48,7 @@ function App() {
                     <NavBar setUser={setUser}/>
                     <Routes>
                         <Route path="/" element={<Home />} />
-                        <Route path="/decks" element={<Deck user={user}/>} />
+                        <Route path="/decks" element={<Deck user={user} deckItems={deckItems}/>} />
                         <Route path="/cards" element={<AllCards />} />
                         <Route path="*" element={'404 Not Found'} />
                     </Routes>
