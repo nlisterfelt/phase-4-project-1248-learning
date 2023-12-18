@@ -76,6 +76,15 @@ class DecksById(Resource):
       return {}, 204
     return {"error": "deck not found"}, 404    
 
+  def patch(self, id):
+    deck=Deck.query.filter(Deck.id==id).first()
+    if deck:
+      setattr(deck, 'name', request.get_json()['name'])
+      db.session.add(deck)
+      db.session.commit()
+      return make_response(deck.to_dict(), 202)
+    return {"error": "deck not found"}, 404
+
 class Cards(Resource):
   def get(self):
     return make_response([card.to_dict() for card in Card.query.all()], 200)

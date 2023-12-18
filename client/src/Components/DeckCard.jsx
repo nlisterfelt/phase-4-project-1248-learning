@@ -7,7 +7,7 @@ function DeckCard({deck}){
 
     function handleDeckEditSubmit(e){
         e.preventDefault()
-        fetch(`/api/decksById/${deck.id}`, {
+        fetch(`/api/decks/${deck.id}`, {
             method: 'PATCH',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
