@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {useNavigate} from "react-router-dom"
 
-function Signup({onLogin, onSetShowLogin}){
+function SignupForm({onLogin, onSetShowLogin}){
     const navigate = useNavigate()
     const [username, setUsername]=useState('')
     const [password, setPassword]=useState('')
@@ -48,4 +48,4 @@ function Signup({onLogin, onSetShowLogin}){
     )
 }
 
-export default Signup
+export default SignupForm

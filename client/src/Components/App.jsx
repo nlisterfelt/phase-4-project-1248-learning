@@ -41,7 +41,7 @@ function App() {
                 <div>
                     <NavBar setUser={setUser}/>
                     <Routes>
-                        <Route path="/" element={<Home user={user}/>} />
+                        <Route path="/" element={<Home />} />
                         <Route path="/decks" element={<Deck user={user}/>} />
                         <Route path="/cards" element={<AllCards />} />
                         <Route path="*" element={'404 Not Found'} />
