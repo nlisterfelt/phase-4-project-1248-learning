@@ -8,16 +8,18 @@ function Deck({user}){
         fetch('/api/decks').then(r => {
             if (r.ok) {
                 r.json().then(decks=>{
-                    deck_list = decks.filter(deck=>deck.user_id === user.id)
+                    const deck_list = decks.filter(deck=>deck.user_id === user.id)
                     setDeckItems([...deckItems])
                 })
             }
         })
     }, [])
 
+    const deckList = deckItems.map(deck => <DeckCard key={deck.id} deck={deck}/>)
+
     return(
         <div>
-
+            {deckList}
         </div>
     )
 }

@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 
 
-function DeckCard(){
+function DeckCard({deck}){
 
 
     return(
