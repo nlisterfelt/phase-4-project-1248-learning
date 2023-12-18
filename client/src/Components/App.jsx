@@ -4,12 +4,14 @@ import NavBar from './NavBar'
 import Home from './Home'
 import AllCards from './AllCards'
 import Deck from './Deck'
-import Login from './Login'
+import LoginForm from './LoginForm'
+import SignupForm from './SignupForm'
 
 function App() {
     const [user, setUser] = useState(null)
     const [showLogin, setShowLogin] = useState(null)
     const [deckItems, setDeckItems]=useState([])
+    const [cardItems, setCardItems]=useState([])
 
     useEffect(() => {
         fetch('/api/check_session').then(r => {
@@ -26,6 +28,11 @@ function App() {
                 r.json().then(decks=>{setDeckItems(decks.filter(deck=>deck.user_id===user.id))})
             }
         })
+        fetch('/api/cards').then(r=>{
+            if (r.ok) {
+                r.json().then(cards=>{setCardItems(cards.filter(card=>card.user_id===user.id))})
+            }
+        })
     }
 
     function handleLoginClick(e){
@@ -36,6 +43,13 @@ function App() {
             setShowLogin(null)
         }
     }
+    const loginSignup = ()=>{
+        if (showLogin === 'login') {
+            return 
+        } else if (showLogin === 'signup') {
+            return 
+        } else { return null}
+    }
 
     return (
         <div>
@@ -44,7 +58,8 @@ function App() {
                 <div>
                     <button value={'signup'} onClick={handleLoginClick}>Sign Up</button>
                     <button value={'login'} onClick={handleLoginClick}>Log in</button>
-                    <Login showLogin={showLogin} userInformation={userInformation} onSetShowLogin={setShowLogin}/>
+                    {showLogin==='login'? (<LoginForm userInformation={userInformation} onSetShowLogin={setShowLogin}/>): null }
+                    {showLogin==='signup'? (<SignupForm onLogin={userInformation} onSetShowLogin={setShowLogin}/>): null } 
                     <Home />
                 </div>
             ) : (
