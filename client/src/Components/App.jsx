@@ -43,13 +43,6 @@ function App() {
             setShowLogin(null)
         }
     }
-    const loginSignup = ()=>{
-        if (showLogin === 'login') {
-            return 
-        } else if (showLogin === 'signup') {
-            return 
-        } else { return null}
-    }
 
     return (
         <div>
@@ -68,7 +61,7 @@ function App() {
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} user={user}/>} />
-                        <Route path="/cards" element={<AllCards />} />
+                        <Route path="/cards" element={<AllCards cardItems={cardItems} deckItems={deckItems}/>} />
                         <Route path="*" element={'404 Not Found'} />
                     </Routes>
                 </div>
