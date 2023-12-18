@@ -1,6 +1,8 @@
 import React, {useState} from "react";
+import {useNavigate} from "react-router-dom"
 
 function LoginForm({onLogin, onSetShowLogin}){
+    const navigate = useNavigate()
     const [username, setUsername]=useState('')
     const [password, setPassword]=useState('')
 
@@ -15,6 +17,7 @@ function LoginForm({onLogin, onSetShowLogin}){
                 r.json().then(user => {
                     onLogin(user)
                     onSetShowLogin(null)
+                    navigate('/')
                 })
             } 
         })
