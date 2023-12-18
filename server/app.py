@@ -68,8 +68,13 @@ class Decks(Resource):
       return {"error": "unprocessable entity"}, 422
 
 class DecksById(Resource):
-  def delete(self):
-    pass
+  def delete(self, id):
+    deck=Deck.query.filter(Deck.id==id).first()
+    if deck:
+      db.session.delete(deck)
+      db.session.commit()
+      return {}, 204
+    return {"error": "deck not found"}, 404    
 
 class Cards(Resource):
   def get(self):
@@ -79,6 +84,7 @@ api.add_resource(Signup, '/api/signup', endpoint='signup')
 api.add_resource(CheckSession, '/api/check_session', endpoint='check_session')
 api.add_resource(Users, '/api/users', endpoint='users')
 api.add_resource(Decks, '/api/decks', endpoint='decks')
+api.add_resource(DecksById, '/api/decks/<int:id>', endpoint='decksById')
 api.add_resource(Cards, '/api/cards', endpoint='cards')
 api.add_resource(Logout, '/api/logout', endpoint='logout')
 api.add_resource(Login, '/api/login', endpoint='login')

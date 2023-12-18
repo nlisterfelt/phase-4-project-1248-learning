@@ -19,13 +19,22 @@ function Deck({user}){
         })
         .then(r => {
             if (r.ok) {
-                r.json().then(data => {setDeckItems([...deckItems, data])})
+                r.json().then(data => {
+                    setDeckItems([...deckItems, data])
+                    setDeckName("")
+                })
             } 
         })
     }
 
     function handleDeckDelete(e){
-        console.log(e.target.parentNode.id)
+        const deck_id = e.target.parentNode.id
+        fetch(`/api/decks/${deck_id}`, {method: 'DELETE'})
+        .then(r=>{
+            if (r.ok) {
+                setDeckItems(deckItems.filter(deck => deck.id !== deck_id))
+            }            
+        })
     }
 
     function handleDeckEdit(e){
