@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 
 
-function DeckCard({deck}){
+function DeckCard({deck, onDeckDelete}){
     const [isEdit, setIsEdit]=useState(false)
     const [newDeckName, setNewDeckName]=useState('')
 
@@ -21,16 +21,6 @@ function DeckCard({deck}){
         setIsEdit(false)
     }
 
-    function handleDeckDelete(){
-        fetch(`/api/decksById/${deck.id}`, {
-            method: 'DELETE'
-        }).then(r=> {
-            if (r.ok) {
-                r.json()
-            }
-        })
-    }
-
     return(
         <div style={{display: 'flex'}}>
             <li>{deck.name}</li>
@@ -38,7 +28,7 @@ function DeckCard({deck}){
                 setIsEdit(!isEdit)
                 setNewDeckName(deck.name)
             }}>Edit</button>
-            <button onClick={handleDeckDelete}>X</button>
+            <button onClick={e=>onDeckDelete(deck.id)}>X</button>
             {isEdit ? <form onSubmit={handleDeckEditSubmit}>
                 <label>New name</label>
                 <input value={newDeckName} onChange={e=>setNewDeckName(e.target.value)}></input>

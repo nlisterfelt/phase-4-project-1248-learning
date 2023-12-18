@@ -14,12 +14,14 @@ function App() {
     useEffect(() => {
         fetch('/api/check_session').then(r => {
             if (r.ok) {
-                r.json().then(user => setUser(user))
-            }
-        })
-        fetch('/api/decks').then(r => {
-            if (r.ok) {
-                r.json().then(decks=>{setDeckItems(decks)})
+                r.json().then(user => {
+                    setUser(user)
+                    fetch('/api/decks').then(r => {
+                        if (r.ok) {
+                            r.json().then(decks=>{setDeckItems(decks.filter(deck=>deck.user_id===user.id))})
+                        }
+                    })
+                })
             }
         })
     }, [])
@@ -48,7 +50,7 @@ function App() {
                     <NavBar setUser={setUser}/>
                     <Routes>
                         <Route path="/" element={<Home />} />
-                        <Route path="/decks" element={<Deck user={user} deckItems={deckItems}/>} />
+                        <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems}/>} />
                         <Route path="/cards" element={<AllCards />} />
                         <Route path="*" element={'404 Not Found'} />
                     </Routes>

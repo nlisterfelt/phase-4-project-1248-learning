@@ -1,9 +1,17 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import DeckCard from "./DeckCard";
 
-function Deck({user, deckItems}){
-    
-    const deckList = deckItems.map(deck => <DeckCard key={deck.id} deck={deck}/>)
+function Deck({deckItems, setDeckItems}){
+
+    function handleDeckDelete(id){
+        fetch(`/api/decks/${id}`, {
+            method: 'DELETE'
+        }).then(r=> {
+            if (r.ok) {setDeckItems(deckItems=>deckItems.filter(deck=>deck.id !== id))}
+        })
+    }
+
+    const deckList = deckItems.map(deck => <DeckCard key={deck.id} deck={deck} onDeckDelete={handleDeckDelete}/>)
 
     return(
         <div>
