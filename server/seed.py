@@ -8,7 +8,7 @@ from faker import Faker
 
 # Local imports
 from app import app
-from models import User, Deck, Card
+from models import User, Deck, Card, Review
 from config import bcrypt, db
 
 if __name__ == '__main__':
@@ -19,6 +19,7 @@ if __name__ == '__main__':
         User.query.delete()
         Deck.query.delete()
         Card.query.delete()
+        Review.query.delete()
         print("Creating users...")
         
         user1 = User(
@@ -29,13 +30,17 @@ if __name__ == '__main__':
         db.session.add(user1)
 
         print("Creating decks...")
-        deck = Deck(
+        deck1 = Deck(
             name = 'deck1',
         )
-        deck.user_id = 1
-        db.session.add(deck)
+        deck1.user_id = 1
+        deck2 = Deck(
+            name = 'deck2',
+        )
+        deck2.user_id = 1
+        db.session.add_all([deck1, deck2])
         print("Creating cards") 
-        card = Card(
+        card1 = Card(
             front_title = 'front word',
             front_description = 'This is the front description.',
             front_image = 'https://mindyourdecisions.com/blog/wp-content/uploads/2022/11/right-triangle-angle-bisector-hypotenuse-problem.png',
@@ -43,8 +48,26 @@ if __name__ == '__main__':
             back_description = "This is the back sentence",
             back_image = 'https://test-preparation.ca/wp-content/uploads/2019/02/Pythagorean5.jpg',
         )
-        card.user_id = 1
-        db.session.add(card)
+        card1.user_id = 1
+        db.session.add(card1)
+
+        print("Creating review...")
+        review1 = Review(
+            session = 1,
+            level = 3
+        )
+        review1.user_id=1
+        review1.deck_id=1
+        review1.card_id=1
+
+        review2 = Review(
+            session = 3,
+            level = 2
+        )
+        review2.user_id=1
+        review2.deck_id=2
+        review2.card_id=1
+        db.session.add_all([review1, review2])
 
         db.session.commit()
         print("Complete.")

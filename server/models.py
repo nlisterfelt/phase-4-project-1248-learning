@@ -5,7 +5,7 @@ from config import db, bcrypt
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
-    serialize_rules = ('-_password_hash', '-decks.user', '-cards.user')
+    serialize_rules = ('-_password_hash', '-decks.user', '-cards.user', '-reviews.user')
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, nullable=False)
@@ -13,6 +13,7 @@ class User(db.Model, SerializerMixin):
 
     decks = db.relationship('Deck', backref='user')
     cards = db.relationship('Card', backref='user')
+    reviews = db.relationship('Review', backref='user')
 
     @hybrid_property
     def password_hash(self):
@@ -31,17 +32,22 @@ class User(db.Model, SerializerMixin):
 
 class Deck(db.Model, SerializerMixin):
     __tablename__ = 'decks'
-    serialize_rules=('-user.decks',)
+    serialize_rules=('-user.decks', '-reviews.deck')
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
+
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+
+    reviews = db.relationship('Review', back_populates = 'deck')
+    cards = association_proxy('reviews', 'card')
 
     def __repr__(self):
         return f'<Deck {id}: {name}'
 
 class Card(db.Model, SerializerMixin):
     __tablename__ = 'cards'
+    serialize_rules = ('-user.cards', '-reviews.card')
     
     id = db.Column(db.Integer, primary_key=True)
     front_title = db.Column(db.String, nullable=False)
@@ -50,23 +56,31 @@ class Card(db.Model, SerializerMixin):
     back_title = db.Column(db.String)
     back_description = db.Column(db.String)
     back_image = db.Column(db.String)
+
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    reviews = db.relationship('Review', back_populates = 'card')
+    decks = association_proxy('reviews', 'deck')
 
     def __repr__(self):
         return f'<Card {id}: {front_title}>'
 
 
-'''
 class Review(db.Model, SerializerMixin):
     __tablename__ = 'reviews'
+    serialize_rules = ('-user.reviews', '-deck.reviews', '-deck.cards', '-card.reviews', '-card.decks')
 
     id = db.Column(db.Integer, primary_key=True)
     session = db.Column(db.Integer)
     level = db.Column(db.Integer)
+
     deck_id = db.Column(db.Integer, db.ForeignKey('decks.id'))
     card_id = db.Column(db.Integer, db.ForeignKey('cards.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    deck = db.relationship('Deck', back_populates='reviews')
+    card = db.relationship('Card', back_populates='reviews')
 
     def __repr__(self):
         return f'<Review {id}>'
 
-'''
