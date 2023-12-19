@@ -89,6 +89,10 @@ class Cards(Resource):
   def get(self):
     return make_response([card.to_dict() for card in Card.query.all()], 200)
 
+class Reviews(Resource):
+  def get(self):
+    return make_response([review.to_dict() for review in Review.query.all()], 200)
+
 api.add_resource(Signup, '/api/signup', endpoint='signup')
 api.add_resource(CheckSession, '/api/check_session', endpoint='check_session')
 api.add_resource(Users, '/api/users', endpoint='users')
@@ -97,6 +101,7 @@ api.add_resource(DecksById, '/api/decks/<int:id>', endpoint='decksById')
 api.add_resource(Cards, '/api/cards', endpoint='cards')
 api.add_resource(Logout, '/api/logout', endpoint='logout')
 api.add_resource(Login, '/api/login', endpoint='login')
+api.add_resource(Reviews, '/api/reviews', endpoint='reviews')
 
 if __name__ == "__main__":
   app.run(port=5555, debug=True)

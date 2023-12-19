@@ -5,7 +5,7 @@ from config import db, bcrypt
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
-    serialize_rules = ('-_password_hash', '-decks.user', '-cards.user', '-reviews.user')
+    serialize_rules = ('-_password_hash', '-decks.cards', '-decks.reviews', '-cards.decks', '-cards.reviews', '-reviews')
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, nullable=False)
@@ -32,7 +32,7 @@ class User(db.Model, SerializerMixin):
 
 class Deck(db.Model, SerializerMixin):
     __tablename__ = 'decks'
-    serialize_rules=('-user.decks', '-reviews.deck')
+    serialize_rules=('-user', '-reviews.user')
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
@@ -47,7 +47,7 @@ class Deck(db.Model, SerializerMixin):
 
 class Card(db.Model, SerializerMixin):
     __tablename__ = 'cards'
-    serialize_rules = ('-user.cards', '-reviews.card')
+    serialize_rules = ('-user', '-reviews.user', '-reviews.card', '-reviews.deck')
     
     id = db.Column(db.Integer, primary_key=True)
     front_title = db.Column(db.String, nullable=False)
@@ -68,7 +68,7 @@ class Card(db.Model, SerializerMixin):
 
 class Review(db.Model, SerializerMixin):
     __tablename__ = 'reviews'
-    serialize_rules = ('-user.reviews', '-deck.reviews', '-deck.cards', '-card.reviews', '-card.decks')
+    serialize_rules = ('-user', '-card.reviews', '-deck.reviews')
 
     id = db.Column(db.Integer, primary_key=True)
     session = db.Column(db.Integer)
