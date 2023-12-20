@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import Card from "./Card";
 import NewCard from "./NewCard";
 
-function AllCards({cardItems, deckItems}){
+const AllCards = ({cardItems, deckItems}) => {
     const [cardItemsFiltered, setCardItemsFiltered]=useState(cardItems)
 
     const cardList = cardItemsFiltered.map(card=><Card key={card.id} card={card}/>)

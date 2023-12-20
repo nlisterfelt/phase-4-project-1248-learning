@@ -30,3 +30,12 @@
   padding: 10px;
   justify-content: center;
 }
+.medium_card {
+  border-style: solid;
+  border-color: palevioletred;
+  border-width: 5px;
+  width: 40%;
+  height: 200px;
+  padding: 10px;
+  justify-content: center;
+}

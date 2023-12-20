@@ -6,6 +6,7 @@ import AllCards from './AllCards'
 import Deck from './Deck'
 import LoginForm from './LoginForm'
 import SignupForm from './SignupForm'
+import NewCard from "./NewCard";
 
 function App() {
     const [user, setUser] = useState(null)
@@ -69,6 +70,7 @@ function App() {
                         <Route path="/" element={<Home />} />
                         <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} user={user}/>} />
                         <Route path="/cards" element={<AllCards cardItems={cardItems} deckItems={deckItems}/>} />
+                        <Route path="/cards/new" element={<NewCard deckItems={deckItems} setError={setError}/>} />
                         <Route path="*" element={'404 Not Found'} />
                     </Routes>
                 </div>
