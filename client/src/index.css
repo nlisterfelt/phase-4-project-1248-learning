@@ -20,3 +20,13 @@
   padding-bottom: 10px;
   background-color: rgb(121, 197, 237);
 }
+
+.cards {
+  border-style: solid;
+  border-color: blue;
+  border-width: 5px;
+  width: 100px;
+  height: 100px;
+  padding: 10px;
+  justify-content: center;
+}

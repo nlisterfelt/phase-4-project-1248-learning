@@ -9,17 +9,24 @@ function AllCards({cardItems, deckItems}){
     const deckOptions = deckItems.map(deck=><option key={deck.id} id={deck.id}>{deck.name}</option>)
 
     function handleDeckSelect(id){
-        
+        if (id === 'all_decks'){
+            setCardItemsFiltered(cardItems)
+        } else {
+            filteredCards = [...cardItems].filter(card=>card.deck.id===id)
+            setCardItemsFiltered(filteredCards)
+        }
     }
     return (
         <div>
             <button>Create a new card</button>
             <h3>All cards</h3>
-            <select>
-                <option>All decks</option>
+            <select onSelect={e => handleDeckSelect(e.target.id)}>
+                <option id={'all_decks'}>All decks</option>
                 {deckOptions}
             </select>
-            {cardList}
+            <div style={{display: 'flex'}}>
+                {cardList}
+            </div>
         </div>
     )
 }
