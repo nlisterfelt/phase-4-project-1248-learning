@@ -2,6 +2,7 @@ from flask import request, session, make_response
 from flask_restful import Resource
 from config import app, api, db
 from models import *
+from sqlalchemy.exc import IntegrityError
 '''
 @app.before_request
 def is_logged_in():
@@ -21,15 +22,17 @@ class Signup(Resource):
       session['user_id']=user.id
       return user.to_dict(), 201
     except IntegrityError:
-      return {"error": "422 Unprocessable entity."}, 422
+      return {"error": "Already exists"}, 422
+    except ValueError:
+      return {"error": str(error)}
 
 class CheckSession(Resource):
   def get(self):
-    user_id = session['user_id']
+    user_id = session.get('user_id')
     if user_id:
       user = User.query.filter(User.id==user_id).first()
       return user.to_dict(), 200
-    return {}, 401
+    return {}, 205
 
 class Login(Resource):
   def post(self):

@@ -2,18 +2,25 @@ from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.hybrid import hybrid_property
 from config import db, bcrypt
+from sqlalchemy.orm import validates
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
     serialize_rules = ('-_password_hash', '-decks.cards', '-decks.reviews', '-cards.decks', '-cards.reviews', '-reviews')
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String, nullable=False)
+    username = db.Column(db.String, nullable=False, unique=True)
     _password_hash = db.Column(db.String)
 
     decks = db.relationship('Deck', backref='user')
     cards = db.relationship('Card', backref='user')
     reviews = db.relationship('Review', backref='user')
+
+    @validates("username")
+    def check_username(self, key, username):
+        if(len(username)<3 or len(username)>30):
+            raise ValueError("Username must be between 3 and 30 characters long.")
+        return username
 
     @hybrid_property
     def password_hash(self):

@@ -12,30 +12,36 @@ function App() {
     const [showLogin, setShowLogin] = useState(null)
     const [deckItems, setDeckItems]=useState([])
     const [cardItems, setCardItems]=useState([])
+    const [error, setError]=useState(null)
 
     useEffect(() => {
-        fetch('/api/check_session').then(r => {
-            if (r.ok) {
+        fetch('/api/check_session')
+        .then(r => {
+            if (r.status === 200) {
                 r.json().then(user => userInformation(user))
-            }
+            } 
         })
     }, [])
 
-    function userInformation(user){
-        setUser(user)
-        fetch('/api/decks').then(r => {
-            if (r.ok) {
-                r.json().then(decks=>{setDeckItems(decks.filter(deck=>deck.user_id===user.id))})
-            }
-        })
-        fetch('/api/cards').then(r=>{
-            if (r.ok) {
-                r.json().then(cards=>{setCardItems(cards.filter(card=>card.user_id===user.id))})
-            }
-        })
+    function userInformation(data){
+        if (data.error){
+            setError(data.get('error'))
+        } else {
+            setUser(data)
+            fetch('/api/decks').then(r => {
+                if (r.status===200) {
+                    r.json().then(decks=>{setDeckItems(decks.filter(deck=>deck.user_id===data.id))})
+                }
+            })
+            fetch('/api/cards').then(r=>{
+                if (r.status===200) {
+                    r.json().then(cards=>{setCardItems(cards.filter(card=>card.user_id===data.id))})
+                }
+            })
+        }
     }
 
-    function handleLoginClick(e){
+    const handleLoginClick = e => {
         e.preventDefault()
         if (e.target.value === 'login' || e.target.value === 'signup') {
             setShowLogin(e.target.value)
@@ -47,12 +53,13 @@ function App() {
     return (
         <div>
             <h1 className="header">1248 Learning</h1>
+            <div>{error}</div>
             { !user ? (
                 <div>
                     <button value={'signup'} onClick={handleLoginClick}>Sign Up</button>
                     <button value={'login'} onClick={handleLoginClick}>Log in</button>
                     {showLogin==='login'? (<LoginForm userInformation={userInformation} onSetShowLogin={setShowLogin}/>): null }
-                    {showLogin==='signup'? (<SignupForm onLogin={userInformation} onSetShowLogin={setShowLogin}/>): null } 
+                    {showLogin==='signup'? (<SignupForm onLogin={userInformation} onSetShowLogin={setShowLogin} setError={setError}/>): null } 
                     <Home />
                 </div>
             ) : (
