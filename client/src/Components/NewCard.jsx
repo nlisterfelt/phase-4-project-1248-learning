@@ -2,7 +2,7 @@ import React from "react";
 import * as yup from "yup"
 import { useFormik } from "formik";
 
-const NewCard = ({deckItems, setError}) => {
+const NewCard = ({deckItems, setError, user, cardItems, setCardItems}) => {
     const formSchema=yup.object().shape({
         front_sentence: yup.string().required("The front of a card must have a sentence.").min(1).max(100),
         front_description: yup.string().max(500),
@@ -38,11 +38,12 @@ const NewCard = ({deckItems, setError}) => {
                 front_url: values.front_url,
                 back_sentence: values.back_sentence,
                 back_description: values.back_description,
-                back_url: values.back_url
+                back_url: values.back_url,
+                user_id: user.id
             })
             .then(r=>{
                 if(r.ok){
-                    console.log(r)
+                    r.json().then(data=>{setCardItems([...cardItems, data])})
                 }
             })
         })
@@ -55,7 +56,7 @@ const NewCard = ({deckItems, setError}) => {
             <h2 >New Card Form</h2>
             <div style={{display: 'flex', justifyContent: 'center'}}>
                 <div className="medium_card">
-                    <h4>Front of card</h4>
+                    <h4>Front</h4>
                     <div>
                         <label html="front_sentence">Sentence</label>
                         <input type="text" name="front_sentence" id="front_sentence" values={formik.values.front_sentence}/>
@@ -73,7 +74,7 @@ const NewCard = ({deckItems, setError}) => {
                     </div>
                 </div>
                 <div className="medium_card">
-                    <h4>Back of card</h4>
+                    <h4>Back</h4>
                     <div>
                         <label html="back_sentence">Sentence</label>
                         <input type="text" name="back_sentence" id="back_sentence" values={formik.values.back_sentence}/>

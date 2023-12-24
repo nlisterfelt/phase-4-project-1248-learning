@@ -1,31 +1,22 @@
 import React, {useState} from "react";
 import Card from "./Card";
-import NewCard from "./NewCard";
 
 const AllCards = ({cardItems, deckItems}) => {
-    const [cardItemsFiltered, setCardItemsFiltered]=useState(cardItems)
-
-    const cardList = cardItemsFiltered.map(card=><Card key={card.id} card={card}/>)
+    const [category, setCategory] = useState('all_decks')
+    
     const deckOptions = deckItems.map(deck=><option key={deck.id} id={deck.id}>{deck.name}</option>)
-
-    function handleDeckSelect(id){
-        if (id === 'all_decks'){
-            setCardItemsFiltered(cardItems)
-        } else {
-            filteredCards = [...cardItems].filter(card=>card.deck.id===id)
-            setCardItemsFiltered(filteredCards)
-        }
-    }
+    //const cardList = cardItems.filter(card=>card.decks.includes(category)).map(card=><Card key={card.id} id={card.id} card={card}/>)
+    const printCards=cardItems.map(card=>console.log(card))
     return (
         <div>
             <button>Create a new card</button>
             <h3>All cards</h3>
-            <select onSelect={e => handleDeckSelect(e.target.id)}>
+            <select onSelect={e=>setCategory(e.target.id)}>
                 <option id={'all_decks'}>All decks</option>
                 {deckOptions}
             </select>
             <div style={{display: 'flex'}}>
-                {cardList}
+                
             </div>
         </div>
     )

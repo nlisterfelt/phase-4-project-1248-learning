@@ -51,6 +51,7 @@ function App() {
         }
     }
 
+
     return (
         <div>
             <h1 className="header">1248 Learning</h1>
@@ -70,7 +71,7 @@ function App() {
                         <Route path="/" element={<Home />} />
                         <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} user={user}/>} />
                         <Route path="/cards" element={<AllCards cardItems={cardItems} deckItems={deckItems}/>} />
-                        <Route path="/cards/new" element={<NewCard deckItems={deckItems} setError={setError}/>} />
+                        <Route path="/cards/new" element={<NewCard deckItems={deckItems} setError={setError} user={user} cardItems={cardItems} setCardItems={setCardItems}/>} />
                         <Route path="*" element={'404 Not Found'} />
                     </Routes>
                 </div>

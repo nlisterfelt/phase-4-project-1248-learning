@@ -50,7 +50,7 @@ class Deck(db.Model, SerializerMixin):
     cards = association_proxy('reviews', 'card')
 
     def __repr__(self):
-        return f'<Deck {id}: {name}'
+        return f'<Deck {self.id}: {self.name}'
 
 class Card(db.Model, SerializerMixin):
     __tablename__ = 'cards'
@@ -70,7 +70,7 @@ class Card(db.Model, SerializerMixin):
     decks = association_proxy('reviews', 'deck')
 
     def __repr__(self):
-        return f'<Card {id}: {front_title}>'
+        return f'<Card {self.id}: {self.front_title}>'
 
 
 class Review(db.Model, SerializerMixin):
@@ -89,5 +89,5 @@ class Review(db.Model, SerializerMixin):
     card = db.relationship('Card', back_populates='reviews')
 
     def __repr__(self):
-        return f'<Review {id}>'
+        return f'<Review {self.id}>'
 

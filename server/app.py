@@ -92,6 +92,24 @@ class Cards(Resource):
   def get(self):
     return make_response([card.to_dict() for card in Card.query.all()], 200)
 
+  def post(self):
+    formData = request.get_json()
+    try:
+      new_card = Card(
+        front_title=formData['front_sentence'],
+        front_description=formData['front_description'],
+        front_image=formData['front_url'],
+        back_title=formData['back_sentence'],
+        back_description=formData['back_description'],
+        back_image=formData['back_url'],
+        user_id=formData['user_id']
+      )
+      db.session.add(new_card)
+      db.session.commit()
+      return new_card.to_dict(), 200
+    except:
+      return {"error": "unprocessable entity"}, 422
+
 class Reviews(Resource):
   def get(self):
     return make_response([review.to_dict() for review in Review.query.all()], 200)
