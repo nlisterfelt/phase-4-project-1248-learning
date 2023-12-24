@@ -54,7 +54,7 @@ class Deck(db.Model, SerializerMixin):
 
 class Card(db.Model, SerializerMixin):
     __tablename__ = 'cards'
-    serialize_rules = ('-user', '-reviews.user', '-reviews.card', '-reviews.deck')
+    serialize_rules = ('-user', '-reviews.user', '-reviews.card', '-reviews.deck', 'decks', '-decks.reviews', '-decks.cards')
     
     id = db.Column(db.Integer, primary_key=True)
     front_title = db.Column(db.String, nullable=False)
