@@ -39,7 +39,7 @@ class User(db.Model, SerializerMixin):
 
 class Deck(db.Model, SerializerMixin):
     __tablename__ = 'decks'
-    serialize_rules=('-user', '-reviews.user')
+    serialize_rules=('-user', '-reviews', 'cards', '-cards.reviews', '-cards.decks')
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)

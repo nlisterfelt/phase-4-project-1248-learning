@@ -29,6 +29,7 @@
   height: 100px;
   padding: 10px;
   justify-content: center;
+  margin: 10px;
 }
 .medium_card {
   border-style: solid;
@@ -38,4 +39,15 @@
   height: 200px;
   padding: 10px;
   justify-content: center;
+  margin: 10px
+}
+.deck_cards {
+  border-style: solid;
+  border-color: blue;
+  border-width: 5px;
+  width: 100px;
+  height: 100px;
+  padding: 10px;
+  justify-content: center;
+  margin: 10px;
 }

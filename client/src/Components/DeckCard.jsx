@@ -1,9 +1,12 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 function DeckCard({deck, deckItems, setDeckItems}){
     const [isEdit, setIsEdit]=useState(false)
     const [newDeckName, setNewDeckName]=useState('')
-
+    const [numberOfCards, setNumberOfCards]=useState(0)
+    useEffect(()=>{
+        setNumberOfCards(deck.cards.length)
+    }, [])
     function handleDeckEditSubmit(e){
         e.preventDefault()
         fetch(`/api/decks/${deck.id}`, {
@@ -34,8 +37,9 @@ function DeckCard({deck, deckItems, setDeckItems}){
     }
 
     return(
-        <div style={{display: 'flex'}}>
-            <li>{deck.name}</li>
+        <div  className="deck_cards">
+            <h5>{deck.name}</h5>
+            <p>{numberOfCards} cards</p>
             <button onClick={e=>{
                 setIsEdit(!isEdit)
                 setNewDeckName(deck.name)

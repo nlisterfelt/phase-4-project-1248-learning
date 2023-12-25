@@ -23,11 +23,12 @@ const AllCards = ({cardItems, deckItems}) => {
         <div>
             <button>Create a new card</button>
             <h3>All cards</h3>
+            <label>Select a deck: </label>
             <select onChange={e=>setCategory(e.target.value)}>
                 <option id={'all_decks'} value={'all_decks'}>All decks</option>
                 {deckOptions}
             </select>
-            <div style={{display: 'flex'}}>
+            <div style={{display: 'flex', paddingTop: '20px'}}>
                 {cardList.length === 0 ? <p>There are no cards in this deck...yet.</p> : cardList}
             </div>
         </div>

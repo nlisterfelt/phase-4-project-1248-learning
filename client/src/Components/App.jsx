@@ -68,9 +68,9 @@ function App() {
                 <div>
                     <NavBar setUser={setUser}/>
                     <Routes>
-                        <Route path="/" element={<Home />} />
+                        <Route exact path="/" element={<Home />} />
                         <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} user={user}/>} />
-                        <Route path="/cards" element={<AllCards cardItems={cardItems} deckItems={deckItems}/>} />
+                        <Route exact path="/cards" element={<AllCards cardItems={cardItems} deckItems={deckItems}/>} />
                         <Route path="/cards/new" element={<NewCard deckItems={deckItems} setError={setError} user={user} cardItems={cardItems} setCardItems={setCardItems}/>} />
                         <Route path="*" element={'404 Not Found'} />
                     </Routes>
