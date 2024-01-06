@@ -94,15 +94,16 @@ class Cards(Resource):
 
   def post(self):
     formData = request.get_json()
+    user_id = session.get('user_id')
     try:
       new_card = Card(
-        front_title=formData['front_sentence'],
+        front_title=formData['front_title'],
         front_description=formData['front_description'],
-        front_image=formData['front_url'],
-        back_title=formData['back_sentence'],
+        front_image=formData['front_image'],
+        back_title=formData['back_title'],
         back_description=formData['back_description'],
-        back_image=formData['back_url'],
-        user_id=formData['user_id']
+        back_image=formData['back_image'],
+        user_id=user_id
       )
       db.session.add(new_card)
       db.session.commit()
