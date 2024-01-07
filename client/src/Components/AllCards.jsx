@@ -1,12 +1,13 @@
 import React, {useState} from "react";
 import Card from "./Card";
+import {useNavigate} from "react-router-dom"
 
 const AllCards = ({cardItems, setCardItems, deckItems}) => {
     const [category, setCategory] = useState('all_decks')
-    const [displayCards, setDisplayCards] = useState(cardItems)
+    const navigate = useNavigate()
     
     const deckOptions = deckItems.map(deck=><option key={deck.id} id={deck.id} value={deck.name}>{deck.name}</option>)
-    const cardList = displayCards.filter(card=>filterCards(card)).map(card=><Card key={card.id} id={card.id} card={card} cardItems={cardItems} setCardItems={setCardItems}/>)
+    const cardList = cardItems.filter(card=>filterCards(card)).map(card=><Card key={card.id} id={card.id} card={card} cardItems={cardItems} setCardItems={setCardItems}/>)
 
     function filterCards(card){
         if(category==='all_decks'){
@@ -20,9 +21,10 @@ const AllCards = ({cardItems, setCardItems, deckItems}) => {
         }     
         return false
     }
+    
     return (
         <div>
-            <button>Create a new card</button>
+            <button onClick={e => navigate('/cards/new')}>Create a new card</button>
             <h3>All cards</h3>
             <label>Select a deck: </label>
             <select onChange={e=>setCategory(e.target.value)}>

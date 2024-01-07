@@ -16,7 +16,6 @@ function NavBar({setUser}){
                 <NavLink className='navigation-links' exact='true' to='/'>Home</NavLink>
                 <NavLink className='navigation-links' to='/decks'>Decks</NavLink>
                 <NavLink className='navigation-links' exact='true' to='/cards'>Cards</NavLink>
-                <NavLink className='navigation-links' to='/cards/new'>New Card</NavLink>
                 <button style={{float: 'right'}} onClick={handleLogoutClick}>Logout</button>
             </nav>
         </div>

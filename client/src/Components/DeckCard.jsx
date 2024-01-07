@@ -38,7 +38,7 @@ function DeckCard({deck, deckItems, setDeckItems}){
 
     return(
         <div  className="deck_cards">
-            <h5>{deck.name}</h5>
+            <h4>{deck.name}</h4>
             <p>{numberOfCards} cards</p>
             <button onClick={e=>{
                 setIsEdit(!isEdit)

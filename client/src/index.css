@@ -34,7 +34,7 @@
 }
 .medium_card {
   border-style: solid;
-  border-color: palevioletred;
+  border-color: rgb(121, 197, 237);
   border-width: 5px;
   width: 40%;
   height: 200px;
@@ -44,7 +44,7 @@
 }
 .deck_cards {
   border-style: solid;
-  border-color: rgb(25, 25, 48);
+  border-color: rgb(46, 46, 120);
   border-width: 5px;
   width: 175px;
   height: 200px;

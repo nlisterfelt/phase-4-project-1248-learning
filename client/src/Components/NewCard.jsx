@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import * as yup from "yup"
 import { useFormik } from "formik";
 import Select from "react-select";
+import { useNavigate } from "react-router-dom";
 
-const NewCard = ({deckItems, setError, user, cardItems, setCardItems}) => {
+const NewCard = ({deckItems, setError, cardItems, setCardItems}) => {
+    const navigate = useNavigate()
     const [deckOptions, setDeckOptions]=useState([])
     useEffect(()=>{
         let newDeckOptions=[]
@@ -55,59 +57,62 @@ const NewCard = ({deckItems, setError, user, cardItems, setCardItems}) => {
     }
     
     return (
-        <form style={{textAlign: 'center'}} onSubmit={formik.handleSubmit}>
-            <h2 >New Card Form</h2>
-            <div style={{display: 'flex', justifyContent: 'center'}}>
-                <div className="medium_card">
-                    <h4>Front</h4>
-                    <div>
-                        <label htmlFor="front_title">Sentence</label>
-                        <input type="text" name="front_title" id="front_title" values={formik.values.front_title} onChange={formik.handleChange}/>
-                        <p style={{color: 'red'}}>{formik.errors.front_title}</p>
+        <div>
+            <button onClick={e => navigate('/cards')}>Back to All Cards</button>
+            <form style={{textAlign: 'center'}} onSubmit={formik.handleSubmit}>
+                <h2 >New Card Form</h2>
+                <div style={{display: 'flex', justifyContent: 'center'}}>
+                    <div className="medium_card">
+                        <h4>Front</h4>
+                        <div>
+                            <label htmlFor="front_title">Sentence</label>
+                            <input type="text" name="front_title" id="front_title" values={formik.values.front_title} onChange={formik.handleChange}/>
+                            <p style={{color: 'red'}}>{formik.errors.front_title}</p>
+                        </div>
+                        <div>
+                            <label htmlFor="front_description">Description</label>
+                            <input type="text" name="front_description" id="front_description" values={formik.values.front_description} onChange={formik.handleChange}/>
+                            <p style={{color: 'red'}}>{formik.errors.front_description}</p>
+                        </div>
+                        <div>
+                            <label htmlFor="front_image">Image url</label>
+                            <input type="text" name="front_image" id="front_image" values={formik.values.front_image} onChange={formik.handleChange}/>
+                            <p style={{color: 'red'}}>{formik.errors.front_image}</p>
+                        </div>
                     </div>
-                    <div>
-                        <label htmlFor="front_description">Description</label>
-                        <input type="text" name="front_description" id="front_description" values={formik.values.front_description} onChange={formik.handleChange}/>
-                        <p style={{color: 'red'}}>{formik.errors.front_description}</p>
-                    </div>
-                    <div>
-                        <label htmlFor="front_image">Image url</label>
-                        <input type="text" name="front_image" id="front_image" values={formik.values.front_image} onChange={formik.handleChange}/>
-                        <p style={{color: 'red'}}>{formik.errors.front_image}</p>
+                    <div className="medium_card">
+                        <h4>Back</h4>
+                        <div>
+                            <label htmlFor="back_title">Sentence</label>
+                            <input type="text" name="back_title" id="back_title" values={formik.values.back_title} onChange={formik.handleChange}/>
+                            <p style={{color: 'red'}}>{formik.errors.back_title}</p>
+                        </div>
+                        <div>
+                            <label htmlFor="back_description">Description</label>
+                            <input type="text" name="back_description" id="back_description" values={formik.values.back_description} onChange={formik.handleChange}/>
+                            <p style={{color: 'red'}}>{formik.errors.back_description}</p>
+                        </div>
+                        <div>
+                            <label htmlFor="back_image">Image url</label>
+                            <input type="text" name="back_image" id="back_image" values={formik.values.back_image} onChange={formik.handleChange}/>
+                            <p style={{color: 'red'}}>{formik.errors.back_image}</p>
+                        </div>
                     </div>
                 </div>
-                <div className="medium_card">
-                    <h4>Back</h4>
-                    <div>
-                        <label htmlFor="back_title">Sentence</label>
-                        <input type="text" name="back_title" id="back_title" values={formik.values.back_title} onChange={formik.handleChange}/>
-                        <p style={{color: 'red'}}>{formik.errors.back_title}</p>
-                    </div>
-                    <div>
-                        <label htmlFor="back_description">Description</label>
-                        <input type="text" name="back_description" id="back_description" values={formik.values.back_description} onChange={formik.handleChange}/>
-                        <p style={{color: 'red'}}>{formik.errors.back_description}</p>
-                    </div>
-                    <div>
-                        <label htmlFor="back_image">Image url</label>
-                        <input type="text" name="back_image" id="back_image" values={formik.values.back_image} onChange={formik.handleChange}/>
-                        <p style={{color: 'red'}}>{formik.errors.back_image}</p>
-                    </div>
+                <div style={{display: 'flex', justifyContent: 'center'}}>
+                    <p style={{paddingRight: '10px'}}>Select a deck for this card.</p>
+                    <Select 
+                        name='deck_id' 
+                        id='deck_id' 
+                        value={defaultValue(deckOptions, formik.values.deck_id)} 
+                        options={deckOptions} 
+                        onChange={value=>formik.setFieldValue('deck_id', value.value)}
+                    />
                 </div>
-            </div>
-            <div style={{display: 'flex', justifyContent: 'center'}}>
-                <p style={{paddingRight: '10px'}}>Select a deck for this card.</p>
-                <Select 
-                    name='deck_id' 
-                    id='deck_id' 
-                    value={defaultValue(deckOptions, formik.values.deck_id)} 
-                    options={deckOptions} 
-                    onChange={value=>formik.setFieldValue('deck_id', value.value)}
-                />
-            </div>
-            {formik.errors.deck_id ? <div>{formik.errors.deck_id}</div> : null}
-            <button type='Submit'>Submit</button>
-        </form>
+                {formik.errors.deck_id ? <div>{formik.errors.deck_id}</div> : null}
+                <button type='Submit'>Submit</button>
+            </form>
+        </div>
     )
 }
 

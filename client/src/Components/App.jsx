@@ -15,6 +15,8 @@ function App() {
     const [cardItems, setCardItems]=useState([])
     const [error, setError]=useState(null)
 
+    const levelColors = ['deeppink', 'blueViolet', 'blue', 'skyBlue', 'limegreen', 'yellow', 'goldenrod', 'coral', 'tomato', 'brown']
+
     useEffect(() => {
         fetch('/api/check_session')
         .then(r => {
@@ -62,13 +64,13 @@ function App() {
                     <button value={'login'} onClick={handleLoginClick}>Log in</button>
                     {showLogin==='login'? (<LoginForm userInformation={userInformation} onSetShowLogin={setShowLogin}/>): null }
                     {showLogin==='signup'? (<SignupForm onLogin={userInformation} onSetShowLogin={setShowLogin} setError={setError}/>): null } 
-                    <Home />
+                    <Home levelColors={levelColors}/>
                 </div>
             ) : (
                 <div>
                     <NavBar setUser={setUser}/>
                     <Routes>
-                        <Route exact path="/" element={<Home />} />
+                        <Route exact path="/" element={<Home levelColors={levelColors}/>} />
                         <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} user={user}/>} />
                         <Route exact path="/cards" element={<AllCards cardItems={cardItems} setCardItems={setCardItems} deckItems={deckItems}/>} />
                         <Route path="/cards/new" element={<NewCard deckItems={deckItems} setError={setError} user={user} cardItems={cardItems} setCardItems={setCardItems}/>} />
