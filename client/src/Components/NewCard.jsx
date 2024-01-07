@@ -37,7 +37,6 @@ const NewCard = ({deckItems, setError, user, cardItems, setCardItems}) => {
         onSubmit: submitCard
     })
     function submitCard(values){
-        console.log(values)
         fetch('/api/cards', {
             method: 'POST',
             headers: {

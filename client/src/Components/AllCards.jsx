@@ -1,11 +1,12 @@
 import React, {useState} from "react";
 import Card from "./Card";
 
-const AllCards = ({cardItems, deckItems}) => {
+const AllCards = ({cardItems, setCardItems, deckItems}) => {
     const [category, setCategory] = useState('all_decks')
+    const [displayCards, setDisplayCards] = useState(cardItems)
     
     const deckOptions = deckItems.map(deck=><option key={deck.id} id={deck.id} value={deck.name}>{deck.name}</option>)
-    const cardList = cardItems.filter(card=>filterCards(card)).map(card=><Card key={card.id} id={card.id} card={card}/>)
+    const cardList = displayCards.filter(card=>filterCards(card)).map(card=><Card key={card.id} id={card.id} card={card} cardItems={cardItems} setCardItems={setCardItems}/>)
 
     function filterCards(card){
         if(category==='all_decks'){
@@ -28,7 +29,7 @@ const AllCards = ({cardItems, deckItems}) => {
                 <option id={'all_decks'} value={'all_decks'}>All decks</option>
                 {deckOptions}
             </select>
-            <div style={{display: 'flex', paddingTop: '20px'}}>
+            <div className="card_container">
                 {cardList.length === 0 ? <p>There are no cards in this deck...yet.</p> : cardList}
             </div>
         </div>

@@ -70,7 +70,7 @@ function App() {
                     <Routes>
                         <Route exact path="/" element={<Home />} />
                         <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} user={user}/>} />
-                        <Route exact path="/cards" element={<AllCards cardItems={cardItems} deckItems={deckItems}/>} />
+                        <Route exact path="/cards" element={<AllCards cardItems={cardItems} setCardItems={setCardItems} deckItems={deckItems}/>} />
                         <Route path="/cards/new" element={<NewCard deckItems={deckItems} setError={setError} user={user} cardItems={cardItems} setCardItems={setCardItems}/>} />
                         <Route path="*" element={'404 Not Found'} />
                     </Routes>

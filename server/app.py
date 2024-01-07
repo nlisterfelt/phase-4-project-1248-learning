@@ -111,6 +111,18 @@ class Cards(Resource):
     except:
       return {"error": "unprocessable entity"}, 422
 
+class CardsById(Resource):
+  def delete(self, id):
+    card = Card.query.filter(Card.id==id).first()
+    print(card)
+    print(id)
+    if card:
+      db.session.delete(card)
+      db.session.commit()
+      return {}, 200
+    return {"error": "Card not found"}, 404
+
+
 class Reviews(Resource):
   def get(self):
     return make_response([review.to_dict() for review in Review.query.all()], 200)
@@ -121,6 +133,7 @@ api.add_resource(Users, '/api/users', endpoint='users')
 api.add_resource(Decks, '/api/decks', endpoint='decks')
 api.add_resource(DecksById, '/api/decks/<int:id>', endpoint='decksById')
 api.add_resource(Cards, '/api/cards', endpoint='cards')
+api.add_resource(CardsById, '/api/cards/<int:id>', endpoint='cardsById')
 api.add_resource(Logout, '/api/logout', endpoint='logout')
 api.add_resource(Login, '/api/login', endpoint='login')
 api.add_resource(Reviews, '/api/reviews', endpoint='reviews')

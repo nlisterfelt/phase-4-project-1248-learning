@@ -30,6 +30,7 @@
   padding: 10px;
   justify-content: center;
   margin: 10px;
+  text-align: center;
 }
 .medium_card {
   border-style: solid;
@@ -43,11 +44,15 @@
 }
 .deck_cards {
   border-style: solid;
-  border-color: blue;
+  border-color: rgb(25, 25, 48);
   border-width: 5px;
-  width: 100px;
-  height: 100px;
+  width: 175px;
+  height: 200px;
   padding: 10px;
   margin: 10px;
   text-align: center;
+}
+.card_container {
+  display: flex;
+  flex-wrap: wrap;
 }

@@ -32,7 +32,7 @@ function Deck({user, deckItems, setDeckItems}){
                 <button>Create</button>
             </form>
             <h4>Decks of Cards</h4>
-            <div style={{display: 'flex'}}>
+            <div className="card_container">
                 {deckList}   
             </div>
         </div>
