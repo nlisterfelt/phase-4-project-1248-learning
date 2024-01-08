@@ -43,7 +43,7 @@ class Login(Resource):
     if user:
       if user.authenticate(password):
         session['user_id']=user.id
-        return user.to_dict(), 200
+        return user.to_dict(), 201
     return {"error": "unathorized"}, 401
 
 class Logout(Resource):
@@ -61,12 +61,11 @@ class Decks(Resource):
 
   def post(self):
     name = request.get_json()['name']
-    user_id = request.get_json()['user_id']
     try:
-      new_deck = Deck(name=name, user_id=user_id)
+      new_deck = Deck(name=name, user_id=session.get('user_id'))
       db.session.add(new_deck)
       db.session.commit()
-      return new_deck.to_dict(), 200
+      return new_deck.to_dict(), 201
     except:
       return {"error": "unprocessable entity"}, 422
 
@@ -107,7 +106,7 @@ class Cards(Resource):
       )
       db.session.add(new_card)
       db.session.commit()
-      return new_card.to_dict(), 200
+      return new_card.to_dict(), 201
     except:
       return {"error": "unprocessable entity"}, 422
 
@@ -126,6 +125,22 @@ class CardsById(Resource):
 class Reviews(Resource):
   def get(self):
     return make_response([review.to_dict() for review in Review.query.all()], 200)
+
+  def post(self):
+    formData = request.get_json()
+    try:
+      new_review = Review(
+        session = 1,
+        level = 1,
+        deck_id = formData['deck_id'],
+        card_id = formData['card_id'],
+        user_id = session.get('user_id'),
+      )
+      db.session.add(new_review)
+      db.session.commit()
+      return new_review.to_dict(), 201
+    except:
+      return {"error": "unprocessable entity"}, 404
 
 api.add_resource(Signup, '/api/signup', endpoint='signup')
 api.add_resource(CheckSession, '/api/check_session', endpoint='check_session')

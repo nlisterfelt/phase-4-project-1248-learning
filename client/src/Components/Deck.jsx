@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import DeckCard from "./DeckCard";
 
-function Deck({user, deckItems, setDeckItems}){
+function Deck({deckItems, setDeckItems, setReviewDeck}){
     const [newDeckName, setNewDeckName]=useState('')
 
     function handleNewDeck(e){
@@ -10,8 +10,7 @@ function Deck({user, deckItems, setDeckItems}){
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
-                name: newDeckName,
-                user_id: user.id
+                name: newDeckName
             })
         }).then(r=>{
                 if (r.ok){
@@ -21,7 +20,7 @@ function Deck({user, deckItems, setDeckItems}){
         })
     }    
 
-    const deckList = deckItems.map(deck => <DeckCard key={deck.id} deck={deck} setDeckItems={setDeckItems} deckItems={deckItems}/>)
+    const deckList = deckItems.map(deck => <DeckCard key={deck.id} deck={deck} setDeckItems={setDeckItems} deckItems={deckItems} setReviewDeck={setReviewDeck}/>)
 
     return(
         <div>

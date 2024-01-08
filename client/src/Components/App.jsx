@@ -7,6 +7,7 @@ import Deck from './Deck'
 import LoginForm from './LoginForm'
 import SignupForm from './SignupForm'
 import NewCard from "./NewCard";
+import Review from "./Review";
 
 function App() {
     const [user, setUser] = useState(null)
@@ -14,6 +15,8 @@ function App() {
     const [deckItems, setDeckItems]=useState([])
     const [cardItems, setCardItems]=useState([])
     const [error, setError]=useState(null)
+    const [reviewDeck, setReviewDeck]=useState(null)
+    const [deckOptions, setDeckOptions]=useState([])
 
     const levelColors = ['deeppink', 'blueViolet', 'blue', 'skyBlue', 'limegreen', 'yellow', 'goldenrod', 'coral', 'tomato', 'brown']
 
@@ -33,7 +36,15 @@ function App() {
             setUser(data)
             fetch('/api/decks').then(r => {
                 if (r.status===200) {
-                    r.json().then(decks=>{setDeckItems(decks.filter(deck=>deck.user_id===data.id))})
+                    r.json().then(decks=>{
+                        const filteredDeck = decks.filter(deck=>deck.user_id===data.id)
+                        setDeckItems(filteredDeck)
+                        let newDeckOptions=[]
+                        for(let i=0; i<filteredDeck.length; i++){
+                            newDeckOptions.push({value: filteredDeck[i].id, label: filteredDeck[i].name})
+                        }
+                        setDeckOptions(newDeckOptions)
+                    })
                 }
             })
             fetch('/api/cards').then(r=>{
@@ -53,7 +64,6 @@ function App() {
         }
     }
 
-
     return (
         <div>
             <h1 className="header">1248 Learning</h1>
@@ -71,9 +81,10 @@ function App() {
                     <NavBar setUser={setUser}/>
                     <Routes>
                         <Route exact path="/" element={<Home levelColors={levelColors}/>} />
-                        <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} user={user}/>} />
+                        <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} setReviewDeck={setReviewDeck}/>} />
                         <Route exact path="/cards" element={<AllCards cardItems={cardItems} setCardItems={setCardItems} deckItems={deckItems}/>} />
                         <Route path="/cards/new" element={<NewCard deckItems={deckItems} setError={setError} user={user} cardItems={cardItems} setCardItems={setCardItems}/>} />
+                        <Route path="/review" element={<Review reviewDeck={reviewDeck} setReviewDeck={setReviewDeck} deckOptions={deckOptions}/>} />
                         <Route path="*" element={'404 Not Found'} />
                     </Routes>
                 </div>

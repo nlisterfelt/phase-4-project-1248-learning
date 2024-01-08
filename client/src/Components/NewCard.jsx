@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 const NewCard = ({deckItems, setError, cardItems, setCardItems}) => {
     const navigate = useNavigate()
     const [deckOptions, setDeckOptions]=useState([])
+    const [isSubmitting, setIsSubmitting]=useState(false)
+
     useEffect(()=>{
         let newDeckOptions=[]
         for (let i=0; i<deckItems.length; i++){
@@ -15,6 +17,7 @@ const NewCard = ({deckItems, setError, cardItems, setCardItems}) => {
         setDeckOptions(newDeckOptions)
         return ()=> {setError(null)}
     }, [])
+    const interval = ()=>setInterval(()=>{setIsSubmitting(false)}, 10000)
 
     const formSchema=yup.object().shape({
         front_title: yup.string().required("The front of a card must have a sentence.").min(1).max(100),
@@ -48,7 +51,31 @@ const NewCard = ({deckItems, setError, cardItems, setCardItems}) => {
             body: JSON.stringify(values, null, 2)
         }).then(r=>{
             if(r.ok){
-                r.json().then(data=>{setCardItems([...cardItems, data])})
+                r.json().then(data=>{
+                    console.log(values)
+                    submitReview(data, values.deck_id)
+                })
+            } 
+        })
+    }
+    function submitReview(card_data, deck_id){
+        fetch('/api/reviews', {
+            method: 'POST',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                card_id: card_data.id,
+                deck_id: deck_id
+            })
+        }).then(r=>{
+            if(r.ok){
+                r.json().then(data=>{
+                    setCardItems([...cardItems, card_data])
+                    setIsSubmitting(true)
+                    interval()
+                })
             } 
         })
     }
@@ -61,6 +88,7 @@ const NewCard = ({deckItems, setError, cardItems, setCardItems}) => {
             <button onClick={e => navigate('/cards')}>Back to All Cards</button>
             <form style={{textAlign: 'center'}} onSubmit={formik.handleSubmit}>
                 <h2 >New Card Form</h2>
+                {isSubmitting ? <p>Your card has been created.</p> : null }
                 <div style={{display: 'flex', justifyContent: 'center'}}>
                     <div className="medium_card">
                         <h4>Front</h4>

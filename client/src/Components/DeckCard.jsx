@@ -1,9 +1,13 @@
 import React, {useEffect, useState} from "react";
+import { useNavigate } from "react-router-dom";
 
-function DeckCard({deck, deckItems, setDeckItems}){
+function DeckCard({deck, deckItems, setDeckItems, setReviewDeck}){
     const [isEdit, setIsEdit]=useState(false)
     const [newDeckName, setNewDeckName]=useState('')
     const [numberOfCards, setNumberOfCards]=useState(0)
+
+    const navigate = useNavigate()
+
     useEffect(()=>{
         setNumberOfCards(deck.cards.length)
     }, [])
@@ -35,11 +39,16 @@ function DeckCard({deck, deckItems, setDeckItems}){
             if (r.ok) {setDeckItems(deckItems=>deckItems.filter(deck=>deck.id !== id))}
         })
     }
+    function handleReviewClick(id){
+        setReviewDeck(id)
+        navigate('/review')
+    }
 
     return(
         <div  className="deck_cards">
             <h4>{deck.name}</h4>
             <p>{numberOfCards} cards</p>
+            <button onClick={e=>handleReviewClick(deck.id)}>Review</button>
             <button onClick={e=>{
                 setIsEdit(!isEdit)
                 setNewDeckName(deck.name)
