@@ -15,7 +15,7 @@ function App() {
     const [deckItems, setDeckItems]=useState([])
     const [cardItems, setCardItems]=useState([])
     const [error, setError]=useState(null)
-    const [reviewDeck, setReviewDeck]=useState(null)
+    const [reviewDeck, setReviewDeck]=useState([])
     const [deckOptions, setDeckOptions]=useState([])
 
     const levelColors = ['deeppink', 'blueViolet', 'blue', 'skyBlue', 'limegreen', 'yellow', 'goldenrod', 'coral', 'tomato', 'brown']
@@ -63,11 +63,16 @@ function App() {
             setShowLogin(null)
         }
     }
+    const findReviewDeck = (id) => {
+        const selectReviewDeck = deckItems.find(deck => deck.id === id)
+        setReviewDeck(selectReviewDeck)
+        return selectReviewDeck
+    }
 
     return (
         <div>
             <h1 className="header">1248 Learning</h1>
-            <div>{error}</div>
+            <div className="errors">{error}</div>
             { !user ? (
                 <div>
                     <button value={'signup'} onClick={handleLoginClick}>Sign Up</button>
@@ -81,10 +86,10 @@ function App() {
                     <NavBar setUser={setUser}/>
                     <Routes>
                         <Route exact path="/" element={<Home levelColors={levelColors}/>} />
-                        <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} setReviewDeck={setReviewDeck}/>} />
+                        <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} findReviewDeck={findReviewDeck}/>} />
                         <Route exact path="/cards" element={<AllCards cardItems={cardItems} setCardItems={setCardItems} deckItems={deckItems}/>} />
                         <Route path="/cards/new" element={<NewCard deckItems={deckItems} setError={setError} user={user} cardItems={cardItems} setCardItems={setCardItems}/>} />
-                        <Route path="/review" element={<Review reviewDeck={reviewDeck} setReviewDeck={setReviewDeck} deckOptions={deckOptions}/>} />
+                        <Route path="/review" element={<Review reviewDeck={reviewDeck} deckOptions={deckOptions} findReviewDeck={findReviewDeck}/>} />
                         <Route path="*" element={'404 Not Found'} />
                     </Routes>
                 </div>

@@ -56,3 +56,20 @@
   display: flex;
   flex-wrap: wrap;
 }
+.errors {
+  color: red;
+  font-size: small;
+}
+.large_card {
+  border-style: solid;
+  border-color: rgb(121, 197, 237);
+  border-width: 5px;
+  width: 90%;
+  height: 80%;
+  padding: 10px;
+  justify-content: center;
+  vertical-align: top;
+  align-items: center;
+  text-align: center;
+  margin: 10px
+}

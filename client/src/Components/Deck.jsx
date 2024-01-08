@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import DeckCard from "./DeckCard";
 
-function Deck({deckItems, setDeckItems, setReviewDeck}){
+function Deck({deckItems, setDeckItems, findReviewDeck}){
     const [newDeckName, setNewDeckName]=useState('')
 
     function handleNewDeck(e){
@@ -20,7 +20,7 @@ function Deck({deckItems, setDeckItems, setReviewDeck}){
         })
     }    
 
-    const deckList = deckItems.map(deck => <DeckCard key={deck.id} deck={deck} setDeckItems={setDeckItems} deckItems={deckItems} setReviewDeck={setReviewDeck}/>)
+    const deckList = deckItems.map(deck => <DeckCard key={deck.id} deck={deck} setDeckItems={setDeckItems} deckItems={deckItems} findReviewDeck={findReviewDeck}/>)
 
     return(
         <div>

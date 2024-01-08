@@ -137,7 +137,7 @@ const NewCard = ({deckItems, setError, cardItems, setCardItems}) => {
                         onChange={value=>formik.setFieldValue('deck_id', value.value)}
                     />
                 </div>
-                {formik.errors.deck_id ? <div>{formik.errors.deck_id}</div> : null}
+                {formik.errors.deck_id ? <div className="errors">{formik.errors.deck_id}</div> : null}
                 <button type='Submit'>Submit</button>
             </form>
         </div>
