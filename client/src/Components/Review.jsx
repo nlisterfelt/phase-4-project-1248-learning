@@ -40,13 +40,10 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors
     }
     function chooseNewReviewCard(reviews){
         const randomNum = Math.floor(Math.random()*reviews.length)
-        const card = cardItems[randomNum]
+        const selectedReview = reviews[randomNum]
+        const card = cardItems.find(card=>card.id===selectedReview.card_id)
         setReviewCard(card)
-        for(let i=0; i<reviews.length; i++){
-            if(reviews[i].card_id===card.id){
-                setReviewForCard(reviews[i])
-            }
-        }
+        setReviewForCard(selectedReview)
     }
     return(
         <div>

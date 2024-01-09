@@ -2,9 +2,8 @@ import React, {useState} from "react"
 
 const ReviewCard = ({card, levelColors, review}) => {
     const [isFront, setIsFront] = useState(true)
-    console.log(review)
     return (
-        <div className="large_card" style={{borderColor: levelColors[0]}} onClick={e=>setIsFront(!isFront)}>
+        <div className="large_card" style={{borderColor: levelColors[review.level]}} onClick={e=>setIsFront(!isFront)}>
             {isFront ? <div >
                 <h6>Front</h6>
                 <h4>{card.front_title}</h4>
@@ -23,7 +22,7 @@ const ReviewCard = ({card, levelColors, review}) => {
                     </button>
                     <button style={{borderColor: 'lime', backgroundColor: 'white', width: '100px'}}>
                         Correct 
-                        <p style={{fontSize:"70%"}}>(Next Level)</p>
+                        <p style={{fontSize:"70%"}}>(Next Level {review.level+1})</p>
                     </button>
                 </div>
             </div>}
