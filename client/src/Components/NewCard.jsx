@@ -52,7 +52,6 @@ const NewCard = ({deckItems, setError, cardItems, setCardItems}) => {
         }).then(r=>{
             if(r.ok){
                 r.json().then(data=>{
-                    console.log(values)
                     submitReview(data, values.deck_id)
                 })
             } 
