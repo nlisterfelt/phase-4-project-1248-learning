@@ -50,6 +50,16 @@ if __name__ == '__main__':
         )
         card1.user_id = 1
         db.session.add(card1)
+        card2 = Card(
+            front_title = 'front word',
+            front_description = 'This is the front description.',
+            front_image = 'https://mindyourdecisions.com/blog/wp-content/uploads/2022/11/right-triangle-angle-bisector-hypotenuse-problem.png',
+            back_title = 'back word',
+            back_description = "This is the back sentence",
+            back_image = 'https://test-preparation.ca/wp-content/uploads/2019/02/Pythagorean5.jpg',
+        )
+        card2.user_id = 1
+        db.session.add(card2)
 
         print("Creating review...")
         review1 = Review(
@@ -67,7 +77,23 @@ if __name__ == '__main__':
         review2.user_id=1
         review2.deck_id=2
         review2.card_id=1
-        db.session.add_all([review1, review2])
+        
+        review3 = Review(
+            session = 1,
+            level = 1
+        )
+        review3.user_id=1
+        review3.deck_id=1
+        review3.card_id=1
+
+        review4 = Review(
+            session = 1,
+            level = 1
+        )
+        review4.user_id=1
+        review4.deck_id=2
+        review4.card_id=1
+        db.session.add_all([review1, review2, review3, review4])
 
         db.session.commit()
         print("Complete.")

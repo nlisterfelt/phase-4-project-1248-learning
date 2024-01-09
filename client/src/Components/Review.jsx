@@ -4,12 +4,13 @@ import { useFormik } from "formik";
 import Select from "react-select";
 import ReviewCard from "./ReviewCard";
 
-const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors}) => {
+const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors, sessionAdvances}) => {
     const [isReview, setIsReview] = useState(false)
     const [reviewCard, setReviewCard] = useState([])
     const [session1Reviews, setSession1Reviews]=useState([])
     const [isReviewsEmpty, setIsReviewsEmpty]=useState(false)
     const [reviewForCard, setReviewForCard]=useState({})
+    const [isDone, setIsDone]=useState(false)
 
     const formSchema=yup.object().shape({
         deck_id: yup.number().integer().positive().required("A deck is required to start reviewing.") 
@@ -32,8 +33,8 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors
             setIsReviewsEmpty(true)
             setReviewForCard({})
         } else {
-            setIsReview(true)
             const filteredReviews = newReviewDeck.filter(review=>review.session===1)
+            setIsReview(true)
             setSession1Reviews(filteredReviews)
             chooseNewReviewCard(filteredReviews)
         }
@@ -44,6 +45,46 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors
         const card = cardItems.find(card=>card.id===selectedReview.card_id)
         setReviewCard(card)
         setReviewForCard(selectedReview)
+    }
+    const handleWrongReview = (review) => {
+        if(session1Reviews.length>1){
+            chooseNewReviewCard(session1Reviews)
+            
+        }
+        if(review.level!==1){
+            console.log('start fetch to make level === 1')
+        }
+    }
+    const handleCorrectReview = (review) => {
+        const newSession = review.session + sessionAdvances[review.level-1]
+        const newLevel = review.level + 1
+        fetch(`/api/reviews/${review.id}`, {
+            method: 'PATCH',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }, 
+            body: JSON.stringify({
+                session: newSession,
+                level: newLevel,
+            })
+        }).then(r=>{
+            if(r.ok){
+                r.json().then(updatedReview => {
+                    const newSession1Reviews =session1Reviews.filter(review=>review.id!==updatedReview.id)
+                    setSession1Reviews(newSession1Reviews)
+                    if(newSession1Reviews.length>0){
+                        chooseNewReviewCard(newSession1Reviews)
+                    } else {
+                        setIsDone(true)
+                    }
+                })
+            }
+        })
+    }
+    const handleEndReview = ()=>{
+        setIsDone(false)
+        setIsReview(false)
     }
     return(
         <div>
@@ -67,8 +108,14 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors
             </div> :
             <div>
                 <button onClick={e=>setIsReview(false)}>Select a different deck</button>
-                <ReviewCard card={reviewCard} levelColors={levelColors} review={reviewForCard}/>
-                <button onClick={e=>console.log('end review')}>End review session.</button>
+                {isDone ? 
+                    <div style={{textAlign: 'center'}}>
+                        <h3>All cards are reviewed in session 1.</h3>
+                        <p>End the review session or select a new deck for more reviewing.</p>
+                    </div> :
+                    <ReviewCard card={reviewCard} levelColors={levelColors} review={reviewForCard} onCorrectReview={handleCorrectReview} onWrongReview={handleWrongReview} /> 
+                }
+                <button onClick={handleEndReview}>End review session</button>
                 <p>Ending a review session will move all cards to the next session, but keep their current levels.</p>
 
             </div> }

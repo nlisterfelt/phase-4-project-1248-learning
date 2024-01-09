@@ -142,6 +142,17 @@ class Reviews(Resource):
     except:
       return {"error": "unprocessable entity"}, 404
 
+class ReviewsById(Resource):
+  def patch(self, id):
+    review = Review.query.filter(Review.id==id).first()
+    if review:
+      setattr(review, 'session', request.get_json()['session'])
+      setattr(review, 'level', request.get_json()['level'])
+      db.session.add(review)
+      db.session.commit()
+      return make_response(review.to_dict(), 202)
+    return {"error": "review not found"}, 404
+
 api.add_resource(Signup, '/api/signup', endpoint='signup')
 api.add_resource(CheckSession, '/api/check_session', endpoint='check_session')
 api.add_resource(Users, '/api/users', endpoint='users')
@@ -152,6 +163,7 @@ api.add_resource(CardsById, '/api/cards/<int:id>', endpoint='cardsById')
 api.add_resource(Logout, '/api/logout', endpoint='logout')
 api.add_resource(Login, '/api/login', endpoint='login')
 api.add_resource(Reviews, '/api/reviews', endpoint='reviews')
+api.add_resource(ReviewsById, '/api/reviews/<int:id>', endpoint='reviewsById')
 
 if __name__ == "__main__":
   app.run(port=5555, debug=True)

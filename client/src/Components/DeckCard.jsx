@@ -1,16 +1,13 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 
 function DeckCard({deck, deckItems, setDeckItems, findReviewDeck}){
     const [isEdit, setIsEdit]=useState(false)
     const [newDeckName, setNewDeckName]=useState('')
-    const [numberOfCards, setNumberOfCards]=useState(0)
-
+   
+    const numberOfCards = deck.cards.length
     const navigate = useNavigate()
 
-    useEffect(()=>{
-        setNumberOfCards(deck.cards.length)
-    }, [])
     function handleDeckEditSubmit(e){
         e.preventDefault()
         fetch(`/api/decks/${deck.id}`, {
