@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import Select from "react-select";
 import ReviewCard from "./ReviewCard";
 
-const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors, sessionAdvances}) => {
+const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors, sessionAdvances, onUpdateDeck}) => {
     const [isReview, setIsReview] = useState(false)
     const [reviewCard, setReviewCard] = useState([])
     const [sessionOneReviews, setSessionOneReviews]=useState([])
@@ -81,6 +81,15 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors
         }).then(r=>{
             if(r.ok){
                 r.json().then(updatedReview => {
+                    const newDeck = reviewDeck
+                    newDeck.reviews.map(review=>{
+                        if(review.id===updatedReview.id){
+                            return updatedReview
+                        } else {
+                            return review
+                        }
+                    })
+                    onUpdateDeck(newDeck)
                     const newSessionOneReviews =sessionOneReviews.filter(review=>review.id!==updatedReview.id)
                     setSessionOneReviews(newSessionOneReviews)
                     if(newSessionOneReviews.length>0){
@@ -100,13 +109,15 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors
     function handleEmptySessionOne(reviews){
         const currentSessions = []
         for(let i=0; i<reviews.length; i++){
+            console.log(reviews[i].session)
             currentSessions.push(reviews[i].session)
         }
         const lowestSession = Math.min(currentSessions)
+        console.log('currentSessions', currentSessions)
+        console.log('lowestSession', lowestSession)
         for(let i=0; i<reviews.length; i++){
             if(reviews[i].level!=='retire'){
-                const newSession = reviews[i]-lowestSession
-                handleReviewPatch(reviews, newSession, reviews[i].level)
+                handleReviewPatch(reviews[i], reviews[i]-lowestSession, reviews[i].level)
             }
         }
     }
