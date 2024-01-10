@@ -37,7 +37,7 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors
         } else {
             const filteredReviews = newReviewDeck.filter(review=>review.session===1)
             if(filteredReviews.length===0){
-                setIsDone(true)
+                handleEmptySessionOne(reviewDeck.reviews)
                 setIsReview(true)
             } else {
                 setIsReview(true)
@@ -56,10 +56,9 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors
     const handleWrongReview = (review) => {
         if(sessionOneReviews.length>1){
             chooseNewReviewCard(sessionOneReviews)
-            
         }
-        if(review.level!==1){
-            console.log('start fetch to make level === 1')
+        if(review.level > 1){
+            handleReviewPatch(review, 1, 1)
         }
     }
     function handleCorrectReview(review) {
@@ -82,37 +81,53 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors
             if(r.ok){
                 r.json().then(updatedReview => {
                     const newDeck = reviewDeck
-                    newDeck.reviews.map(review=>{review.id===updatedReview.id ? updatedReview : review})
+                    const newReviews = newDeck.reviews.map(review=>{
+                        if(review.id===updatedReview.id){
+                            return updatedReview
+                        }
+                        return review
+                    })
+                    newDeck.reviews = newReviews
                     onUpdateDeck(newDeck)
-                    const newSessionOneReviews =sessionOneReviews.filter(review=>review.id!==updatedReview.id)
-                    setSessionOneReviews(newSessionOneReviews)
-                    if(newSessionOneReviews.length>0){
-                        chooseNewReviewCard(newSessionOneReviews)
+                    if(updatedReview.level!==1){
+                        const sessionOneReviewsWithout =sessionOneReviews.filter(review=>review.id!==updatedReview.id)
+                        setSessionOneReviews(sessionOneReviewsWithout)
+                        if(sessionOneReviewsWithout.length>0){
+                            chooseNewReviewCard(sessionOneReviewsWithout)
+                        } else {
+                            setIsDone(true)
+                        }
                     } else {
-                        setIsDone(true)
+                        const sessionOneReviewsWith =sessionOneReviews.map(review=>{
+                            if(review.id===updatedReview.id){
+                                return updatedReview
+                            } 
+                            return review 
+                        })
+                        chooseNewReviewCard(sessionOneReviewsWith)
                     }
                 })
             }
         })
     }
-    const handleEndReview = ()=>{
+    const handleEndReview = (e)=>{
         setIsDone(false)
         setIsReview(false)
         handleEmptySessionOne(reviewDeck.reviews)
     }
     function handleEmptySessionOne(reviews){
-        console.log('handleEmptySessionOne', reviews)
-        const currentSessions = []
-        for(let i=0; i<reviews.length; i++){
-            currentSessions.push(reviews[i].session)
+        let lowestSession = reviews[0].session
+        for(let i=1; i<reviews.length; i++){
+            if(reviews[i].session<lowestSession){
+                lowestSession = reviews[i].session
+            }
         }
-        const lowestSession = Math.min(...currentSessions)
         for(let i=0; i<reviews.length; i++){
             if(reviews[i].level!=='retire' && reviews[i].session!==1){
                 if(lowestSession===2){
-                    handleReviewPatch(reviews[i], reviews[i].level-1, reviews[i].level)
-                } else if (lowestSession!==1) {
-                    const newSession = reviews[i].level-lowestSession
+                    handleReviewPatch(reviews[i], reviews[i].session-1, reviews[i].level)
+                } else if (lowestSession>2) {
+                    const newSession = reviews[i].level-lowestSession+1
                     handleReviewPatch(reviews[i], newSession, reviews[i].level)
                 }
             }
