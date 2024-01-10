@@ -82,13 +82,7 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors
             if(r.ok){
                 r.json().then(updatedReview => {
                     const newDeck = reviewDeck
-                    newDeck.reviews.map(review=>{
-                        if(review.id===updatedReview.id){
-                            return updatedReview
-                        } else {
-                            return review
-                        }
-                    })
+                    newDeck.reviews.map(review=>{review.id===updatedReview.id ? updatedReview : review})
                     onUpdateDeck(newDeck)
                     const newSessionOneReviews =sessionOneReviews.filter(review=>review.id!==updatedReview.id)
                     setSessionOneReviews(newSessionOneReviews)
@@ -107,17 +101,20 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors
         handleEmptySessionOne(reviewDeck.reviews)
     }
     function handleEmptySessionOne(reviews){
+        console.log('handleEmptySessionOne', reviews)
         const currentSessions = []
         for(let i=0; i<reviews.length; i++){
-            console.log(reviews[i].session)
             currentSessions.push(reviews[i].session)
         }
-        const lowestSession = Math.min(currentSessions)
-        console.log('currentSessions', currentSessions)
-        console.log('lowestSession', lowestSession)
+        const lowestSession = Math.min(...currentSessions)
         for(let i=0; i<reviews.length; i++){
-            if(reviews[i].level!=='retire'){
-                handleReviewPatch(reviews[i], reviews[i]-lowestSession, reviews[i].level)
+            if(reviews[i].level!=='retire' && reviews[i].session!==1){
+                if(lowestSession===2){
+                    handleReviewPatch(reviews[i], reviews[i].level-1, reviews[i].level)
+                } else if (lowestSession!==1) {
+                    const newSession = reviews[i].level-lowestSession
+                    handleReviewPatch(reviews[i], newSession, reviews[i].level)
+                }
             }
         }
     }

@@ -69,6 +69,7 @@ function App() {
         return selectReviewDeck
     }
     const handleUpdateDeck = (newDeck) => {
+        console.log('update deck in App', newDeck)
         const newDeckItems = deckItems.map(deck=>{
             if(deck.id===newDeck.id){
                 return newDeck
