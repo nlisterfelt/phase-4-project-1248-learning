@@ -8,7 +8,8 @@ function Card({card, cardItems, setCardItems}){
             method: 'DELETE'
         }).then(r=>{
             if (r.ok){
-                setCardItems(cardItems=>cardItems.filter(item=>item.id !== id))
+                const newCardItems = cardItems.filter(item=>item.id !== id)
+                setCardItems(newCardItems)
             }
         })
     }

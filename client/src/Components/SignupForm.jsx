@@ -3,7 +3,7 @@ import {useNavigate} from "react-router-dom"
 import * as yup from "yup"
 import {useFormik} from "formik"
 
-const SignupForm = ({onLogin, onSetShowLogin, setError}) => {
+const SignupForm = ({userInformation, onSetShowLogin, setError}) => {
     const navigate = useNavigate()
 
     useEffect(()=>{
@@ -34,7 +34,7 @@ const SignupForm = ({onLogin, onSetShowLogin, setError}) => {
         }).then(r => {
             if (r.ok){
                 r.json().then(user => {
-                    onLogin(user)
+                    userInformation(user)
                     onSetShowLogin(null)
                     navigate('/')
                 })

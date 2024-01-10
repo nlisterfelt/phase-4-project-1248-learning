@@ -7,7 +7,7 @@ import ReviewCard from "./ReviewCard";
 const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors, sessionAdvances}) => {
     const [isReview, setIsReview] = useState(false)
     const [reviewCard, setReviewCard] = useState([])
-    const [session1Reviews, setSession1Reviews]=useState([])
+    const [sessionOneReviews, setSessionOneReviews]=useState([])
     const [isReviewsEmpty, setIsReviewsEmpty]=useState(false)
     const [reviewForCard, setReviewForCard]=useState({})
     const [isDone, setIsDone]=useState(false)
@@ -27,16 +27,23 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors
         onSubmit: submitStartReview
     })
     function submitStartReview(values){
+        setIsDone(false)
         const newReviewDeck = findReviewDeck(values.deck_id).reviews
         if(newReviewDeck.length===0){
             setReviewCard(null)
             setIsReviewsEmpty(true)
             setReviewForCard({})
+            setIsDone(true)
         } else {
             const filteredReviews = newReviewDeck.filter(review=>review.session===1)
-            setIsReview(true)
-            setSession1Reviews(filteredReviews)
-            chooseNewReviewCard(filteredReviews)
+            if(filteredReviews.length===0){
+                setIsDone(true)
+                setIsReview(true)
+            } else {
+                setIsReview(true)
+                setSessionOneReviews(filteredReviews)
+                chooseNewReviewCard(filteredReviews)
+            }
         }
     }
     function chooseNewReviewCard(reviews){
@@ -47,17 +54,20 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors
         setReviewForCard(selectedReview)
     }
     const handleWrongReview = (review) => {
-        if(session1Reviews.length>1){
-            chooseNewReviewCard(session1Reviews)
+        if(sessionOneReviews.length>1){
+            chooseNewReviewCard(sessionOneReviews)
             
         }
         if(review.level!==1){
             console.log('start fetch to make level === 1')
         }
     }
-    const handleCorrectReview = (review) => {
+    function handleCorrectReview(review) {
         const newSession = review.session + sessionAdvances[review.level-1]
         const newLevel = review.level + 1
+        handleReviewPatch(review, newSession, newLevel)
+    }
+    function handleReviewPatch(review, newSession, newLevel){
         fetch(`/api/reviews/${review.id}`, {
             method: 'PATCH',
             headers: {
@@ -71,10 +81,10 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors
         }).then(r=>{
             if(r.ok){
                 r.json().then(updatedReview => {
-                    const newSession1Reviews =session1Reviews.filter(review=>review.id!==updatedReview.id)
-                    setSession1Reviews(newSession1Reviews)
-                    if(newSession1Reviews.length>0){
-                        chooseNewReviewCard(newSession1Reviews)
+                    const newSessionOneReviews =sessionOneReviews.filter(review=>review.id!==updatedReview.id)
+                    setSessionOneReviews(newSessionOneReviews)
+                    if(newSessionOneReviews.length>0){
+                        chooseNewReviewCard(newSessionOneReviews)
                     } else {
                         setIsDone(true)
                     }
@@ -85,6 +95,20 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors
     const handleEndReview = ()=>{
         setIsDone(false)
         setIsReview(false)
+        handleEmptySessionOne(reviewDeck.reviews)
+    }
+    function handleEmptySessionOne(reviews){
+        const currentSessions = []
+        for(let i=0; i<reviews.length; i++){
+            currentSessions.push(reviews[i].session)
+        }
+        const lowestSession = Math.min(currentSessions)
+        for(let i=0; i<reviews.length; i++){
+            if(reviews[i].level!=='retire'){
+                const newSession = reviews[i]-lowestSession
+                handleReviewPatch(reviews, newSession, reviews[i].level)
+            }
+        }
     }
     return(
         <div>

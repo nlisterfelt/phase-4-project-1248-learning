@@ -7,7 +7,7 @@ const AllCards = ({cardItems, setCardItems, deckItems}) => {
     const navigate = useNavigate()
     
     const deckOptions = deckItems.map(deck=><option key={deck.id} id={deck.id} value={deck.name}>{deck.name}</option>)
-    const cardList = cardItems.filter(card=>filterCards(card)).map(card=><Card key={card.id} id={card.id} card={card} cardItems={cardItems} setCardItems={setCardItems}/>)
+    const cardList = cardItems.filter(card=>filterCards(card)).map(card=><Card key={card.id} id={card.id} card={card} cardItems={cardItems} setCardItems={setCardItems} />)
 
     function filterCards(card){
         if(category==='all_decks'){

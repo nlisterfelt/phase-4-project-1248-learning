@@ -68,6 +68,16 @@ function App() {
         setReviewDeck(selectReviewDeck)
         return selectReviewDeck
     }
+    const handleUpdateDeck = (newDeck) => {
+        const newDeckItems = deckItems.map(deck=>{
+            if(deck.id===newDeck.id){
+                return newDeck
+            } else {
+                return deck
+            }
+        })
+        setDeckItems(newDeckItems)
+    }
 
     return (
         <div>
@@ -78,7 +88,7 @@ function App() {
                     <button value={'signup'} onClick={handleLoginClick}>Sign Up</button>
                     <button value={'login'} onClick={handleLoginClick}>Log in</button>
                     {showLogin==='login'? (<LoginForm userInformation={userInformation} onSetShowLogin={setShowLogin}/>): null }
-                    {showLogin==='signup'? (<SignupForm onLogin={userInformation} onSetShowLogin={setShowLogin} setError={setError}/>): null } 
+                    {showLogin==='signup'? (<SignupForm userInformation={userInformation} onSetShowLogin={setShowLogin} setError={setError}/>): null } 
                     <Home levelColors={levelColors} sessionAdvances={sessionAdvances}/>
                 </div>
             ) : (
@@ -87,8 +97,8 @@ function App() {
                     <Routes>
                         <Route exact path="/" element={<Home levelColors={levelColors} sessionAdvances={sessionAdvances}/>} />
                         <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} findReviewDeck={findReviewDeck}/>} />
-                        <Route exact path="/cards" element={<AllCards cardItems={cardItems} setCardItems={setCardItems} deckItems={deckItems}/>} />
-                        <Route path="/cards/new" element={<NewCard deckItems={deckItems} setError={setError} user={user} cardItems={cardItems} setCardItems={setCardItems}/>} />
+                        <Route exact path="/cards" element={<AllCards cardItems={cardItems} setCardItems={setCardItems} deckItems={deckItems} />} />
+                        <Route path="/cards/new" element={<NewCard deckItems={deckItems} setError={setError} user={user} cardItems={cardItems} setCardItems={setCardItems} onUpdateDeck={handleUpdateDeck}/>} />
                         <Route path="/review" element={<Review reviewDeck={reviewDeck} deckOptions={deckOptions} findReviewDeck={findReviewDeck} cardItems={cardItems} levelColors={levelColors} sessionAdvances={sessionAdvances}/>} />
                         <Route path="*" element={'404 Not Found'} />
                     </Routes>

@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
 
-const NewCard = ({deckItems, setError, cardItems, setCardItems}) => {
+const NewCard = ({deckItems, setError, cardItems, setCardItems, onUpdateDeck}) => {
     const navigate = useNavigate()
     const [deckOptions, setDeckOptions]=useState([])
     const [isSubmitting, setIsSubmitting]=useState(false)
@@ -53,6 +53,9 @@ const NewCard = ({deckItems, setError, cardItems, setCardItems}) => {
             if(r.ok){
                 r.json().then(data=>{
                     submitReview(data, values.deck_id)
+                    const newDeck = deckItems.find(deck=>deck.id===values.deck_id)
+                    newDeck.cards.push(data)
+                    onUpdateDeck(newDeck)
                 })
             } 
         })
