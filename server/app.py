@@ -113,8 +113,6 @@ class Cards(Resource):
 class CardsById(Resource):
   def delete(self, id):
     card = Card.query.filter(Card.id==id).first()
-    print(card)
-    print(id)
     if card:
       db.session.delete(card)
       db.session.commit()

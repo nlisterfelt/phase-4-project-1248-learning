@@ -4,10 +4,9 @@ import { useNavigate } from "react-router-dom";
 function DeckCard({deck, deckItems, setDeckItems, findReviewDeck}){
     const [isEdit, setIsEdit]=useState(false)
     const [newDeckName, setNewDeckName]=useState('')
-   
-    const numberOfCards = deck.cards.length
+    const [numberOfCards, setNumberOfCards] = useState(deck.cards.length)
     const navigate = useNavigate()
-
+    
     function handleDeckEditSubmit(e){
         e.preventDefault()
         fetch(`/api/decks/${deck.id}`, {
@@ -33,7 +32,9 @@ function DeckCard({deck, deckItems, setDeckItems, findReviewDeck}){
         fetch(`/api/decks/${id}`, {
             method: 'DELETE'
         }).then(r=> {
-            if (r.ok) {setDeckItems(deckItems=>deckItems.filter(deck=>deck.id !== id))}
+            if (r.ok) {
+                setDeckItems(deckItems=>deckItems.filter(deck=>deck.id !== id))
+            }
         })
     }
     function handleReviewClick(id){
@@ -44,7 +45,7 @@ function DeckCard({deck, deckItems, setDeckItems, findReviewDeck}){
     return(
         <div  className="deck_cards">
             <h4>{deck.name}</h4>
-            <p>{numberOfCards} cards</p>
+            <p>{numberOfCards} {numberOfCards==1 ? 'card' : 'cards'}</p>
             <button onClick={e=>handleReviewClick(deck.id)}>Review</button>
             <button onClick={e=>{
                 setIsEdit(!isEdit)

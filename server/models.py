@@ -12,9 +12,9 @@ class User(db.Model, SerializerMixin):
     username = db.Column(db.String, nullable=False, unique=True)
     _password_hash = db.Column(db.String)
 
-    decks = db.relationship('Deck', backref='user')
-    cards = db.relationship('Card', backref='user')
-    reviews = db.relationship('Review', backref='user')
+    decks = db.relationship('Deck', backref='user', cascade='all, delete-orphan')
+    cards = db.relationship('Card', backref='user', cascade='all, delete-orphan')
+    reviews = db.relationship('Review', backref='user', )
 
     @validates("username")
     def check_username(self, key, username):
@@ -46,7 +46,7 @@ class Deck(db.Model, SerializerMixin):
 
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
-    reviews = db.relationship('Review', back_populates = 'deck')
+    reviews = db.relationship('Review', back_populates = 'deck', cascade='all, delete-orphan')
     cards = association_proxy('reviews', 'card')
 
     def __repr__(self):
@@ -66,7 +66,7 @@ class Card(db.Model, SerializerMixin):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    reviews = db.relationship('Review', back_populates = 'card')
+    reviews = db.relationship('Review', back_populates = 'card', cascade='all, delete-orphan')
     decks = association_proxy('reviews', 'deck')
 
     def __repr__(self):
