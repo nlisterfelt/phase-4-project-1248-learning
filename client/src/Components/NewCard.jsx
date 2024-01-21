@@ -53,7 +53,6 @@ const NewCard = ({deckItems, setError, cardItems, setCardItems, onUpdateDeck, de
                 r.json().then(data=>{
                     const selectedDeck = deckItems.find(deck=>deck.id === values.deck_id)
                     data.decks.push(selectedDeck)
-                    console.log(data)
                     submitReview(data, values.deck_id)
                 })
             } 

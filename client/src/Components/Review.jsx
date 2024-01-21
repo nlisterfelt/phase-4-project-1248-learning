@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import * as yup from "yup"
 import { useFormik } from "formik";
 import Select from "react-select";
@@ -64,56 +64,66 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors
     function handleCorrectReview(review) {
         const newSession = review.session + sessionAdvances[review.level-1]
         const newLevel = review.level + 1
-        handleReviewPatch(review, newSession, newLevel)
+        if(newSession>0){
+            handleReviewPatch(review, newSession, newLevel)
+        } else {
+            handleReviewPatch(review, 1, newLevel)
+        }
     }
     function handleReviewPatch(review, newSession, newLevel){
-        fetch(`/api/reviews/${review.id}`, {
-            method: 'PATCH',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }, 
-            body: JSON.stringify({
-                session: newSession,
-                level: newLevel,
-            })
-        }).then(r=>{
-            if(r.ok){
-                r.json().then(updatedReview => {
-                    const newDeck = reviewDeck
-                    const newReviews = newDeck.reviews.map(review=>{
-                        if(review.id===updatedReview.id){
-                            return updatedReview
-                        }
-                        return review
-                    })
-                    newDeck.reviews = newReviews
-                    onUpdateDeck(newDeck)
-                    if(updatedReview.level!==1){
-                        const sessionOneReviewsWithout =sessionOneReviews.filter(review=>review.id!==updatedReview.id)
-                        setSessionOneReviews(sessionOneReviewsWithout)
-                        if(sessionOneReviewsWithout.length>0){
-                            chooseNewReviewCard(sessionOneReviewsWithout)
-                        } else {
-                            setIsDone(true)
-                        }
-                    } else {
-                        const sessionOneReviewsWith =sessionOneReviews.map(review=>{
+        if(newSession>0){
+            fetch(`/api/reviews/${review.id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }, 
+                body: JSON.stringify({
+                    session: newSession,
+                    level: newLevel,
+                })
+            }).then(r=>{
+                if(r.ok){
+                    r.json().then(updatedReview => {
+                        const newDeck = reviewDeck
+                        const newReviews = newDeck.reviews.map(review=>{
                             if(review.id===updatedReview.id){
                                 return updatedReview
-                            } 
-                            return review 
+                            }
+                            return review
                         })
-                        chooseNewReviewCard(sessionOneReviewsWith)
-                    }
-                })
-            }
-        })
+                        newDeck.reviews = newReviews
+                        onUpdateDeck(newDeck)
+                        if(updatedReview.level>1){
+                            const sessionOneReviewsWithout =sessionOneReviews.filter(review=>review.id!==updatedReview.id)
+                            setSessionOneReviews(sessionOneReviewsWithout)
+                            if(sessionOneReviewsWithout.length>0){
+                                chooseNewReviewCard(sessionOneReviewsWithout)
+                            } else {
+                                setIsDone(true)
+                            }
+                        } else {
+                            const sessionOneReviewsWith =sessionOneReviews.map(review=>{
+                                if(review.id===updatedReview.id){
+                                    return updatedReview
+                                } 
+                                return review 
+                            })
+                            chooseNewReviewCard(sessionOneReviewsWith)
+                        }
+                    })
+                }
+            })
+        } else {
+            console.log('error newSession is not >0')
+        }
     }
     const handleEndReview = (e)=>{
         setIsDone(false)
         setIsReview(false)
-        handleEmptySessionOne(reviewDeck.reviews)
+        if (reviewDeck){
+            handleEmptySessionOne(reviewDeck.reviews)
+        }
     }
     function handleEmptySessionOne(reviews){
         let lowestSession = reviews[0].session
@@ -123,15 +133,17 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors
             }
         }
         for(let i=0; i<reviews.length; i++){
-            if(reviews[i].level!=='retire' && reviews[i].session!==1){
+            if(reviews[i].level!=='retire' && reviews[i].session>1){
                 if(lowestSession===2){
                     handleReviewPatch(reviews[i], reviews[i].session-1, reviews[i].level)
                 } else if (lowestSession>2) {
-                    const newSession = reviews[i].level-lowestSession+1
+                    const newSession = reviews[i].session-lowestSession+1
                     handleReviewPatch(reviews[i], newSession, reviews[i].level)
                 }
+            } else if (reviews[i].level!=='retire' && reviews[i].session<1){
+                handleReviewPatch(reviews[i], 1, reviews[i].level)
             }
-        }
+        } 
     }
     return(
         <div>
