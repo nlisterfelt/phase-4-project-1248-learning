@@ -3,7 +3,7 @@ import Card from "./Card";
 import {useNavigate} from "react-router-dom"
 import CardEdit from "./CardEdit";
 
-const AllCards = ({cardItems, setCardItems, deckItems, onUpdateDeck, deckOptions}) => {
+const AllCards = ({cardItems, setCardItems, deckItems, onUpdateDeck, deckOptions, onUpdateCard, onUpdateReview}) => {
     const [category, setCategory] = useState('all_decks')
     const [isEdit, setIsEdit]=useState(false)
     const [editCard, setEditCard]=useState({})
@@ -65,7 +65,7 @@ const AllCards = ({cardItems, setCardItems, deckItems, onUpdateDeck, deckOptions
                 </div>:
                 <div>
                     <button onClick={e=>setIsEdit(false)}>Back to All cards</button>
-                    <CardEdit card={editCard}/>
+                    <CardEdit card={editCard} deckOptions={deckOptions}/>
                 </div>
             }
         </div>

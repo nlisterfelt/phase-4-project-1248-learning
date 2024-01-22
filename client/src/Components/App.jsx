@@ -78,6 +78,12 @@ function App() {
         })
         setDeckItems(newDeckItems)
     }
+    const handleUpdateCard = (card) => {
+        console.log(card)
+    }
+    const handleUpdateReview = (review) => {
+        console.log(review)
+    }
 
     return (
         <div>
@@ -97,7 +103,7 @@ function App() {
                     <Routes>
                         <Route exact path="/" element={<Home levelColors={levelColors} sessionAdvances={sessionAdvances}/>} />
                         <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} findReviewDeck={findReviewDeck}/>} />
-                        <Route exact path="/cards" element={<AllCards onUpdateDeck={handleUpdateDeck} cardItems={cardItems} setCardItems={setCardItems} deckItems={deckItems} deckOptions={deckOptions}/>} />
+                        <Route exact path="/cards" element={<AllCards onUpdateDeck={handleUpdateDeck} cardItems={cardItems} setCardItems={setCardItems} deckItems={deckItems} deckOptions={deckOptions} onUpdateCard={handleUpdateCard} onUpdateReview={handleUpdateReview}/>} />
                         <Route path="/cards/new" element={<NewCard deckItems={deckItems} setError={setError} user={user} cardItems={cardItems} setCardItems={setCardItems} onUpdateDeck={handleUpdateDeck} deckOptions={deckOptions} setDeckOptions={setDeckOptions}/>} />
                         <Route path="/review" element={<Review reviewDeck={reviewDeck} deckOptions={deckOptions} findReviewDeck={findReviewDeck} cardItems={cardItems} levelColors={levelColors} sessionAdvances={sessionAdvances} onUpdateDeck={handleUpdateDeck}/>} />
                         <Route path="*" element={'404 Not Found'} />
