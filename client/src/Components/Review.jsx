@@ -172,7 +172,19 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors
                         <h3>All cards are reviewed in session 1.</h3>
                         <p>End the review session or select a new deck for more reviewing.</p>
                     </div> :
-                    <ReviewCard card={reviewCard} levelColors={levelColors} review={reviewForCard} onCorrectReview={handleCorrectReview} onWrongReview={handleWrongReview} /> 
+                    <div>
+                        <ReviewCard card={reviewCard} color={levelColors[reviewForCard.level]} /> 
+                        <div style={{display: 'flex', justifyContent: 'center'}}>
+                            <button onClick={e=>handleWrongReview(reviewForCard)} style={{marginRight: '20px', borderColor: 'red', backgroundColor: 'white', width: '100px'}}>
+                                Wrong 
+                                <p style={{fontSize: '70%'}}>(Level 1)</p>
+                            </button>
+                            <button onClick={e=>handleCorrectReview(reviewForCard)} style={{borderColor: 'lime', backgroundColor: 'white', width: '100px'}}>
+                                Correct 
+                                <p style={{fontSize:"70%"}}>(Next Level {reviewForCard.level+1})</p>
+                            </button>
+                        </div>
+                    </div>
                 }
                 <button onClick={handleEndReview}>End review session</button>
                 <p>Ending a review session will move all cards to the next session, but keep their current levels.</p>

@@ -3,13 +3,14 @@ import Card from "./Card";
 import {useNavigate} from "react-router-dom"
 import CardEdit from "./CardEdit";
 
-const AllCards = ({cardItems, setCardItems, deckItems, onUpdateDeck}) => {
+const AllCards = ({cardItems, setCardItems, deckItems, onUpdateDeck, deckOptions}) => {
     const [category, setCategory] = useState('all_decks')
     const [isEdit, setIsEdit]=useState(false)
     const [editCard, setEditCard]=useState({})
     const navigate = useNavigate()
 
-    const deckOptions = deckItems.map(deck=><option key={deck.id} id={deck.id} value={deck.name}>{deck.name}</option>)
+    const deckOptionsList = deckOptions.map(deck=><option key={deck.value} id={deck.value} value={deck.label}>{deck.label}</option>)
+
     const cardList = cardItems.filter(card=>filterCards(card)).map(card=><Card key={card.id} id={card.id} card={card} onEditCard={handleEditCard} onDeleteCard={handleDeleteCard}/>)
     
     function filterCards(card){
@@ -56,7 +57,7 @@ const AllCards = ({cardItems, setCardItems, deckItems, onUpdateDeck}) => {
                     <label>Select a deck: </label>
                     <select onChange={e=>setCategory(e.target.value)}>
                         <option id={'all_decks'} value={'all_decks'}>All decks</option>
-                        {deckOptions}
+                        {deckOptionsList}
                     </select>
                     <div className="card_container">
                         {cardList.length === 0 ? <p>There are no cards in this deck...yet.</p> : cardList}
