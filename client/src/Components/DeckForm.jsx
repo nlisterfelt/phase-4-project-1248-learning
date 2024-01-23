@@ -3,7 +3,7 @@ import Select from "react-select"
 import * as yup from "yup"
 import { useFormik } from "formik";
 
-const DeckForm = ({filteredDeckOptions}) => {
+const DeckForm = ({filteredDeckOptions, card, onEditCard}) => {
     const formSchema=yup.object().shape({
         deck_id: yup.number().positive().integer().required("A deck is required.")
     })
@@ -15,7 +15,29 @@ const DeckForm = ({filteredDeckOptions}) => {
         onSubmit: submitAddDeck
     })
     function submitAddDeck(values){
-        console.log(values)
+        fetch('/api/reviews', {
+            method: 'POST', 
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                card_id: card.id,
+                deck_id: values.deck_id
+            })
+        }).then(r=>{
+            if(r.ok){
+                r.json().then(data=>{
+                    console.log('data', data)
+                    const updatedDecks = card.decks.push(filteredDeckOptions.find(option=>option.id===data.deck_id))
+                    const updatedReviews = card.reviews.push(data)
+                    card['decks']=updatedDecks
+                    card['reviews']=updatedReviews
+                    onEditCard(card)
+                })
+            }
+        })
+        
     }
     const defaultValue = (options, value) => {
         return options ? options.find(option=>option.value===value):""

@@ -151,6 +151,14 @@ class ReviewsById(Resource):
       return make_response(review.to_dict(), 202)
     return {"error": "review not found"}, 404
 
+  def delete(self, id):
+    review = Review.query.filter(Review.id==id).first()
+    if review:
+      db.session.delete(review)
+      db.session.commit()
+      return {}, 200
+    return {"error": "review not found"}, 404
+
 api.add_resource(Signup, '/api/signup', endpoint='signup')
 api.add_resource(CheckSession, '/api/check_session', endpoint='check_session')
 api.add_resource(Users, '/api/users', endpoint='users')

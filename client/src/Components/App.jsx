@@ -78,11 +78,13 @@ function App() {
         })
         setDeckItems(newDeckItems)
     }
-    const handleUpdateCard = (card) => {
-        console.log(card)
+    const handleEditCard = (card) => {
+        console.log('card in App', card)
+        const updatedCardItems = cardItems.map(item=>{item.id===card.id ? card : item})
+        setCardItems(updatedCardItems)
     }
-    const handleUpdateReview = (review) => {
-        console.log(review)
+    const handleEditReview = (review) => {
+        console.log('this is in app handling edit', review)
     }
 
     return (
@@ -103,7 +105,7 @@ function App() {
                     <Routes>
                         <Route exact path="/" element={<Home levelColors={levelColors} sessionAdvances={sessionAdvances}/>} />
                         <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} findReviewDeck={findReviewDeck}/>} />
-                        <Route exact path="/cards" element={<AllCards onUpdateDeck={handleUpdateDeck} cardItems={cardItems} setCardItems={setCardItems} deckItems={deckItems} deckOptions={deckOptions} onUpdateCard={handleUpdateCard} onUpdateReview={handleUpdateReview}/>} />
+                        <Route exact path="/cards" element={<AllCards onUpdateDeck={handleUpdateDeck} cardItems={cardItems} setCardItems={setCardItems} deckItems={deckItems} deckOptions={deckOptions} onEditCard={handleEditCard} onEditReview={handleEditReview}/>} />
                         <Route path="/cards/new" element={<NewCard deckItems={deckItems} setError={setError} user={user} cardItems={cardItems} setCardItems={setCardItems} onUpdateDeck={handleUpdateDeck} deckOptions={deckOptions} setDeckOptions={setDeckOptions}/>} />
                         <Route path="/review" element={<Review reviewDeck={reviewDeck} deckOptions={deckOptions} findReviewDeck={findReviewDeck} cardItems={cardItems} levelColors={levelColors} sessionAdvances={sessionAdvances} onUpdateDeck={handleUpdateDeck}/>} />
                         <Route path="*" element={'404 Not Found'} />
