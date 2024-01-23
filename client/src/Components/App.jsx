@@ -79,8 +79,7 @@ function App() {
         setDeckItems(newDeckItems)
     }
     const handleEditCard = (card) => {
-        console.log('card in App', card)
-        const updatedCardItems = cardItems.map(item=>{item.id===card.id ? card : item})
+        const updatedCardItems = cardItems.map(item=>item.id===card.id ? card : item)
         setCardItems(updatedCardItems)
     }
     const handleEditReview = (review) => {

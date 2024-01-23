@@ -3,7 +3,7 @@ import Select from "react-select"
 import * as yup from "yup"
 import { useFormik } from "formik";
 
-const DeckForm = ({filteredDeckOptions, card, onEditCard}) => {
+const DeckForm = ({filteredDeckOptions, card, onEditCard, deckItems}) => {
     const formSchema=yup.object().shape({
         deck_id: yup.number().positive().integer().required("A deck is required.")
     })
@@ -28,9 +28,10 @@ const DeckForm = ({filteredDeckOptions, card, onEditCard}) => {
         }).then(r=>{
             if(r.ok){
                 r.json().then(data=>{
-                    console.log('data', data)
-                    const updatedDecks = card.decks.push(filteredDeckOptions.find(option=>option.id===data.deck_id))
-                    const updatedReviews = card.reviews.push(data)
+                    const updatedDecks = card.decks 
+                    updatedDecks.push(deckItems.find(item=>item.id===data.deck_id))
+                    const updatedReviews = card.reviews 
+                    updatedReviews.push(data)
                     card['decks']=updatedDecks
                     card['reviews']=updatedReviews
                     onEditCard(card)

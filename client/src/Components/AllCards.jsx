@@ -10,7 +10,6 @@ const AllCards = ({cardItems, setCardItems, deckItems, onUpdateDeck, deckOptions
     const navigate = useNavigate()
 
     const deckOptionsList = deckOptions.map(deck=><option key={deck.value} id={deck.value} value={deck.label}>{deck.label}</option>)
-
     const cardList = cardItems.filter(card=>filterCards(card)).map(card=><Card key={card.id} id={card.id} card={card} onEditCard={handleEditCard} onDeleteCard={handleDeleteCard}/>)
     
     function filterCards(card){
@@ -65,7 +64,7 @@ const AllCards = ({cardItems, setCardItems, deckItems, onUpdateDeck, deckOptions
                 </div>:
                 <div>
                     <button onClick={e=>setIsEdit(false)}>Back to All cards</button>
-                    <CardEdit card={editCard} deckOptions={deckOptions} onEditReview={onEditReview} onEditCard={onEditCard}/>
+                    <CardEdit card={editCard} deckOptions={deckOptions} onEditReview={onEditReview} onEditCard={onEditCard} deckItems={deckItems}/>
                 </div>
             }
         </div>
