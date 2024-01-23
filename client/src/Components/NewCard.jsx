@@ -16,7 +16,6 @@ const NewCard = ({deckItems, setError, cardItems, setCardItems, onUpdateDeck, de
         setDeckOptions(newDeckOptions)
         return ()=> {setError(null)}
     }, [])
-    const interval = ()=>setInterval(()=>{setIsSubmitting(false)}, 10000)
 
     const formSchema=yup.object().shape({
         front_title: yup.string().required("The front of a card must have a sentence.").min(1).max(100),
@@ -74,11 +73,11 @@ const NewCard = ({deckItems, setError, cardItems, setCardItems, onUpdateDeck, de
                 r.json().then(data=>{
                     setCardItems([...cardItems, card_data])
                     setIsSubmitting(true)
-                    interval()
                     const newDeck = deckItems.find(deck=>deck.id===deck_id)
                     newDeck.cards.push(card_data)
                     newDeck.reviews.push(data)
                     onUpdateDeck(newDeck)
+                    navigate('/cards')
                 })
             } 
         })

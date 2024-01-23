@@ -43,6 +43,7 @@ function App() {
                         for(let i=0; i<filteredDeck.length; i++){
                             newDeckOptions.push({value: filteredDeck[i].id, label: filteredDeck[i].name})
                         }
+                        newDeckOptions.sort((a,b)=>a.label>b.label?1:-1)
                         setDeckOptions(newDeckOptions)
                     })
                 }

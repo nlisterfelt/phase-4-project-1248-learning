@@ -9,8 +9,12 @@ const AllCards = ({cardItems, setCardItems, deckItems, onUpdateDeck, deckOptions
     const [editCard, setEditCard]=useState({})
     const navigate = useNavigate()
 
-    const deckOptionsList = deckOptions.map(deck=><option key={deck.value} id={deck.value} value={deck.label}>{deck.label}</option>)
-    const cardList = cardItems.filter(card=>filterCards(card)).map(card=><Card key={card.id} id={card.id} card={card} onEditCard={handleEditCard} onDeleteCard={handleDeleteCard}/>)
+    const deckOptionsList = deckOptions
+        .sort((a,b)=>a.label>b.label?1:-1)
+        .map(deck=><option key={deck.value} id={deck.value} value={deck.label}>{deck.label}</option>)
+    const cardList = cardItems
+        .sort((a,b)=>a.front_title>b.front_title?1:-1)
+        .filter(card=>filterCards(card)).map(card=><Card key={card.id} id={card.id} card={card} onEditCard={handleEditCard} onDeleteCard={handleDeleteCard}/>)
     
     function filterCards(card){
         if(category==='all_decks'){

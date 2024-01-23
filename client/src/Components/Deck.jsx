@@ -20,7 +20,9 @@ function Deck({deckItems, setDeckItems, findReviewDeck}){
         })
     }    
 
-    const deckList = deckItems.map(deck => <DeckCard key={deck.id} deck={deck} setDeckItems={setDeckItems} deckItems={deckItems} findReviewDeck={findReviewDeck}/>)
+    const deckList = deckItems
+        .sort((a,b)=>a.name>b.name?1:-1)
+        .map(deck => <DeckCard key={deck.id} deck={deck} setDeckItems={setDeckItems} deckItems={deckItems} findReviewDeck={findReviewDeck}/>)
 
     return(
         <div>
