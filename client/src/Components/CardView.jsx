@@ -1,8 +1,9 @@
 import React from "react";
 import ReviewCard from "./ReviewCard";
 import DeckForm from "./DeckForm";
+import ReviewListCard from "./ReviewListCard";
 
-const CardEdit = ({card, deckOptions, onEditReview, onEditCard, deckItems}) => {
+const CardView = ({card, deckOptions, onEditReview, onEditCard, deckItems, sessionAdvances}) => {
     const deckList = card.decks
         .sort((a,b)=> a.name > b.name ? 1 : -1)
         .map(deck=>{
@@ -11,10 +12,7 @@ const CardEdit = ({card, deckOptions, onEditReview, onEditCard, deckItems}) => {
         })
     const reviewList = card.reviews
         .sort((a,b)=> a.level>b.level ? 1 : -1)
-        .map(review=>{
-            const deckInfo = deckItems.find(item=>item.id===review.deck_id)
-            return <li key={review.id} id={review.id}>Deck: {deckInfo.name}, Session: {review.session}, Level: {review.level} <button onClick={e=>handleReviewEdit(review)}>Edit</button>  <button onClick={e=>handleReviewDelete(review.deck_id)}>X</button></li>
-        })
+        .map(review=><ReviewListCard key={review.id} id={review.id} deckItems={deckItems} review={review} onReviewEdit={handleReviewEdit} onReviewDelete={handleReviewDelete} sessionAdvances={sessionAdvances}/>)
 
     const filteredDeckOptions = deckOptions.filter(deck=>{
         for(let i=0; i<card.decks.length; i++){
@@ -49,9 +47,8 @@ const CardEdit = ({card, deckOptions, onEditReview, onEditCard, deckItems}) => {
             <DeckForm filteredDeckOptions={filteredDeckOptions} card={card} onEditCard={onEditCard} deckItems={deckItems}/>
             <h4>Reviews</h4>
             <ul>{reviewList}</ul>
-            <p style={{color: 'red'}}>When the last review or the deck with the last review is deleted, this card will be deleted as well.</p>
         </div>
     )
 }
 
-export default CardEdit
+export default CardView

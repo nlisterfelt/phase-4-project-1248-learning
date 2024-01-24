@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import Card from "./Card";
 import {useNavigate} from "react-router-dom"
-import CardEdit from "./CardEdit";
+import CardView from "./CardView";
 
-const AllCards = ({cardItems, setCardItems, deckItems, onUpdateDeck, deckOptions, onEditCard, onEditReview}) => {
+const AllCards = ({cardItems, setCardItems, deckItems, onEditDeck, deckOptions, onEditCard, onEditReview, sessionAdvances}) => {
     const [category, setCategory] = useState('all_decks')
     const [isEdit, setIsEdit]=useState(false)
     const [editCard, setEditCard]=useState({})
@@ -40,7 +40,7 @@ const AllCards = ({cardItems, setCardItems, deckItems, onUpdateDeck, deckOptions
                     if(updatedDeck){
                         const filteredCardsList = updatedDeck.cards.filter(item=>item.id!==card.id)
                         const newUpdatedDeck = {...updatedDeck, cards: filteredCardsList}
-                        onUpdateDeck(newUpdatedDeck)
+                        onEditDeck(newUpdatedDeck)
                     }
                 }
             }
@@ -68,7 +68,7 @@ const AllCards = ({cardItems, setCardItems, deckItems, onUpdateDeck, deckOptions
                 </div>:
                 <div>
                     <button onClick={e=>setIsEdit(false)}>Back to All cards</button>
-                    <CardEdit card={editCard} deckOptions={deckOptions} onEditReview={onEditReview} onEditCard={onEditCard} deckItems={deckItems}/>
+                    <CardView card={editCard} deckOptions={deckOptions} onEditReview={onEditReview} onEditCard={onEditCard} deckItems={deckItems} sessionAdvances={sessionAdvances}/>
                 </div>
             }
         </div>

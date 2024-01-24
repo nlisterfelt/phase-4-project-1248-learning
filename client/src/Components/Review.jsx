@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import Select from "react-select";
 import ReviewCard from "./ReviewCard";
 
-const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors, sessionAdvances, onUpdateDeck}) => {
+const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors, sessionAdvances, onEditReview}) => {
     const [isReview, setIsReview] = useState(false)
     const [reviewCard, setReviewCard] = useState([])
     const [sessionOneReviews, setSessionOneReviews]=useState([])
@@ -64,10 +64,15 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors
     function handleCorrectReview(review) {
         const newSession = review.session + sessionAdvances[review.level-1]
         const newLevel = review.level + 1
-        if(newSession>0){
-            handleReviewPatch(review, newSession, newLevel)
+        if(newLevel<sessionAdvances.length){
+            if(newSession>0){
+                handleReviewPatch(review, newSession, newLevel)
+            } else {
+                handleReviewPatch(review, 1, newLevel)
+            }
         } else {
-            handleReviewPatch(review, 1, newLevel)
+            const finalLevel = sessionAdvances[sessionAdvances.length]
+            handleReviewPatch(review, finalLevel, finalLevel)
         }
     }
     function handleReviewPatch(review, newSession, newLevel){
@@ -92,8 +97,7 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors
                             }
                             return review
                         })
-                        newDeck.reviews = newReviews
-                        onUpdateDeck(newDeck)
+                        onEditReview(updatedReview)
                         if(updatedReview.level>1){
                             const sessionOneReviewsWithout =sessionOneReviews.filter(review=>review.id!==updatedReview.id)
                             setSessionOneReviews(sessionOneReviewsWithout)
