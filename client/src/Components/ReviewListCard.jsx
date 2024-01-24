@@ -9,13 +9,10 @@ const ReviewListCard = ({deckItems, review, onReviewEdit, onReviewDelete, sessio
         <div>
             <li>
                 Deck: {deckInfo.name}, Session: {review.session}, Level: {review.level} 
-                <button onClick={e=>{
-                    setIsEditReview(!isEditReview)
-                    onReviewEdit(review)}
-                }>Edit</button>  
+                <button onClick={e=>setIsEditReview(!isEditReview)}>Edit</button>  
                 <button onClick={e=>onReviewDelete(review.deck_id)}>X</button>
             </li>
-            {isEditReview ? <ReviewListForm sessionAdvances={sessionAdvances}/> : null}
+            {isEditReview ? <ReviewListForm sessionAdvances={sessionAdvances} review={review} setIsEditReview={setIsEditReview}/> : null}
         </div>
     )
 }
