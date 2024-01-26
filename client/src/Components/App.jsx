@@ -17,6 +17,7 @@ function App() {
     const [error, setError]=useState(null)
     const [reviewDeck, setReviewDeck]=useState([])
     const [deckOptions, setDeckOptions]=useState([])
+    const [currentReview, setCurrentReview]=useState({})
 
     const levelColors = ['deeppink', 'blueViolet', 'blue', 'skyBlue', 'limegreen', 'yellow', 'goldenrod', 'coral', 'tomato', 'brown']
     const sessionAdvances = [1, 2, 4, 8, 16, 32, 64, 128, 256, 'Retire']
@@ -85,12 +86,51 @@ function App() {
     }
     const handleEditReview = (review) => {
         const card = cardItems.find(item=>item.id===review.card_id)
-        card.reviews.map(item=>item.id===review.id ? review : item)
+        card.reviews = card.reviews.map(item=>item.id===review.id ? review : item)
         const deck = deckItems.find(item=>item.id===review.deck_id)
-        deck.reviews.map(item=>item.id===review.id ? review : item)
-
+        deck.reviews = deck.reviews.map(item=>item.id===review.id ? review : item)
         handleEditCard(card)
         handleEditDeck(deck)
+    }
+    function handleReviewPatch(review, newSession, newLevel){
+        if(newSession>0){
+            fetch(`/api/reviews/${review.id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }, 
+                body: JSON.stringify({
+                    session: newSession,
+                    level: newLevel,
+                })
+            }).then(r=>{
+                if(r.ok){
+                    r.json().then(updatedReview => {
+                        handleEditReview(updatedReview)
+                        // if(updatedReview.level>1){
+                        //     const sessionOneReviewsWithout =sessionOneReviews.filter(review=>review.id!==updatedReview.id)
+                        //     setSessionOneReviews(sessionOneReviewsWithout)
+                        //     if(sessionOneReviewsWithout.length>0){
+                        //         chooseNewReviewCard(sessionOneReviewsWithout)
+                        //     } else {
+                        //         setIsDone(true)
+                        //     }
+                        // } else {
+                        //     const sessionOneReviewsWith =sessionOneReviews.map(review=>{
+                        //         if(review.id===updatedReview.id){
+                        //             return updatedReview
+                        //         } 
+                        //         return review 
+                        //     })
+                        //     chooseNewReviewCard(sessionOneReviewsWith)
+                        // }
+                    })
+                }
+            })
+        } else {
+            console.log('error newSession is not >0')
+        }
     }
 
     return (
@@ -111,9 +151,9 @@ function App() {
                     <Routes>
                         <Route exact path="/" element={<Home levelColors={levelColors} sessionAdvances={sessionAdvances}/>} />
                         <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} findReviewDeck={findReviewDeck}/>} />
-                        <Route exact path="/cards" element={<AllCards onEditDeck={handleEditDeck} cardItems={cardItems} setCardItems={setCardItems} deckItems={deckItems} deckOptions={deckOptions} onEditCard={handleEditCard} onEditReview={handleEditReview} sessionAdvances={sessionAdvances}/>} />
+                        <Route exact path="/cards" element={<AllCards onEditDeck={handleEditDeck} cardItems={cardItems} setCardItems={setCardItems} deckItems={deckItems} deckOptions={deckOptions} onEditCard={handleEditCard} onEditReview={handleEditReview} sessionAdvances={sessionAdvances} onReviewPatch={handleReviewPatch}/>} />
                         <Route path="/cards/new" element={<NewCard deckItems={deckItems} setError={setError} user={user} cardItems={cardItems} setCardItems={setCardItems} onEditDeck={handleEditDeck} deckOptions={deckOptions} setDeckOptions={setDeckOptions}/>} />
-                        <Route path="/review" element={<Review reviewDeck={reviewDeck} deckOptions={deckOptions} findReviewDeck={findReviewDeck} cardItems={cardItems} levelColors={levelColors} sessionAdvances={sessionAdvances} onEditReview={handleEditReview}/>} />
+                        <Route path="/review" element={<Review reviewDeck={reviewDeck} deckOptions={deckOptions} findReviewDeck={findReviewDeck} cardItems={cardItems} levelColors={levelColors} sessionAdvances={sessionAdvances} onEditReview={handleEditReview} onReviewPatch={handleReviewPatch}/>} />
                         <Route path="*" element={'404 Not Found'} />
                     </Routes>
                 </div>

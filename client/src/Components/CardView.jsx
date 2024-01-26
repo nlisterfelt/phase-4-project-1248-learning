@@ -3,7 +3,7 @@ import ReviewCard from "./ReviewCard";
 import DeckForm from "./DeckForm";
 import ReviewListCard from "./ReviewListCard";
 
-const CardView = ({card, deckOptions, onEditReview, onEditCard, deckItems, sessionAdvances}) => {
+const CardView = ({card, deckOptions, onEditCard, deckItems, sessionAdvances, onReviewPatch}) => {
     const deckList = card.decks
         .sort((a,b)=> a.name > b.name ? 1 : -1)
         .map(deck=>{
@@ -12,7 +12,7 @@ const CardView = ({card, deckOptions, onEditReview, onEditCard, deckItems, sessi
         })
     const reviewList = card.reviews
         .sort((a,b)=> a.level>b.level ? 1 : -1)
-        .map(review=><ReviewListCard key={review.id} id={review.id} deckItems={deckItems} review={review} onReviewEdit={handleReviewEdit} onReviewDelete={handleReviewDelete} sessionAdvances={sessionAdvances}/>)
+        .map(review=><ReviewListCard key={review.id} id={review.id} deckItems={deckItems} review={review} onReviewDelete={handleReviewDelete} sessionAdvances={sessionAdvances} onReviewPatch={onReviewPatch}/>)
 
     const filteredDeckOptions = deckOptions.filter(deck=>{
         for(let i=0; i<card.decks.length; i++){
@@ -22,9 +22,6 @@ const CardView = ({card, deckOptions, onEditReview, onEditCard, deckItems, sessi
         }
         return true
     })
-    function handleReviewEdit(review){
-        console.log(review)
-    }
     function handleReviewDelete(deckId){
         const review = card.reviews.find(item=>item.deck_id===deckId)
         fetch(`/api/reviews/${review.id}`, {

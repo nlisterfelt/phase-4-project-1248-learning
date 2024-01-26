@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as yup from "yup"
 import { useFormik } from "formik";
 import Select from "react-select";
 import ReviewCard from "./ReviewCard";
 
-const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors, sessionAdvances, onEditReview}) => {
+const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors, sessionAdvances, onReviewPatch}) => {
     const [isReview, setIsReview] = useState(false)
     const [reviewCard, setReviewCard] = useState([])
     const [sessionOneReviews, setSessionOneReviews]=useState([])
@@ -21,7 +21,7 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors
     }
     const formik = useFormik({
         initialValues: {
-            deck_id: reviewDeck.id
+            deck_id: null
         },
         validationSchema: formSchema,
         onSubmit: submitStartReview
@@ -52,13 +52,15 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors
         const card = cardItems.find(card=>card.id===selectedReview.card_id)
         setReviewCard(card)
         setReviewForCard(selectedReview)
+        console.log('card', card)
+        console.log('selected review', selectedReview)
     }
     const handleWrongReview = (review) => {
         if(sessionOneReviews.length>1){
             chooseNewReviewCard(sessionOneReviews)
         }
         if(review.level > 1){
-            handleReviewPatch(review, 1, 1)
+            onReviewPatch(review, 1, 1)
         }
     }
     function handleCorrectReview(review) {
@@ -66,62 +68,16 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors
         const newLevel = review.level + 1
         if(newLevel<sessionAdvances.length){
             if(newSession>0){
-                handleReviewPatch(review, newSession, newLevel)
+                onReviewPatch(review, newSession, newLevel)
             } else {
-                handleReviewPatch(review, 1, newLevel)
+                onReviewPatch(review, 1, newLevel)
             }
         } else {
             const finalLevel = sessionAdvances[sessionAdvances.length]
-            handleReviewPatch(review, finalLevel, finalLevel)
+            onReviewPatch(review, finalLevel, finalLevel)
         }
     }
-    function handleReviewPatch(review, newSession, newLevel){
-        if(newSession>0){
-            fetch(`/api/reviews/${review.id}`, {
-                method: 'PATCH',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }, 
-                body: JSON.stringify({
-                    session: newSession,
-                    level: newLevel,
-                })
-            }).then(r=>{
-                if(r.ok){
-                    r.json().then(updatedReview => {
-                        const newDeck = reviewDeck
-                        const newReviews = newDeck.reviews.map(review=>{
-                            if(review.id===updatedReview.id){
-                                return updatedReview
-                            }
-                            return review
-                        })
-                        onEditReview(updatedReview)
-                        if(updatedReview.level>1){
-                            const sessionOneReviewsWithout =sessionOneReviews.filter(review=>review.id!==updatedReview.id)
-                            setSessionOneReviews(sessionOneReviewsWithout)
-                            if(sessionOneReviewsWithout.length>0){
-                                chooseNewReviewCard(sessionOneReviewsWithout)
-                            } else {
-                                setIsDone(true)
-                            }
-                        } else {
-                            const sessionOneReviewsWith =sessionOneReviews.map(review=>{
-                                if(review.id===updatedReview.id){
-                                    return updatedReview
-                                } 
-                                return review 
-                            })
-                            chooseNewReviewCard(sessionOneReviewsWith)
-                        }
-                    })
-                }
-            })
-        } else {
-            console.log('error newSession is not >0')
-        }
-    }
+    
     const handleEndReview = (e)=>{
         setIsDone(false)
         setIsReview(false)
@@ -139,20 +95,20 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, cardItems, levelColors
         for(let i=0; i<reviews.length; i++){
             if(reviews[i].level!=='retire' && reviews[i].session>1){
                 if(lowestSession===2){
-                    handleReviewPatch(reviews[i], reviews[i].session-1, reviews[i].level)
+                    onReviewPatch(reviews[i], reviews[i].session-1, reviews[i].level)
                 } else if (lowestSession>2) {
                     const newSession = reviews[i].session-lowestSession+1
-                    handleReviewPatch(reviews[i], newSession, reviews[i].level)
+                    onReviewPatch(reviews[i], newSession, reviews[i].level)
                 }
             } else if (reviews[i].level!=='retire' && reviews[i].session<1){
-                handleReviewPatch(reviews[i], 1, reviews[i].level)
+                onReviewPatch(reviews[i], 1, reviews[i].level)
             }
         } 
     }
     return(
         <div>
             {!isReview ? <div >
-                <form onSubmit={formik.handleSubmit}>
+                <form onSubmit={formik.handleSubmit} >
                     <label>Select a deck to review: </label>
                     <Select 
                         name="review_deck"

@@ -3,7 +3,7 @@ import Card from "./Card";
 import {useNavigate} from "react-router-dom"
 import CardView from "./CardView";
 
-const AllCards = ({cardItems, setCardItems, deckItems, onEditDeck, deckOptions, onEditCard, onEditReview, sessionAdvances}) => {
+const AllCards = ({cardItems, setCardItems, deckItems, onEditDeck, deckOptions, onEditCard, onEditReview, sessionAdvances, onReviewPatch}) => {
     const [category, setCategory] = useState('all_decks')
     const [isEdit, setIsEdit]=useState(false)
     const [editCard, setEditCard]=useState({})
@@ -68,7 +68,7 @@ const AllCards = ({cardItems, setCardItems, deckItems, onEditDeck, deckOptions, 
                 </div>:
                 <div>
                     <button onClick={e=>setIsEdit(false)}>Back to All cards</button>
-                    <CardView card={editCard} deckOptions={deckOptions} onEditReview={onEditReview} onEditCard={onEditCard} deckItems={deckItems} sessionAdvances={sessionAdvances}/>
+                    <CardView card={editCard} deckOptions={deckOptions} onEditReview={onEditReview} onEditCard={onEditCard} deckItems={deckItems} sessionAdvances={sessionAdvances} onReviewPatch={onReviewPatch}/>
                 </div>
             }
         </div>

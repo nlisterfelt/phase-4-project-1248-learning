@@ -2,7 +2,7 @@ import React from "react";
 import * as yup from "yup"
 import { useFormik } from "formik";
 
-const ReviewListForm = ({sessionAdvances, review, setIsEditReview}) => {
+const ReviewListForm = ({sessionAdvances, review, setIsEditReview, onReviewPatch}) => {
     const formSchema = yup.object().shape({
         session: yup.number().positive().integer().required("Session required").min(1).max(1000),
         level: yup.number().integer().positive().min(1).max(sessionAdvances.length-1).required("Level required")
@@ -18,7 +18,8 @@ const ReviewListForm = ({sessionAdvances, review, setIsEditReview}) => {
 
     function submitEditReview(values){
         setIsEditReview(false)
-
+        onReviewPatch(review, values.session, values.level)
+        
     }
     return (
         <form onSubmit={formik.handleSubmit}>
