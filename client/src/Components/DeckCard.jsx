@@ -1,12 +1,12 @@
 import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 
-function DeckCard({deck, deckItems, setDeckItems, findReviewDeck}){
+function DeckCard({deck, findReviewDeck, onEditDeck, onDeleteDeck}){
     const [isEdit, setIsEdit]=useState(false)
     const [newDeckName, setNewDeckName]=useState('')
-    const [numberOfCards, setNumberOfCards] = useState(deck.cards.length)
-    const navigate = useNavigate()
     
+    const navigate = useNavigate()
+
     function handleDeckEditSubmit(e){
         e.preventDefault()
         fetch(`/api/decks/${deck.id}`, {
@@ -17,13 +17,7 @@ function DeckCard({deck, deckItems, setDeckItems, findReviewDeck}){
             })
         }).then(r=> {
             if (r.ok) {
-                r.json().then(updatedDeck=>setDeckItems(deckItems.map(item=>{
-                    if(updatedDeck.id===item.id){
-                        return updatedDeck
-                    } else {
-                        return item
-                    }
-                })))
+                r.json().then(data=>onEditDeck(data))
             }
         })
         setIsEdit(false)
@@ -33,7 +27,7 @@ function DeckCard({deck, deckItems, setDeckItems, findReviewDeck}){
             method: 'DELETE'
         }).then(r=> {
             if (r.ok) {
-                setDeckItems(deckItems=>deckItems.filter(deck=>deck.id !== id))
+                onDeleteDeck(id)
             }
         })
     }
@@ -45,7 +39,7 @@ function DeckCard({deck, deckItems, setDeckItems, findReviewDeck}){
     return(
         <div  className="deck_cards">
             <h4>{deck.name}</h4>
-            <p>{numberOfCards} {numberOfCards==1 ? 'card' : 'cards'}</p>
+            <p>{deck.cards.length} {deck.cards.length==1 ? 'card' : 'cards'}</p>
             <button onClick={e=>handleReviewClick(deck.id)}>Review</button>
             <button onClick={e=>{
                 setIsEdit(!isEdit)

@@ -33,7 +33,6 @@ function App() {
             } 
         })
     }, [])
-
     function userInformation(data){
         if (data.error){
             setError(data.get('error'))
@@ -77,14 +76,17 @@ function App() {
         return selectReviewDeck
     }
     const handleEditDeck = (newDeck) => {
-        const newDeckItems = deckItems.map(deck=>{
-            if(deck.id===newDeck.id){
-                return newDeck
-            } else {
-                return deck
-            }
-        })
+        console.log('newdeck',newDeck)
+        const newDeckItems = deckItems.map(deck=>deck.id===newDeck.id ? newDeck : deck)
         setDeckItems(newDeckItems)
+        const newDeckOptions = deckOptions.map(deck=>deck.value===newDeck.id ? {value: deck.value, label: newDeck.name} : deck)
+        setDeckOptions(newDeckOptions)
+    }
+    const handleDeleteDeck = (id) => {
+        const filteredDeckItems = deckItems.filter(deck=>deck.id!==id)
+        setDeckItems(filteredDeckItems)
+        const filteredDeckOptions = deckOptions.filter(option=>option.value!==id)
+        setDeckOptions(filteredDeckOptions)
     }
     const handleEditCard = (card) => {
         const updatedCardItems = cardItems.map(item=>item.id===card.id ? card : item)
@@ -168,7 +170,7 @@ function App() {
                     <Routes>
                         <Route exact path="/" element={<Home levelColors={levelColors} sessionAdvances={sessionAdvances}/>} />
                         
-                        <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} findReviewDeck={findReviewDeck}/>} />
+                        <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} findReviewDeck={findReviewDeck} onEditDeck={handleEditDeck} onDeleteDeck={handleDeleteDeck}/>} />
 
                         <Route exact path="/cards" element={<AllCards onEditDeck={handleEditDeck} cardItems={cardItems} setCardItems={setCardItems} deckItems={deckItems} deckOptions={deckOptions} onEditCard={handleEditCard} onEditReview={handleEditReview} sessionAdvances={sessionAdvances} onReviewPatch={handleReviewPatch} isFront={isFront} setIsFront={setIsFront}/>} />
 
