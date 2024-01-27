@@ -55,12 +55,14 @@ function App() {
             })
             fetch('/api/cards').then(r=>{
                 if (r.status===200) {
-                    r.json().then(cards=>{setCardItems(cards.filter(card=>card.user_id===data.id))})
+                    r.json().then(cards=>{
+                        const userCards = cards.filter(card=>card.user_id===data.id)
+                        setCardItems(userCards)
+                    })
                 }
             })
         }
     }
-
     const handleLoginClick = e => {
         e.preventDefault()
         if (e.target.value === 'login' || e.target.value === 'signup') {
@@ -97,7 +99,7 @@ function App() {
         handleEditDeck(deck)
     }
     function handleReviewPatch(review, newSession, newLevel){
-        if(newSession>0){
+        if(newSession>0 || newSession===sessionAdvances[sessionAdvances.length-1]){
             fetch(`/api/reviews/${review.id}`, {
                 method: 'PATCH',
                 headers: {
@@ -137,11 +139,15 @@ function App() {
         }
     }
     function chooseNewReviewCard(reviews){
-        const randomNum = Math.floor(Math.random()*reviews.length)
-        const selectedReview = reviews[randomNum]
-        const card = cardItems.find(card=>card.id===selectedReview.card_id)
-        setReviewCard(card)
-        setCurrentReview(selectedReview)
+        if(reviews.length>0){
+            const randomNum = Math.floor(Math.random()*reviews.length)
+            const selectedReview = reviews[randomNum]
+            const card = cardItems.find(card=>card.id===selectedReview.card_id)
+            setReviewCard(card)
+            setCurrentReview(selectedReview)
+        } else {
+            const card = cardItems.find(card=>card.id===currentReview.card_id)
+        }
     }
 
     return (
@@ -164,7 +170,7 @@ function App() {
                         
                         <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} findReviewDeck={findReviewDeck}/>} />
 
-                        <Route exact path="/cards" element={<AllCards onEditDeck={handleEditDeck} cardItems={cardItems} setCardItems={setCardItems} deckItems={deckItems} deckOptions={deckOptions} onEditCard={handleEditCard} onEditReview={handleEditReview} sessionAdvances={sessionAdvances} onReviewPatch={handleReviewPatch}/>} />
+                        <Route exact path="/cards" element={<AllCards onEditDeck={handleEditDeck} cardItems={cardItems} setCardItems={setCardItems} deckItems={deckItems} deckOptions={deckOptions} onEditCard={handleEditCard} onEditReview={handleEditReview} sessionAdvances={sessionAdvances} onReviewPatch={handleReviewPatch} isFront={isFront} setIsFront={setIsFront}/>} />
 
                         <Route path="/cards/new" element={<NewCard deckItems={deckItems} setError={setError} user={user} cardItems={cardItems} setCardItems={setCardItems} onEditDeck={handleEditDeck} deckOptions={deckOptions} setDeckOptions={setDeckOptions}/>} />
 

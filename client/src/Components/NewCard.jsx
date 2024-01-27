@@ -71,6 +71,7 @@ const NewCard = ({deckItems, setError, cardItems, setCardItems, onEditDeck, deck
         }).then(r=>{
             if(r.ok){
                 r.json().then(data=>{
+                    card_data.reviews.push(data)
                     setCardItems([...cardItems, card_data])
                     setIsSubmitting(true)
                     const newDeck = deckItems.find(deck=>deck.id===deck_id)

@@ -3,7 +3,7 @@ import ReviewCard from "./ReviewCard";
 import DeckForm from "./DeckForm";
 import ReviewListCard from "./ReviewListCard";
 
-const CardView = ({card, deckOptions, onEditCard, deckItems, sessionAdvances, onReviewPatch}) => {
+const CardView = ({card, deckOptions, onEditCard, deckItems, sessionAdvances, onReviewPatch, isFront, setIsFront}) => {
     const deckList = card.decks
         .sort((a,b)=> a.name > b.name ? 1 : -1)
         .map(deck=>{
@@ -38,7 +38,7 @@ const CardView = ({card, deckOptions, onEditCard, deckItems, sessionAdvances, on
     }
     return (
         <div>
-            <ReviewCard card={card} color={'black'} />
+            <ReviewCard card={card} color={'black'} isFront={isFront} setIsFront={setIsFront}/>
             <h4>Decks</h4>
             <ul>{deckList}</ul>
             <DeckForm filteredDeckOptions={filteredDeckOptions} card={card} onEditCard={onEditCard} deckItems={deckItems}/>
