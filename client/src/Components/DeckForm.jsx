@@ -3,13 +3,13 @@ import Select from "react-select"
 import * as yup from "yup"
 import { useFormik } from "formik";
 
-const DeckForm = ({filteredDeckOptions, card, onEditCard, deckItems}) => {
+const DeckForm = ({filteredDeckOptions, card, onNewReview}) => {
     const formSchema=yup.object().shape({
         deck_id: yup.number().positive().integer().required("A deck is required.")
     })
     const formik = useFormik({
         initialValues: {
-            deck_id: 1
+            deck_id: ''
         },
         validationSchema: formSchema,
         onSubmit: submitAddDeck
@@ -28,17 +28,10 @@ const DeckForm = ({filteredDeckOptions, card, onEditCard, deckItems}) => {
         }).then(r=>{
             if(r.ok){
                 r.json().then(data=>{
-                    const updatedDecks = card.decks 
-                    updatedDecks.push(deckItems.find(item=>item.id===data.deck_id))
-                    const updatedReviews = card.reviews 
-                    updatedReviews.push(data)
-                    card['decks']=updatedDecks
-                    card['reviews']=updatedReviews
-                    onEditCard(card)
+                    onNewReview(data)
                 })
             }
         })
-        
     }
     const defaultValue = (options, value) => {
         return options ? options.find(option=>option.value===value):""
@@ -54,7 +47,8 @@ const DeckForm = ({filteredDeckOptions, card, onEditCard, deckItems}) => {
                 options={filteredDeckOptions}
                 onChange={value=>formik.setFieldValue('deck_id', value.value)}
             />
-            <button type="Submit">Submit</button>
+            <button type="Submit" >Submit</button>
+            {formik.errors.deck_id ? <div className="errors">{formik.errors.deck_id}</div> : null}
         </form>
     )
 }

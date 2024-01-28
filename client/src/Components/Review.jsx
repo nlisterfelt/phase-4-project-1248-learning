@@ -42,11 +42,10 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, levelColors, sessionAd
         }
     }
     const handleWrongReview = (review) => {
-        if(sessionOneReviews.length>1){
-            chooseNewReviewCard(sessionOneReviews)
-        }
         if(review.level > 1){
             onReviewPatch(review, 1, 1)
+        } else {
+            chooseNewReviewCard(sessionOneReviews)
         }
         setIsFront(true)
     }

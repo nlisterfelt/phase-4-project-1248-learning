@@ -8,6 +8,7 @@ import LoginForm from './LoginForm'
 import SignupForm from './SignupForm'
 import NewCard from "./NewCard";
 import Review from "./Review";
+import Errors from "./Errors";
 
 function App() {
     const [user, setUser] = useState(null)
@@ -76,7 +77,6 @@ function App() {
         return selectReviewDeck
     }
     const handleEditDeck = (newDeck) => {
-        console.log('newdeck',newDeck)
         const newDeckItems = deckItems.map(deck=>deck.id===newDeck.id ? newDeck : deck)
         setDeckItems(newDeckItems)
         const newDeckOptions = deckOptions.map(deck=>deck.value===newDeck.id ? {value: deck.value, label: newDeck.name} : deck)
@@ -88,6 +88,12 @@ function App() {
         const filteredDeckOptions = deckOptions.filter(option=>option.value!==id)
         setDeckOptions(filteredDeckOptions)
     }
+    const handleNewDeck = (deck)=>{
+        const newDeckItems =[...deckItems, deck]
+        setDeckItems(newDeckItems)
+        const newDeckOptions=[...deckOptions, {value: deck.id, label: deck.name}]
+        setDeckOptions(newDeckOptions)
+    }
     const handleEditCard = (card) => {
         const updatedCardItems = cardItems.map(item=>item.id===card.id ? card : item)
         setCardItems(updatedCardItems)
@@ -97,6 +103,29 @@ function App() {
         card.reviews = card.reviews.map(item=>item.id===review.id ? review : item)
         const deck = deckItems.find(item=>item.id===review.deck_id)
         deck.reviews = deck.reviews.map(item=>item.id===review.id ? review : item)
+        handleEditCard(card)
+        handleEditDeck(deck)
+    }
+    const handleDeleteReview= (review)=>{
+        const card = cardItems.find(item=>item.id===review.card_id)
+        card.reviews = card.reviews.filter(item=>item.id!==review.id)
+        const deck = deckItems.find(item=>item.id===review.deck_id)
+        deck.reviews = deck.reviews.filter(item=>item.id!==review.id)
+
+        card['decks'] = card.decks.filter(item=>item.id!==review.deck_id)
+        deck['cards'] = deck.cards.filter(item=>item.id!==review.card_id)
+
+        handleEditCard(card)
+        handleEditDeck(deck)
+    }
+    const handleNewReview = (review)=>{
+        const card = cardItems.find(item=>item.id===review.card_id)
+        card['reviews'].push(review)
+        const deck = deckItems.find(item=>item.id===review.deck_id)
+        deck['reviews'].push(review)
+
+        card['decks'].push(deck)
+        deck['cards'].push(card)
         handleEditCard(card)
         handleEditDeck(deck)
     }
@@ -116,7 +145,11 @@ function App() {
                 if(r.ok){
                     r.json().then(updatedReview => {
                         handleEditReview(updatedReview)
-                        if(updatedReview.level>1){
+                        if(updatedReview.level===1){
+                            const sessionOneReviewsWith =sessionOneReviews.map(review=>review.id===updatedReview.id ? updatedReview : review )
+                            setSessionOneReviews(sessionOneReviewsWith)
+                            chooseNewReviewCard(sessionOneReviewsWith)
+                        } else {
                             const sessionOneReviewsWithout =sessionOneReviews.filter(review=>review.id!==updatedReview.id)
                             setSessionOneReviews(sessionOneReviewsWithout)
                             if(sessionOneReviewsWithout.length>0){
@@ -124,14 +157,6 @@ function App() {
                             } else {
                                 setIsDone(true)
                             }
-                        } else {
-                            const sessionOneReviewsWith =sessionOneReviews.map(review=>{
-                                if(review.id===updatedReview.id){
-                                    return updatedReview
-                                } 
-                                return review 
-                            })
-                            chooseNewReviewCard(sessionOneReviewsWith)
                         }
                     })
                 }
@@ -148,13 +173,16 @@ function App() {
             setReviewCard(card)
             setCurrentReview(selectedReview)
         } else {
-            const card = cardItems.find(card=>card.id===currentReview.card_id)
+            //const card = cardItems.find(card=>card.id===currentReview.card_id)
+            console.log('else for choose new')
+            //fix
         }
     }
 
     return (
         <div>
             <h1 className="header">1248 Learning</h1>
+            <Errors error={error}/>
             <div className="errors">{error}</div>
             { !user ? (
                 <div>
@@ -167,12 +195,13 @@ function App() {
             ) : (
                 <div>
                     <NavBar setUser={setUser}/>
+                    
                     <Routes>
                         <Route exact path="/" element={<Home levelColors={levelColors} sessionAdvances={sessionAdvances}/>} />
                         
-                        <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} findReviewDeck={findReviewDeck} onEditDeck={handleEditDeck} onDeleteDeck={handleDeleteDeck}/>} />
+                        <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} findReviewDeck={findReviewDeck} onNewDeck={handleNewDeck} onDeleteDeck={handleDeleteDeck} onEditDeck={handleEditDeck}/>} />
 
-                        <Route exact path="/cards" element={<AllCards onEditDeck={handleEditDeck} cardItems={cardItems} setCardItems={setCardItems} deckItems={deckItems} deckOptions={deckOptions} onEditCard={handleEditCard} onEditReview={handleEditReview} sessionAdvances={sessionAdvances} onReviewPatch={handleReviewPatch} isFront={isFront} setIsFront={setIsFront}/>} />
+                        <Route exact path="/cards" element={<AllCards onEditDeck={handleEditDeck} cardItems={cardItems} setCardItems={setCardItems} deckItems={deckItems} deckOptions={deckOptions} onEditCard={handleEditCard} onEditReview={handleEditReview} sessionAdvances={sessionAdvances} onReviewPatch={handleReviewPatch} isFront={isFront} setIsFront={setIsFront} onDeleteReview={handleDeleteReview} onNewReview={handleNewReview}/>} />
 
                         <Route path="/cards/new" element={<NewCard deckItems={deckItems} setError={setError} user={user} cardItems={cardItems} setCardItems={setCardItems} onEditDeck={handleEditDeck} deckOptions={deckOptions} setDeckOptions={setDeckOptions}/>} />
 

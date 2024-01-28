@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import Card from "./Card";
 import {useNavigate} from "react-router-dom"
 import CardView from "./CardView";
 
-const AllCards = ({cardItems, setCardItems, deckItems, onEditDeck, deckOptions, onEditCard, onEditReview, sessionAdvances, onReviewPatch, isFront, setIsFront}) => {
+const AllCards = ({cardItems, setCardItems, deckItems, onEditDeck, deckOptions, onEditReview, sessionAdvances, onReviewPatch, isFront, setIsFront, onDeleteReview, onNewReview}) => {
     const [category, setCategory] = useState('all_decks')
     const [isEdit, setIsEdit]=useState(false)
     const [editCard, setEditCard]=useState({})
@@ -14,7 +14,7 @@ const AllCards = ({cardItems, setCardItems, deckItems, onEditDeck, deckOptions, 
         .map(deck=><option key={deck.value} id={deck.value} value={deck.label}>{deck.label}</option>)
     const cardList = cardItems
         .sort((a,b)=>a.front_title>b.front_title?1:-1)
-        .filter(card=>filterCards(card)).map(card=><Card key={card.id} id={card.id} card={card} onEditCard={handleEditCard} onDeleteCard={handleDeleteCard}/>)
+        .filter(card=>filterCards(card)).map(card=><Card key={card.id} id={card.id} card={card}  onDeleteCard={handleDeleteCard} onViewCard={handleViewCard}/>)
     
     function filterCards(card){
         if(category==='all_decks'){
@@ -46,7 +46,7 @@ const AllCards = ({cardItems, setCardItems, deckItems, onEditDeck, deckOptions, 
             }
         })
     }
-    function handleEditCard(card){
+    function handleViewCard(card){
         setIsEdit(true)
         setEditCard(card)
     }
@@ -68,7 +68,7 @@ const AllCards = ({cardItems, setCardItems, deckItems, onEditDeck, deckOptions, 
                 </div>:
                 <div>
                     <button onClick={e=>setIsEdit(false)}>Back to All cards</button>
-                    <CardView card={editCard} deckOptions={deckOptions} onEditReview={onEditReview} onEditCard={onEditCard} deckItems={deckItems} sessionAdvances={sessionAdvances} onReviewPatch={onReviewPatch} isFront={isFront} setIsFront={setIsFront}/>
+                    <CardView card={editCard} deckOptions={deckOptions} onEditReview={onEditReview} deckItems={deckItems} sessionAdvances={sessionAdvances} onReviewPatch={onReviewPatch} isFront={isFront} setIsFront={setIsFront} onDeleteReview={onDeleteReview} onNewReview={onNewReview}/>
                 </div>
             }
         </div>

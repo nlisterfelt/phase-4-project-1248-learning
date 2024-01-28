@@ -3,7 +3,7 @@ import DeckCard from "./DeckCard";
 import { useFormik } from "formik";
 import * as yup from "yup"
 
-const Deck = ({deckItems, findReviewDeck, onEditDeck, onDeleteDeck}) => {
+const Deck = ({deckItems, findReviewDeck, onNewDeck, onDeleteDeck, onEditDeck}) => {
     const formSchema=yup.object().shape({
         newDeckName: yup.string().min(1).max(100)
     })
@@ -12,9 +12,9 @@ const Deck = ({deckItems, findReviewDeck, onEditDeck, onDeleteDeck}) => {
             newDeckName: ''
         },
         validationSchema: formSchema,
-        onSubmit: handleNewDeck
+        onSubmit: handleNewDeckSubmit
     })
-    function handleNewDeck(values){
+    function handleNewDeckSubmit(values){
         fetch('/api/decks', {
             method: "POST",
             headers: {"Content-Type": "application/json"},
@@ -23,7 +23,7 @@ const Deck = ({deckItems, findReviewDeck, onEditDeck, onDeleteDeck}) => {
             })
         }).then(r=>{
                 if (r.ok){
-                    r.json().then(deck =>onEditDeck(deck))
+                    r.json().then(deck =>onNewDeck(deck))
                 }
         })
     }    

@@ -3,7 +3,7 @@ import ReviewCard from "./ReviewCard";
 import DeckForm from "./DeckForm";
 import ReviewListCard from "./ReviewListCard";
 
-const CardView = ({card, deckOptions, onEditCard, deckItems, sessionAdvances, onReviewPatch, isFront, setIsFront}) => {
+const CardView = ({card, deckOptions, deckItems, sessionAdvances, onReviewPatch, isFront, setIsFront, onDeleteReview, onNewReview}) => {
     const deckList = card.decks
         .sort((a,b)=> a.name > b.name ? 1 : -1)
         .map(deck=>{
@@ -12,7 +12,7 @@ const CardView = ({card, deckOptions, onEditCard, deckItems, sessionAdvances, on
         })
     const reviewList = card.reviews
         .sort((a,b)=> a.level>b.level ? 1 : -1)
-        .map(review=><ReviewListCard key={review.id} id={review.id} deckItems={deckItems} review={review} onReviewDelete={handleReviewDelete} sessionAdvances={sessionAdvances} onReviewPatch={onReviewPatch}/>)
+        .map(review=><ReviewListCard key={review.id} id={review.id} deckItems={deckItems} review={review} onReviewDelete={e=>handleReviewDelete(review.deck_id)} sessionAdvances={sessionAdvances} onReviewPatch={onReviewPatch}/>)
 
     const filteredDeckOptions = deckOptions.filter(deck=>{
         for(let i=0; i<card.decks.length; i++){
@@ -28,11 +28,7 @@ const CardView = ({card, deckOptions, onEditCard, deckItems, sessionAdvances, on
             method: 'DELETE',
         }).then(r=> {
             if (r.ok) {
-                const updatedReviews = card.reviews.filter(item=>item.id!==review.id)
-                card['reviews']=updatedReviews
-                const updatedDecks = card.decks.filter(item=>item.id!=review.deck_id)
-                card['decks']=updatedDecks
-                onEditCard(card)
+                onDeleteReview(review)
             }
         })
     }
@@ -41,7 +37,7 @@ const CardView = ({card, deckOptions, onEditCard, deckItems, sessionAdvances, on
             <ReviewCard card={card} color={'black'} isFront={isFront} setIsFront={setIsFront}/>
             <h4>Decks</h4>
             <ul>{deckList}</ul>
-            <DeckForm filteredDeckOptions={filteredDeckOptions} card={card} onEditCard={onEditCard} deckItems={deckItems}/>
+            <DeckForm filteredDeckOptions={filteredDeckOptions} card={card} deckItems={deckItems} onNewReview={onNewReview}/>
             <h4>Reviews</h4>
             <ul>{reviewList}</ul>
         </div>

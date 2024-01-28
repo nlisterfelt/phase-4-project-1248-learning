@@ -66,8 +66,10 @@ class Decks(Resource):
       db.session.add(new_deck)
       db.session.commit()
       return new_deck.to_dict(), 201
-    except:
-      return {"error": "unprocessable entity"}, 422
+    except IntegrityError:
+      return {"error": "Already exists"}, 422
+    except ValueError:
+      return {"error": str(error)}
 
 class DecksById(Resource):
   def delete(self, id):

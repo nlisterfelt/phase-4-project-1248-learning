@@ -31,16 +31,11 @@ function DeckCard({deck, findReviewDeck, onEditDeck, onDeleteDeck}){
             }
         })
     }
-    function handleReviewClick(id){
-        findReviewDeck(id)
-        navigate('/review')
-    }
 
     return(
         <div  className="deck_cards">
             <h4>{deck.name}</h4>
             <p>{deck.cards.length} {deck.cards.length==1 ? 'card' : 'cards'}</p>
-            <button onClick={e=>handleReviewClick(deck.id)}>Review</button>
             <button onClick={e=>{
                 setIsEdit(!isEdit)
                 setNewDeckName(deck.name)

@@ -38,9 +38,9 @@ const SignupForm = ({userInformation, onSetShowLogin, setError}) => {
                     onSetShowLogin(null)
                     navigate('/')
                 })
-            } //else {
-                //r.json().then(err => setError(err.errors))
-            //}
+            } else {
+                r.json().then(err => setError(err.errors))
+            }
         })
     }
     
