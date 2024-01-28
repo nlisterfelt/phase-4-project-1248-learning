@@ -8,7 +8,6 @@ import LoginForm from './LoginForm'
 import SignupForm from './SignupForm'
 import NewCard from "./NewCard";
 import Review from "./Review";
-import Errors from "./Errors";
 
 function App() {
     const [user, setUser] = useState(null)
@@ -182,13 +181,12 @@ function App() {
     return (
         <div>
             <h1 className="header">1248 Learning</h1>
-            <Errors error={error}/>
-            <div className="errors">{error}</div>
+            <h4 style={{color: "red"}}>{error}</h4>
             { !user ? (
                 <div>
                     <button value={'signup'} onClick={handleLoginClick}>Sign Up</button>
                     <button value={'login'} onClick={handleLoginClick}>Log in</button>
-                    {showLogin==='login'? (<LoginForm userInformation={userInformation} onSetShowLogin={setShowLogin}/>): null }
+                    {showLogin==='login'? (<LoginForm userInformation={userInformation} onSetShowLogin={setShowLogin} setError={setError}/>): null }
                     {showLogin==='signup'? (<SignupForm userInformation={userInformation} onSetShowLogin={setShowLogin} setError={setError}/>): null } 
                     <Home levelColors={levelColors} sessionAdvances={sessionAdvances}/>
                 </div>
@@ -199,7 +197,7 @@ function App() {
                     <Routes>
                         <Route exact path="/" element={<Home levelColors={levelColors} sessionAdvances={sessionAdvances}/>} />
                         
-                        <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} findReviewDeck={findReviewDeck} onNewDeck={handleNewDeck} onDeleteDeck={handleDeleteDeck} onEditDeck={handleEditDeck}/>} />
+                        <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} findReviewDeck={findReviewDeck} onNewDeck={handleNewDeck} onDeleteDeck={handleDeleteDeck} onEditDeck={handleEditDeck} setError={setError}/>} />
 
                         <Route exact path="/cards" element={<AllCards onEditDeck={handleEditDeck} cardItems={cardItems} setCardItems={setCardItems} deckItems={deckItems} deckOptions={deckOptions} onEditCard={handleEditCard} onEditReview={handleEditReview} sessionAdvances={sessionAdvances} onReviewPatch={handleReviewPatch} isFront={isFront} setIsFront={setIsFront} onDeleteReview={handleDeleteReview} onNewReview={handleNewReview}/>} />
 

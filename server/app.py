@@ -44,7 +44,7 @@ class Login(Resource):
       if user.authenticate(password):
         session['user_id']=user.id
         return user.to_dict(), 201
-    return {"error": "unathorized"}, 401
+    return {"error": "User not found"}, 401
 
 class Logout(Resource):
   def delete(self):
@@ -67,7 +67,7 @@ class Decks(Resource):
       db.session.commit()
       return new_deck.to_dict(), 201
     except IntegrityError:
-      return {"error": "Already exists"}, 422
+      return {"error": "Deck already exists"}, 422
     except ValueError:
       return {"error": str(error)}
 

@@ -1,11 +1,14 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom"
 
-function LoginForm({userInformation, onSetShowLogin}){
+function LoginForm({userInformation, onSetShowLogin, setError}){
     const navigate = useNavigate()
     const [username, setUsername]=useState('')
     const [password, setPassword]=useState('')
 
+    useEffect(()=>{
+        return ()=>setError(null)
+    },[])
     function handleSubmit(e){
         e.preventDefault()
         fetch("/api/login", {
@@ -19,7 +22,9 @@ function LoginForm({userInformation, onSetShowLogin}){
                     onSetShowLogin(null)
                     navigate('/')
                 })
-            } 
+            } else {
+                r.json().then(data=>setError(data.error))
+            }
         })
     }
     

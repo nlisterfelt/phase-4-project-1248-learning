@@ -9,11 +9,6 @@ const NewCard = ({deckItems, setError, cardItems, setCardItems, onEditDeck, deck
     const [isSubmitting, setIsSubmitting]=useState(false)
 
     useEffect(()=>{
-        let newDeckOptions=[]
-        for (let i=0; i<deckItems.length; i++){
-            newDeckOptions = [...newDeckOptions, {'value': deckItems[i].id, 'label': deckItems[i].name}]
-        }
-        setDeckOptions(newDeckOptions)
         return ()=> {setError(null)}
     }, [])
 
@@ -34,7 +29,7 @@ const NewCard = ({deckItems, setError, cardItems, setCardItems, onEditDeck, deck
             back_title: "",
             back_description: "",
             back_image: "",
-            deck_id: 1
+            deck_id: null
         },
         validationSchema: formSchema,
         onSubmit: submitCard
@@ -54,7 +49,9 @@ const NewCard = ({deckItems, setError, cardItems, setCardItems, onEditDeck, deck
                     data.decks.push(selectedDeck)
                     submitReview(data, values.deck_id)
                 })
-            } 
+            } else {
+                r.json().then(data=>setError(data.error))
+            }
         })
     }
     function submitReview(card_data, deck_id){
@@ -75,13 +72,17 @@ const NewCard = ({deckItems, setError, cardItems, setCardItems, onEditDeck, deck
                     setCardItems([...cardItems, card_data])
                     setIsSubmitting(true)
                     const newDeck = deckItems.find(deck=>deck.id===deck_id)
+                    console.log('newDeck',newDeck)
+                    console.log('card_data',card_data)
                     newDeck.cards.push(card_data)
                     newDeck.reviews.push(data)
                     onEditDeck(newDeck)
                     navigate('/cards')
                 })
-            } 
-        })
+            } else {
+                r.json().then(data=>setError(data.error))
+            }
+        })          
     }
     const defaultValue = (options, value) => {
         return options ? options.find(option=>option.value===value):""

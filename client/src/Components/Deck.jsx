@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import DeckCard from "./DeckCard";
 import { useFormik } from "formik";
 import * as yup from "yup"
 
-const Deck = ({deckItems, findReviewDeck, onNewDeck, onDeleteDeck, onEditDeck}) => {
+const Deck = ({deckItems, findReviewDeck, onNewDeck, onDeleteDeck, onEditDeck, setError}) => {
+    useEffect(()=>{
+        return ()=>setError(null)
+    }, [])
     const formSchema=yup.object().shape({
         newDeckName: yup.string().min(1).max(100)
     })
@@ -22,9 +25,11 @@ const Deck = ({deckItems, findReviewDeck, onNewDeck, onDeleteDeck, onEditDeck}) 
                 name: values.newDeckName
             })
         }).then(r=>{
-                if (r.ok){
-                    r.json().then(deck =>onNewDeck(deck))
-                }
+            if (r.ok){
+                r.json().then(deck =>onNewDeck(deck))
+            } else {
+                r.json().then(data=>setError(data.error))
+            }
         })
     }    
 
