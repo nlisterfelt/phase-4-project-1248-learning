@@ -22,6 +22,7 @@ function App() {
     const [sessionOneReviews, setSessionOneReviews]=useState([])
     const [reviewCard, setReviewCard] = useState([])
     const [isDone, setIsDone]=useState(false)
+    const [isNewCard, setIsNewCard]=useState(false)
 
     const levelColors = ['deeppink', 'blueViolet', 'blue', 'skyBlue', 'limegreen', 'yellow', 'goldenrod', 'coral', 'tomato', 'brown']
     const sessionAdvances = [1, 2, 4, 8, 16, 32, 64, 128, 256, 'Retire']
@@ -199,9 +200,9 @@ function App() {
                         
                         <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} findReviewDeck={findReviewDeck} onNewDeck={handleNewDeck} onDeleteDeck={handleDeleteDeck} onEditDeck={handleEditDeck} setError={setError}/>} />
 
-                        <Route exact path="/cards" element={<AllCards onEditDeck={handleEditDeck} cardItems={cardItems} setCardItems={setCardItems} deckItems={deckItems} deckOptions={deckOptions} onEditCard={handleEditCard} onEditReview={handleEditReview} sessionAdvances={sessionAdvances} onReviewPatch={handleReviewPatch} isFront={isFront} setIsFront={setIsFront} onDeleteReview={handleDeleteReview} onNewReview={handleNewReview}/>} />
+                        <Route exact path="/cards" element={<AllCards onEditDeck={handleEditDeck} cardItems={cardItems} setCardItems={setCardItems} deckItems={deckItems} deckOptions={deckOptions} onEditCard={handleEditCard} onEditReview={handleEditReview} sessionAdvances={sessionAdvances} onReviewPatch={handleReviewPatch} isFront={isFront} setIsFront={setIsFront} onDeleteReview={handleDeleteReview} onNewReview={handleNewReview} isNewCard={isNewCard} setIsNewCard={setIsNewCard} setError={setError}/>} />
 
-                        <Route path="/cards/new" element={<NewCard deckItems={deckItems} setError={setError} user={user} cardItems={cardItems} setCardItems={setCardItems} onEditDeck={handleEditDeck} deckOptions={deckOptions} setDeckOptions={setDeckOptions}/>} />
+                        <Route path="/cards/new" element={<NewCard deckItems={deckItems} setError={setError} user={user} cardItems={cardItems} setCardItems={setCardItems} onEditDeck={handleEditDeck} deckOptions={deckOptions} isNewCard={isNewCard} />} />
 
                         <Route path="/review" element={<Review reviewDeck={reviewDeck} deckOptions={deckOptions} findReviewDeck={findReviewDeck} levelColors={levelColors} sessionAdvances={sessionAdvances} onEditReview={handleEditReview} onReviewPatch={handleReviewPatch} isFront={isFront} setIsFront={setIsFront} currentReview={currentReview} setCurrentReview={setCurrentReview} chooseNewReviewCard={chooseNewReviewCard} sessionOneReviews={sessionOneReviews} setSessionOneReviews={setSessionOneReviews} reviewCard={reviewCard} setReviewCard={setReviewCard} isDone={isDone} setIsDone={setIsDone}/>} />
                         <Route path="*" element={'404 Not Found'} />

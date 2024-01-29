@@ -3,9 +3,9 @@ import Card from "./Card";
 import {useNavigate} from "react-router-dom"
 import CardView from "./CardView";
 
-const AllCards = ({cardItems, setCardItems, deckItems, onEditDeck, deckOptions, onEditReview, sessionAdvances, onReviewPatch, isFront, setIsFront, onDeleteReview, onNewReview}) => {
+const AllCards = ({cardItems, setCardItems, deckItems, onEditDeck, deckOptions, onEditReview, sessionAdvances, onReviewPatch, isFront, setIsFront, onDeleteReview, onNewReview, isNewCard, setIsNewCard, setError}) => {
     const [category, setCategory] = useState('all_decks')
-    const [isEdit, setIsEdit]=useState(false)
+    const [isView, setIsView]=useState(false)
     const [editCard, setEditCard]=useState({})
     const navigate = useNavigate()
 
@@ -47,15 +47,19 @@ const AllCards = ({cardItems, setCardItems, deckItems, onEditDeck, deckOptions, 
         })
     }
     function handleViewCard(card){
-        setIsEdit(true)
+        setIsNewCard(false)
+        setIsView(true)
         setEditCard(card)
     }
     
     return (
         <div>
-            {!isEdit ? 
+            {!isView ? 
                 <div>
-                    <button onClick={e => navigate('/cards/new')}>Create a new card</button>
+                    <button onClick={e => {
+                        setIsNewCard(true)
+                        navigate('/cards/new')}
+                        }>Create a new card</button>
                     <h3>All cards</h3>
                     <label>Select a deck: </label>
                     <select onChange={e=>setCategory(e.target.value)}>
@@ -67,8 +71,8 @@ const AllCards = ({cardItems, setCardItems, deckItems, onEditDeck, deckOptions, 
                     </div> 
                 </div>:
                 <div>
-                    <button onClick={e=>setIsEdit(false)}>Back to All cards</button>
-                    <CardView card={editCard} deckOptions={deckOptions} onEditReview={onEditReview} deckItems={deckItems} sessionAdvances={sessionAdvances} onReviewPatch={onReviewPatch} isFront={isFront} setIsFront={setIsFront} onDeleteReview={onDeleteReview} onNewReview={onNewReview}/>
+                    <button onClick={e=>setIsView(false)}>Back to All cards</button>
+                    <CardView card={editCard} deckOptions={deckOptions} onEditReview={onEditReview} deckItems={deckItems} sessionAdvances={sessionAdvances} onReviewPatch={onReviewPatch} isFront={isFront} setIsFront={setIsFront} onDeleteReview={onDeleteReview} onNewReview={onNewReview} isNewCard={isNewCard} setIsNewCard={setIsNewCard} setError={setError}/>
                 </div>
             }
         </div>

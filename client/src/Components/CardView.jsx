@@ -1,9 +1,20 @@
-import React from "react";
+import React, {useState} from "react";
 import ReviewCard from "./ReviewCard";
 import DeckForm from "./DeckForm";
 import ReviewListCard from "./ReviewListCard";
+import CardForm from "./CardForm";
 
-const CardView = ({card, deckOptions, deckItems, sessionAdvances, onReviewPatch, isFront, setIsFront, onDeleteReview, onNewReview}) => {
+const CardView = ({card, deckOptions, deckItems, sessionAdvances, onReviewPatch, isFront, setIsFront, onDeleteReview, onNewReview, isNewCard, setIsNewCard, setError}) => {
+    const [isEdit, setIsEdit]=useState(false)
+    const initialVal = {
+        front_title: card.front_title,
+        front_description: card.front_description,
+        front_image: card.front_image,
+        back_title: card.back_title,
+        back_description: card.back_description,
+        back_image: card.back_image,
+        deck_id: 1
+    }
     const deckList = card.decks
         .sort((a,b)=> a.name > b.name ? 1 : -1)
         .map(deck=>{
@@ -32,14 +43,42 @@ const CardView = ({card, deckOptions, deckItems, sessionAdvances, onReviewPatch,
             }
         })
     }
+    const handleSubmitCard = (values) => {
+        console.log(values)
+        fetch(`/api/cards/${card.id}`, {
+            method: 'PATCH',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(values, null, 2)
+        }).then(r=>{
+            if(r.ok){
+                r.json().then(data=>{
+                    console.log('data from editing a card', data)
+                })
+            } else {
+                console.log('error')
+                r.json().then(data=>setError(data.error))
+            }
+        })
+    }
+    const handleEditClick = () => {
+        setIsEdit(!isEdit)
+    }
     return (
         <div>
             <ReviewCard card={card} color={'black'} isFront={isFront} setIsFront={setIsFront}/>
-            <h4>Decks</h4>
-            <ul>{deckList}</ul>
-            <DeckForm filteredDeckOptions={filteredDeckOptions} card={card} deckItems={deckItems} onNewReview={onNewReview}/>
-            <h4>Reviews</h4>
-            <ul>{reviewList}</ul>
+            <button onClick={handleEditClick}>{isEdit ? "Edit decks and reviews" : "Edit card"}</button>
+            {isEdit?
+            <CardForm onSubmitCard={handleSubmitCard} deckOptions={{}} isNewCard={isNewCard} initialVal={initialVal}/> :
+            <div>
+                <h4>Decks</h4>
+                <ul>{deckList}</ul>
+                <DeckForm filteredDeckOptions={filteredDeckOptions} card={card} deckItems={deckItems} onNewReview={onNewReview}/>
+                <h4>Reviews</h4>
+                <ul>{reviewList}</ul>
+            </div>}
         </div>
     )
 }

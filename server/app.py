@@ -3,13 +3,13 @@ from flask_restful import Resource
 from config import app, api, db
 from models import *
 from sqlalchemy.exc import IntegrityError
-'''
+
 @app.before_request
 def is_logged_in():
   open_access=['login','check_session','signup']
   if request.endpoint not in open_access and not session.get('user_id'):
     return {'error': 'unauthorized'}, 401
-'''
+
 class Signup(Resource):
   def post(self):
     user = User(
@@ -113,6 +113,17 @@ class Cards(Resource):
       return {"error": "unprocessable entity"}, 422
 
 class CardsById(Resource):
+  def patch(self, id):
+    card = Card.query.filter(Card.id==id).first()
+    form_data = request.get_json()
+    if card:
+      for attr in form_data:
+        setattr(card, attr, form_data.get(attr))
+      db.session.add(card)
+      db.session.commit()
+      return make_response(card.to_dict(), 202)
+    return {"error": "Card not found"}, 404
+
   def delete(self, id):
     card = Card.query.filter(Card.id==id).first()
     if card:
