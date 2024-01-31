@@ -1,11 +1,8 @@
 import React, {useState} from "react";
-import { useNavigate } from "react-router-dom";
 
-function DeckCard({deck, findReviewDeck, onEditDeck, onDeleteDeck}){
+function DeckCard({deck, onEditDeck, onDeleteDeck}){
     const [isEdit, setIsEdit]=useState(false)
     const [newDeckName, setNewDeckName]=useState('')
-    
-    const navigate = useNavigate()
 
     function handleDeckEditSubmit(e){
         e.preventDefault()

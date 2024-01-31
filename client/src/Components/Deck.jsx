@@ -3,7 +3,7 @@ import DeckCard from "./DeckCard";
 import { useFormik } from "formik";
 import * as yup from "yup"
 
-const Deck = ({deckItems, findReviewDeck, onNewDeck, onDeleteDeck, onEditDeck, setError}) => {
+const Deck = ({deckItems, onNewDeck, onDeleteDeck, onEditDeck, setError}) => {
     useEffect(()=>{
         return ()=>setError(null)
     }, [])
@@ -26,7 +26,10 @@ const Deck = ({deckItems, findReviewDeck, onNewDeck, onDeleteDeck, onEditDeck, s
             })
         }).then(r=>{
             if (r.ok){
-                r.json().then(deck =>onNewDeck(deck))
+                r.json().then(deck =>{
+                    onNewDeck(deck)
+                    setError(null)
+                })
             } else {
                 r.json().then(data=>setError(data.error))
             }
@@ -35,7 +38,7 @@ const Deck = ({deckItems, findReviewDeck, onNewDeck, onDeleteDeck, onEditDeck, s
 
     const deckList = deckItems
         .sort((a,b)=>a.name>b.name?1:-1)
-        .map(deck => <DeckCard key={deck.id} deck={deck} findReviewDeck={findReviewDeck} onEditDeck={onEditDeck} onDeleteDeck={onDeleteDeck}/>)
+        .map(deck => <DeckCard key={deck.id} deck={deck} onEditDeck={onEditDeck} onDeleteDeck={onDeleteDeck}/>)
 
     return(
         <div>

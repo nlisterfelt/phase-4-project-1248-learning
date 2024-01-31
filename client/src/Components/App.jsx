@@ -83,6 +83,10 @@ function App() {
         setDeckOptions(newDeckOptions)
     }
     const handleDeleteDeck = (id) => {
+        const selectedDeck = deckItems.find(deck=>deck.id===id)
+        for(let i=0;i<selectedDeck.reviews.length;i++){
+            handleDeleteReview(selectedDeck.reviews[i])
+        }
         const filteredDeckItems = deckItems.filter(deck=>deck.id!==id)
         setDeckItems(filteredDeckItems)
         const filteredDeckOptions = deckOptions.filter(option=>option.value!==id)
@@ -166,17 +170,14 @@ function App() {
         }
     }
     function chooseNewReviewCard(reviews){
+        setIsFront(true)
         if(reviews.length>0){
             const randomNum = Math.floor(Math.random()*reviews.length)
             const selectedReview = reviews[randomNum]
             const card = cardItems.find(card=>card.id===selectedReview.card_id)
             setReviewCard(card)
             setCurrentReview(selectedReview)
-        } else {
-            //const card = cardItems.find(card=>card.id===currentReview.card_id)
-            console.log('else for choose new')
-            //fix
-        }
+        } 
     }
 
     return (
@@ -198,9 +199,9 @@ function App() {
                     <Routes>
                         <Route exact path="/" element={<Home levelColors={levelColors} sessionAdvances={sessionAdvances}/>} />
                         
-                        <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} findReviewDeck={findReviewDeck} onNewDeck={handleNewDeck} onDeleteDeck={handleDeleteDeck} onEditDeck={handleEditDeck} setError={setError}/>} />
+                        <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} onNewDeck={handleNewDeck} onDeleteDeck={handleDeleteDeck} onEditDeck={handleEditDeck} setError={setError}/>} />
 
-                        <Route exact path="/cards" element={<AllCards onEditDeck={handleEditDeck} cardItems={cardItems} setCardItems={setCardItems} deckItems={deckItems} deckOptions={deckOptions} onEditCard={handleEditCard} onEditReview={handleEditReview} sessionAdvances={sessionAdvances} onReviewPatch={handleReviewPatch} isFront={isFront} setIsFront={setIsFront} onDeleteReview={handleDeleteReview} onNewReview={handleNewReview} isNewCard={isNewCard} setIsNewCard={setIsNewCard} setError={setError}/>} />
+                        <Route exact path="/cards" element={<AllCards onEditDeck={handleEditDeck} cardItems={cardItems} setCardItems={setCardItems} deckItems={deckItems} deckOptions={deckOptions} onEditCard={handleEditCard} onEditReview={handleEditReview} sessionAdvances={sessionAdvances} onReviewPatch={handleReviewPatch} isFront={isFront} setIsFront={setIsFront} onDeleteReview={handleDeleteReview} onNewReview={handleNewReview} isNewCard={isNewCard} setIsNewCard={setIsNewCard} setError={setError} />} />
 
                         <Route path="/cards/new" element={<NewCard deckItems={deckItems} setError={setError} user={user} cardItems={cardItems} setCardItems={setCardItems} onEditDeck={handleEditDeck} deckOptions={deckOptions} isNewCard={isNewCard} />} />
 

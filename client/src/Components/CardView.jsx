@@ -4,7 +4,7 @@ import DeckForm from "./DeckForm";
 import ReviewListCard from "./ReviewListCard";
 import CardForm from "./CardForm";
 
-const CardView = ({card, deckOptions, deckItems, sessionAdvances, onReviewPatch, isFront, setIsFront, onDeleteReview, onNewReview, isNewCard, setIsNewCard, setError}) => {
+const CardView = ({card, deckOptions, deckItems, sessionAdvances, onReviewPatch, isFront, setIsFront, onDeleteReview, onNewReview, isNewCard, setError, onEditCard, setIsView}) => {
     const [isEdit, setIsEdit]=useState(false)
     const initialVal = {
         front_title: card.front_title,
@@ -44,7 +44,6 @@ const CardView = ({card, deckOptions, deckItems, sessionAdvances, onReviewPatch,
         })
     }
     const handleSubmitCard = (values) => {
-        console.log(values)
         fetch(`/api/cards/${card.id}`, {
             method: 'PATCH',
             headers: {
@@ -55,10 +54,11 @@ const CardView = ({card, deckOptions, deckItems, sessionAdvances, onReviewPatch,
         }).then(r=>{
             if(r.ok){
                 r.json().then(data=>{
-                    console.log('data from editing a card', data)
+                    onEditCard(data)
+                    setIsView(false)
+                    setIsFront(true)
                 })
             } else {
-                console.log('error')
                 r.json().then(data=>setError(data.error))
             }
         })
@@ -75,7 +75,7 @@ const CardView = ({card, deckOptions, deckItems, sessionAdvances, onReviewPatch,
             <div>
                 <h4>Decks</h4>
                 <ul>{deckList}</ul>
-                <DeckForm filteredDeckOptions={filteredDeckOptions} card={card} deckItems={deckItems} onNewReview={onNewReview}/>
+                <DeckForm filteredDeckOptions={filteredDeckOptions} card={card} deckItems={deckItems} onNewReview={onNewReview} setError={setError} setIsView={setIsView}/>
                 <h4>Reviews</h4>
                 <ul>{reviewList}</ul>
             </div>}

@@ -3,7 +3,7 @@ import Select from "react-select"
 import * as yup from "yup"
 import { useFormik } from "formik";
 
-const DeckForm = ({filteredDeckOptions, card, onNewReview}) => {
+const DeckForm = ({filteredDeckOptions, card, onNewReview, setError, setIsView}) => {
     const formSchema=yup.object().shape({
         deck_id: yup.number().positive().integer().required("A deck is required.")
     })
@@ -29,7 +29,10 @@ const DeckForm = ({filteredDeckOptions, card, onNewReview}) => {
             if(r.ok){
                 r.json().then(data=>{
                     onNewReview(data)
+                    setIsView(false)
                 })
+            } else {
+                r.json().then(data=>setError(data.error))
             }
         })
     }
