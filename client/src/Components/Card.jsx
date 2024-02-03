@@ -5,7 +5,7 @@ function Card({card, onViewCard, onDeleteCard}){
     return (
         <div className="cards">
             <h4>{card.front_title}</h4>
-            <div style={{display: "flex"}}>
+            <div style={{display: "flex", justifyContent: "center"}}>
                 <button onClick={e=>onViewCard(card)}>View</button>
                 <button onClick={e=>onDeleteCard(card)}>X</button>
             </div>

@@ -25,12 +25,14 @@
   border-style: solid;
   border-color: blue;
   border-width: 5px;
-  width: 100px;
-  height: 100px;
+  width: 160px;
+  height: 160px;
   padding: 10px;
   justify-content: center;
   margin: 10px;
   text-align: center;
+  overflow-wrap: break-word;
+  padding: 10px;
 }
 .medium_card {
   border-style: solid;
@@ -40,7 +42,8 @@
   height: 200px;
   padding: 10px;
   justify-content: center;
-  margin: 10px
+  margin: 10px;
+  overflow-wrap: break-word;
 }
 .deck_cards {
   border-style: solid;
@@ -51,10 +54,12 @@
   padding: 10px;
   margin: 10px;
   text-align: center;
+  overflow-wrap: break-word;
 }
 .card_container {
   display: flex;
   flex-wrap: wrap;
+  overflow-wrap: break-word;
 }
 .errors {
   color: red;
@@ -71,5 +76,6 @@
   vertical-align: top;
   align-items: center;
   text-align: center;
-  margin: 10px
+  margin: 10px;
+  overflow-wrap: break-word;
 }

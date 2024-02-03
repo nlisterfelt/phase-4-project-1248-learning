@@ -23,7 +23,8 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, levelColors, sessionAd
         onSubmit: submitStartReview
     })
     function submitStartReview(values){
-        const newReviewDeck = findReviewDeck(values.deck_id).reviews
+        const newReviewDeck = findReviewDeck(values.deck_id).reviews.filter(review=>review.level!==sessionAdvances[sessionAdvances.length-1])
+        console.log('newreviewdeck', newReviewDeck)
         if(newReviewDeck.length===0){
             setReviewCard(null)
             setIsReviewsEmpty(true)
@@ -31,16 +32,19 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, levelColors, sessionAd
             setIsDone(true)
         } else {
             const filteredReviews = newReviewDeck.filter(review=>review.session===1)
+            console.log('filteredreviews',filteredReviews)
             if(filteredReviews.length===0){
+                console.log('filteredreviews empty')
                 handleEmptySessionOne(newReviewDeck)
             } else {
+                console.log('filteredreviews nonempty')
                 setSessionOneReviews(filteredReviews)
                 chooseNewReviewCard(filteredReviews)
             }
-            setIsDone(false)
             setIsReview(true)
         }
     }
+    console.log('current review',currentReview)
     const handleWrongReview = (review) => {
         if(review.level > 1){
             onReviewPatch(review, 1, 1)
@@ -70,28 +74,34 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, levelColors, sessionAd
         setIsDone(false)
         setIsReview(false)
         if (reviewDeck){
+            console.log('reviewdeck',reviewDeck)
             handleEmptySessionOne(reviewDeck.reviews)
         }
     }
     function handleEmptySessionOne(reviews){
+        const lastLevel = sessionAdvances[sessionAdvances.length-1]
         let lowestSession = reviews[0].session
         for(let i=1; i<reviews.length; i++){
-            if(reviews[i].session<lowestSession){
+            if(reviews[i].session<lowestSession || lowestSession===lastLevel){
                 lowestSession = reviews[i].session
             }
         }
-        for(let i=0; i<reviews.length; i++){
-            if(reviews[i].level!=='retire' && reviews[i].session>1){
-                if(lowestSession===2){
-                    onReviewPatch(reviews[i], reviews[i].session-1, reviews[i].level)
-                } else if (lowestSession>2) {
-                    const newSession = reviews[i].session-lowestSession+1
-                    onReviewPatch(reviews[i], newSession, reviews[i].level)
+        if(lowestSession!==lastLevel){
+            for(let i=0; i<reviews.length; i++){
+                if(reviews[i].level!=='retire' && reviews[i].session>1){
+                    if(lowestSession===2){
+                        onReviewPatch(reviews[i], reviews[i].session-1, reviews[i].level)
+                    } else if (lowestSession>2) {
+                        const newSession = reviews[i].session-lowestSession+1
+                        onReviewPatch(reviews[i], newSession, reviews[i].level)
+                    }
+                } else if (reviews[i].level!=='retire' && reviews[i].session<1){
+                    onReviewPatch(reviews[i], 1, reviews[i].level)
                 }
-            } else if (reviews[i].level!=='retire' && reviews[i].session<1){
-                onReviewPatch(reviews[i], 1, reviews[i].level)
-            }
-        } 
+            } 
+        } else {
+            setIsDone(true)
+        }
     }
     return(
         <div>

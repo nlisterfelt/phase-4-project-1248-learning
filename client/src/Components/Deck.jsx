@@ -8,11 +8,11 @@ const Deck = ({deckItems, onNewDeck, onDeleteDeck, onEditDeck, setError}) => {
         return ()=>setError(null)
     }, [])
     const formSchema=yup.object().shape({
-        newDeckName: yup.string().min(1).max(100)
+        deckName: yup.string().min(1).max(100).required("Name required")
     })
     const formik = useFormik({
         initialValues: {
-            newDeckName: ''
+            deckName: ""
         },
         validationSchema: formSchema,
         onSubmit: handleNewDeckSubmit
@@ -22,7 +22,7 @@ const Deck = ({deckItems, onNewDeck, onDeleteDeck, onEditDeck, setError}) => {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
-                name: values.newDeckName
+                name: values.deckName
             })
         }).then(r=>{
             if (r.ok){
@@ -44,10 +44,11 @@ const Deck = ({deckItems, onNewDeck, onDeleteDeck, onEditDeck, setError}) => {
         <div>
             <h4>New Deck Form</h4>
             <form onSubmit={formik.handleSubmit}>
-                <label htmlFor="newDeckName">Name</label>
-                <input value={formik.values.newDeckName} onChange={formik.handleChange} name="newDeckName" id="newDeckName"/>
+                <label htmlFor="deckName">Name</label>
+                <input value={formik.values.deckName} onChange={formik.handleChange} name="deckName" id="deckName"/>
                 <button type="Submit">Create</button>
             </form>
+            {formik.errors.deckName ? <div className="errors">{formik.errors.deckName}</div> : ""}
             <h4>Decks of Cards</h4>
             <div className="card_container">
                 {deckList}   

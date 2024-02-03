@@ -1,29 +1,11 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {useNavigate} from "react-router-dom"
-import * as yup from "yup"
-import {useFormik} from "formik"
+import UserForm from "./UserForm";
 
 const SignupForm = ({userInformation, onSetShowLogin, setError}) => {
     const navigate = useNavigate()
 
-    useEffect(()=>{
-        return () => {setError(null)}
-    }, [])
-    const formSchema = yup.object().shape({
-        username: yup.string().required("Username is required.").min(3).max(30),
-        password: yup.string().required("Password is required.").min(3)
-    })
-
-    const formik = useFormik({
-        initialValues: {
-            username: "",
-            password: ""
-        },
-        validationSchema: formSchema,
-        onSubmit: submitUser
-    })
-
-    function submitUser(values){
+    function handleSubmitUser(values){
         fetch('/api/signup', {
             method: "POST",
             headers: {
@@ -45,20 +27,11 @@ const SignupForm = ({userInformation, onSetShowLogin, setError}) => {
     }
     
     return (
-        <form onSubmit={formik.handleSubmit}>
+        <div>
             <h3>Sign Up form</h3>
-            <div>
-                <label html="username">username</label>
-                <input type='text' name='username' id='username' values={formik.values.username} onChange={formik.handleChange}/>
-                <p style={{color: 'red'}}>{formik.errors.username}</p>
-            </div>
-            <div>
-                <label html="password">password</label>
-                <input type='text' name='password' id='password' values={formik.values.password} onChange={formik.handleChange}/>
-                <p style={{color: 'red'}}>{formik.errors.password}</p>
-            </div>
-            <button type='Submit'>Submit</button>
-        </form>
+            <UserForm onSubmitUser={handleSubmitUser} setError={setError}/>
+        </div>
+        
     )
 }
 

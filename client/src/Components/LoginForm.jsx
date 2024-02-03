@@ -1,20 +1,15 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {useNavigate} from "react-router-dom"
+import UserForm from "./UserForm";
 
 function LoginForm({userInformation, onSetShowLogin, setError}){
     const navigate = useNavigate()
-    const [username, setUsername]=useState('')
-    const [password, setPassword]=useState('')
 
-    useEffect(()=>{
-        return ()=>setError(null)
-    },[])
-    function handleSubmit(e){
-        e.preventDefault()
+    function handleSubmitLogin(values){
         fetch("/api/login", {
             method: "POST",
             headers: {"Content-Type": "application/json",},
-            body: JSON.stringify({username, password})
+            body: JSON.stringify(values, null, 2)
         }).then(r => {
             if (r.ok) {
                 r.json().then(user => {
@@ -29,18 +24,10 @@ function LoginForm({userInformation, onSetShowLogin, setError}){
     }
     
     return (
-        <form onSubmit={handleSubmit}>
+        <div>
             <h3>Log In form</h3>
-            <div>
-                <label>username</label>
-                <input type='text' id='username' value={username} onChange={e => setUsername(e.target.value)}/>
-            </div>
-            <div>
-                <label>password</label>
-                <input type='text' id='password' value={password} onChange={e => setPassword(e.target.value)}/>
-            </div>
-            <button type='Submit'>Submit</button>
-        </form>
+            <UserForm onSubmitUser={handleSubmitLogin} setError={setError}/>
+        </div>
     )
 }
 
