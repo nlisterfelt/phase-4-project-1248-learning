@@ -1,17 +1,15 @@
 import React, {useState} from "react";
+import DeckNameForm from "./DeckNameForm";
 
-function DeckCard({deck, onEditDeck, onDeleteDeck}){
+function DeckCard({deck, onEditDeck, onDeleteDeck, setError}){
     const [isEdit, setIsEdit]=useState(false)
     const [newDeckName, setNewDeckName]=useState('')
 
-    function handleDeckEditSubmit(e){
-        e.preventDefault()
+    function handleDeckEditSubmit(values){
         fetch(`/api/decks/${deck.id}`, {
             method: 'PATCH',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                name: newDeckName
-            })
+            body: JSON.stringify(values, null, 2)
         }).then(r=> {
             if (r.ok) {
                 r.json().then(data=>onEditDeck(data))
@@ -38,11 +36,7 @@ function DeckCard({deck, onEditDeck, onDeleteDeck}){
                 setNewDeckName(deck.name)
             }}>Edit</button>
             <button onClick={e=>handleDeckDelete(deck.id)}>X</button>
-            {isEdit ? <form onSubmit={handleDeckEditSubmit}>
-                <label>New name</label>
-                <input value={newDeckName} onChange={e=>setNewDeckName(e.target.value)}></input>
-                <button>Submit</button>
-            </form>: null}
+            {isEdit ? <DeckNameForm onSubmitName={handleDeckEditSubmit} setError={setError}/>: null}
         </div>
     )
 }

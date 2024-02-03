@@ -2,7 +2,7 @@ import React from "react";
 import {useNavigate} from "react-router-dom"
 import UserForm from "./UserForm";
 
-function LoginForm({userInformation, onSetShowLogin, setError}){
+function Login({userInformation, onSetShowLogin, setError}){
     const navigate = useNavigate()
 
     function handleSubmitLogin(values){
@@ -31,4 +31,4 @@ function LoginForm({userInformation, onSetShowLogin, setError}){
     )
 }
 
-export default LoginForm;
+export default Login;

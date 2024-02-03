@@ -4,8 +4,8 @@ import NavBar from './NavBar'
 import Home from './Home'
 import AllCards from './AllCards'
 import Deck from './Deck'
-import LoginForm from './LoginForm'
-import SignupForm from './SignupForm'
+import Login from './Login'
+import Signup from './Signup'
 import NewCard from "./NewCard";
 import Review from "./Review";
 
@@ -188,8 +188,8 @@ function App() {
                 <div>
                     <button value={'signup'} onClick={handleLoginClick}>Sign Up</button>
                     <button value={'login'} onClick={handleLoginClick}>Log in</button>
-                    {showLogin==='login'? (<LoginForm userInformation={userInformation} onSetShowLogin={setShowLogin} setError={setError}/>): null }
-                    {showLogin==='signup'? (<SignupForm userInformation={userInformation} onSetShowLogin={setShowLogin} setError={setError}/>): null } 
+                    {showLogin==='login'? (<Login userInformation={userInformation} onSetShowLogin={setShowLogin} setError={setError}/>): null }
+                    {showLogin==='signup'? (<Signup userInformation={userInformation} onSetShowLogin={setShowLogin} setError={setError}/>): null } 
                     <Home levelColors={levelColors} sessionAdvances={sessionAdvances}/>
                 </div>
             ) : (

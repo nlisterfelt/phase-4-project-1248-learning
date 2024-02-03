@@ -38,7 +38,7 @@ const Deck = ({deckItems, onNewDeck, onDeleteDeck, onEditDeck, setError}) => {
 
     const deckList = deckItems
         .sort((a,b)=>a.name>b.name?1:-1)
-        .map(deck => <DeckCard key={deck.id} deck={deck} onEditDeck={onEditDeck} onDeleteDeck={onDeleteDeck}/>)
+        .map(deck => <DeckCard key={deck.id} deck={deck} onEditDeck={onEditDeck} onDeleteDeck={onDeleteDeck} setError={setError}/>)
 
     return(
         <div>

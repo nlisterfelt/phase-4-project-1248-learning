@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import * as yup from "yup";
 import { useFormik } from "formik";
 
-const UserForm = ({onSubmitUser, setError}) => {
+const UserForm = ({onSubmitUser,setError}) => {
     useEffect(()=>{
         return () => {setError(null)}
     }, [])
@@ -24,12 +24,12 @@ const UserForm = ({onSubmitUser, setError}) => {
             <div>
                 <label html="username">username</label>
                 <input type='text' name='username' id='username' values={formik.values.username} onChange={formik.handleChange}/>
-                <p style={{color: 'red'}}>{formik.errors.username}</p>
+                <p className="errors">{formik.errors.username}</p>
             </div>
             <div>
                 <label html="password">password</label>
                 <input type='text' name='password' id='password' values={formik.values.password} onChange={formik.handleChange}/>
-                <p style={{color: 'red'}}>{formik.errors.password}</p>
+                <p className="errors">{formik.errors.password}</p>
             </div>
             <button type='Submit'>Submit</button>
         </form>

@@ -2,7 +2,7 @@ import React from "react";
 import {useNavigate} from "react-router-dom"
 import UserForm from "./UserForm";
 
-const SignupForm = ({userInformation, onSetShowLogin, setError}) => {
+const Signup = ({userInformation, onSetShowLogin, setError}) => {
     const navigate = useNavigate()
 
     function handleSubmitUser(values){
@@ -35,4 +35,4 @@ const SignupForm = ({userInformation, onSetShowLogin, setError}) => {
     )
 }
 
-export default SignupForm
+export default Signup
