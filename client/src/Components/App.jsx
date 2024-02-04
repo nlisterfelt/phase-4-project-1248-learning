@@ -112,10 +112,9 @@ function App() {
     }
     const handleDeleteReview= (review)=>{
         const card = cardItems.find(item=>item.id===review.card_id)
-        card.reviews = card.reviews.filter(item=>item.id!==review.id)
+        card['reviews'] = card.reviews.filter(item=>item.id!==review.id)
         const deck = deckItems.find(item=>item.id===review.deck_id)
-        deck.reviews = deck.reviews.filter(item=>item.id!==review.id)
-
+        deck['reviews'] = deck.reviews.filter(item=>item.id!==review.id)
         card['decks'] = card.decks.filter(item=>item.id!==review.deck_id)
         deck['cards'] = deck.cards.filter(item=>item.id!==review.card_id)
 

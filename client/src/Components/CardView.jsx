@@ -15,14 +15,20 @@ const CardView = ({card, deckOptions, deckItems, sessionAdvances, onReviewPatch,
         back_image: card.back_image,
         deck_id: 1
     }
+
     const deckList = card.decks
-        .sort((a,b)=> a.name > b.name ? 1 : -1)
+        .filter(deck=>deckOptions.find(option=>option.value===deck.id)!=='undefined')
         .map(deck=>{
             const deckInfo = deckOptions.find(option=>option.value===deck.id)
-            return <li key={deck.id} id={deck.id}>{deckInfo.label} <button onClick={e=>handleReviewDelete(deck.id)}>X</button></li>
+            if(deckInfo===undefined){
+                return null
+            } else {
+                return <li key={deck.id} id={deck.id}>{deckInfo['label']!==undefined? deckInfo['label']: null}<button onClick={e=>handleReviewDelete(deck.id)}>X</button></li>
+            }
         })
+        
     const reviewList = card.reviews
-        .sort((a,b)=> a.level>b.level ? 1 : -1)
+        .filter(review=>deckOptions.find(option=>option.value===review.deck_id)!=='undefined')
         .map(review=><ReviewListCard key={review.id} id={review.id} deckItems={deckItems} review={review} onReviewDelete={e=>handleReviewDelete(review.deck_id)} sessionAdvances={sessionAdvances} onReviewPatch={onReviewPatch}/>)
 
     const filteredDeckOptions = deckOptions.filter(deck=>{
