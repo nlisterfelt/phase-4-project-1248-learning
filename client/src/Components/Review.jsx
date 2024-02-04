@@ -24,7 +24,6 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, levelColors, sessionAd
     })
     function submitStartReview(values){
         const newReviewDeck = findReviewDeck(values.deck_id).reviews.filter(review=>review.level!==sessionAdvances[sessionAdvances.length-1])
-        console.log('newreviewdeck', newReviewDeck)
         if(newReviewDeck.length===0){
             setReviewCard(null)
             setIsReviewsEmpty(true)
@@ -32,19 +31,17 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, levelColors, sessionAd
             setIsDone(true)
         } else {
             const filteredReviews = newReviewDeck.filter(review=>review.session===1)
-            console.log('filteredreviews',filteredReviews)
+            setIsReview(true)
             if(filteredReviews.length===0){
-                console.log('filteredreviews empty')
                 handleEmptySessionOne(newReviewDeck)
             } else {
-                console.log('filteredreviews nonempty')
                 setSessionOneReviews(filteredReviews)
+                setCurrentReview(filteredReviews[0])
                 chooseNewReviewCard(filteredReviews)
             }
-            setIsReview(true)
+            setIsDone(false)
         }
     }
-    console.log('current review',currentReview)
     const handleWrongReview = (review) => {
         if(review.level > 1){
             onReviewPatch(review, 1, 1)
@@ -54,9 +51,9 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, levelColors, sessionAd
         setIsFront(true)
     }
     function handleCorrectReview(review) {
-        const newSession = review.session + sessionAdvances[review.level-1]
+        const newSession = 1 + sessionAdvances[review.level-1]
         const newLevel = review.level + 1
-        if(newLevel<sessionAdvances.length){
+        if(newLevel<sessionAdvances.length+1){
             if(newSession>0){
                 onReviewPatch(review, newSession, newLevel)
             } else {
@@ -74,7 +71,6 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, levelColors, sessionAd
         setIsDone(false)
         setIsReview(false)
         if (reviewDeck){
-            console.log('reviewdeck',reviewDeck)
             handleEmptySessionOne(reviewDeck.reviews)
         }
     }
@@ -124,25 +120,24 @@ const Review = ({deckOptions, reviewDeck, findReviewDeck, levelColors, sessionAd
                 </form>
             </div> :
             <div>
-                {isDone ? 
-                    <div style={{textAlign: 'center'}}>
-                        <h3>All cards are reviewed in session 1.</h3>
-                        <p>End the review session to start this deck again or select a different deck.</p>
-                    </div> :
-                    <div>
-                        <ReviewCard card={reviewCard} color={levelColors[currentReview.level]} isFront={isFront} setIsFront={setIsFront}/> 
-                        <div style={{display: 'flex', justifyContent: 'center'}}>
-                            <button onClick={e=>handleWrongReview(currentReview)} style={{marginRight: '20px', borderColor: 'red', backgroundColor: 'white', width: '100px'}}>
-                                Wrong 
-                                <p style={{fontSize: '70%'}}>(Level 1)</p>
-                            </button>
-                            <button onClick={e=>handleCorrectReview(currentReview)} style={{borderColor: 'lime', backgroundColor: 'white', width: '100px'}}>
-                                Correct 
-                                <p style={{fontSize:"70%"}}>(Next Level {currentReview.level+1===sessionAdvances.length? sessionAdvances[sessionAdvances.length-1] : currentReview.level+1})</p>
-                            </button>
-                        </div>
+                {isDone && reviewCard ? 
+                <div style={{textAlign: 'center'}}>
+                    <h3>All cards are reviewed in session 1.</h3>
+                    <p>End the review session to start this deck again or select a different deck.</p>
+                </div> :
+                <div>
+                    <ReviewCard card={reviewCard} color={levelColors[currentReview.level]} isFront={isFront} setIsFront={setIsFront}/> 
+                    <div style={{display: 'flex', justifyContent: 'center'}}>
+                        <button onClick={e=>handleWrongReview(currentReview)} style={{marginRight: '20px', borderColor: 'red', backgroundColor: 'white', width: '100px'}}>
+                            Wrong 
+                            <p style={{fontSize: '70%'}}>(Level 1)</p>
+                        </button>
+                        <button onClick={e=>handleCorrectReview(currentReview)} style={{borderColor: 'lime', backgroundColor: 'white', width: '100px'}}>
+                            Correct 
+                            <p style={{fontSize:"70%"}}>(Next Level {currentReview.level===sessionAdvances.length? sessionAdvances[sessionAdvances.length-1] : currentReview.level+1})</p>
+                        </button>
                     </div>
-                }
+                </div>}
                 <button onClick={handleEndReview}>End review session</button>
             </div> }
         </div>

@@ -7,7 +7,7 @@ const DeckNameForm = ({onSubmitName, setError}) => {
         return ()=>{setError(null)}
     },[])
     const formSchema = yup.object().shape({
-        name: yup.string().required("Name required.").min(1).max(50)
+        name: yup.string().required("Name required.").max(100)
     })
     const formik = useFormik({
         initialValues: {

@@ -1,7 +1,6 @@
 import React from "react"
 
 const ReviewCard = ({card, color, isFront, setIsFront}) => {
-    
     return (
             <div className="large_card" style={{borderColor: color}} onClick={e=>setIsFront(!isFront)}>
             {isFront ? <div >

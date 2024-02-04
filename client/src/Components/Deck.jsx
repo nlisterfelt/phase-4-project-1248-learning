@@ -1,29 +1,14 @@
-import React, { useEffect } from "react";
+import React from "react";
 import DeckCard from "./DeckCard";
-import { useFormik } from "formik";
-import * as yup from "yup"
+import DeckNameForm from "./DeckNameForm";
 
 const Deck = ({deckItems, onNewDeck, onDeleteDeck, onEditDeck, setError}) => {
-    useEffect(()=>{
-        return ()=>setError(null)
-    }, [])
-    const formSchema=yup.object().shape({
-        deckName: yup.string().min(1).max(100).required("Name required")
-    })
-    const formik = useFormik({
-        initialValues: {
-            deckName: ""
-        },
-        validationSchema: formSchema,
-        onSubmit: handleNewDeckSubmit
-    })
+    
     function handleNewDeckSubmit(values){
         fetch('/api/decks', {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({
-                name: values.deckName
-            })
+            body: JSON.stringify(values,null,2)
         }).then(r=>{
             if (r.ok){
                 r.json().then(deck =>{
@@ -43,12 +28,7 @@ const Deck = ({deckItems, onNewDeck, onDeleteDeck, onEditDeck, setError}) => {
     return(
         <div>
             <h4>New Deck Form</h4>
-            <form onSubmit={formik.handleSubmit}>
-                <label htmlFor="deckName">Name</label>
-                <input value={formik.values.deckName} onChange={formik.handleChange} name="deckName" id="deckName"/>
-                <button type="Submit">Create</button>
-            </form>
-            {formik.errors.deckName ? <div className="errors">{formik.errors.deckName}</div> : ""}
+            <DeckNameForm onSubmitName={handleNewDeckSubmit} setError={setError}/>
             <h4>Decks of Cards</h4>
             <div className="card_container">
                 {deckList}   
