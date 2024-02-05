@@ -8,7 +8,7 @@ function Home({levelColors, sessionAdvances}){
         <div>
             <h2 style={{textAlign:'center'}}>Study using spaced repetition.</h2>
             <h4 style={{textAlign:'center'}}>The cards you don't know will show up more often than the cards you do know.</h4>
-            <p>Each card will have a different level assigned to it. When you go through a review session, you will be click either "Wrong" or "Correct". All wrong cards go back to level 1 for more review during the current session. Correct cards move on to the next level based on the list below.</p>
+            <p>Each card will have a different level assigned to it. When you go through a review session, you will click either "Wrong" or "Correct". All wrong cards go back to level 1 for more review during the current session. Correct cards move on to the next level based on the list below.</p>
             <div style={{justifyContent: 'center', display: 'flex'}}>
                 <ul style={{fontSize: 'large'}}>
                     {levelInfo}
