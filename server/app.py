@@ -184,6 +184,9 @@ api.add_resource(Logout, '/api/logout', endpoint='logout')
 api.add_resource(Login, '/api/login', endpoint='login')
 api.add_resource(Reviews, '/api/reviews', endpoint='reviews')
 api.add_resource(ReviewsById, '/api/reviews/<int:id>', endpoint='reviewsById')
-
+@app.route('/')
+@app.route('/<int:id>')
+def index(id=0):
+    return render_template("index.html")
 if __name__ == "__main__":
   app.run(port=5555, debug=True)
