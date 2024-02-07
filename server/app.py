@@ -1,4 +1,4 @@
-from flask import request, session, make_response
+from flask import request, session, make_response, render_template
 from flask_restful import Resource
 from config import app, api, db
 from models import *
