@@ -3,14 +3,13 @@ from flask_restful import Resource
 from config import app, api, db
 from models import *
 from sqlalchemy.exc import IntegrityError
-from dotenv import load_dotenv
-load_dotenv()
 
-@app.before_request
-def is_logged_in():
-  open_access=['login','check_session','signup']
-  if request.endpoint not in open_access and not session.get('user_id'):
-    return {'error': 'unauthorized'}, 401
+
+# @app.before_request
+# def is_logged_in():
+#   open_access=['login','check_session','signup']
+#   if request.endpoint not in open_access and not session.get('user_id'):
+#     return {'error': 'unauthorized'}, 401
 
 class Signup(Resource):
   def post(self):
