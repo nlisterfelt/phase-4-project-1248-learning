@@ -3,6 +3,8 @@ from flask_restful import Resource
 from config import app, api, db
 from models import *
 from sqlalchemy.exc import IntegrityError
+from dotenv import load_dotenv
+load_dotenv()
 
 @app.before_request
 def is_logged_in():
