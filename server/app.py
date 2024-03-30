@@ -173,6 +173,13 @@ class ReviewsById(Resource):
       return {}, 200
     return {"error": "review not found"}, 404
 
+#get, user_decks/<int:n>, list of users that n or more decks
+class UserByDecks(Resource):
+  def get(self, n):
+    users = User.query.all()
+    filtered_users = [user.to_dict() for user in users if len(user.decks)>=n]
+    return filtered_users,200
+
 api.add_resource(Signup, '/api/signup', endpoint='signup')
 api.add_resource(CheckSession, '/api/check_session', endpoint='check_session')
 api.add_resource(Users, '/api/users', endpoint='users')
@@ -184,6 +191,7 @@ api.add_resource(Logout, '/api/logout', endpoint='logout')
 api.add_resource(Login, '/api/login', endpoint='login')
 api.add_resource(Reviews, '/api/reviews', endpoint='reviews')
 api.add_resource(ReviewsById, '/api/reviews/<int:id>', endpoint='reviewsById')
+api.add_resource(UserByDecks, '/api/user_decks/<int:n>')
 @app.route('/')
 @app.route('/<int:id>')
 def index(id=0):

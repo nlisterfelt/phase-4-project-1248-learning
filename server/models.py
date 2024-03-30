@@ -71,6 +71,8 @@ class Card(db.Model, SerializerMixin):
 
     def __repr__(self):
         return f'<Card {self.id}: {self.front_title}>'
+    
+    
 
 
 class Review(db.Model, SerializerMixin):
