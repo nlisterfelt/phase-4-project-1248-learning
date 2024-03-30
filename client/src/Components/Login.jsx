@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import {useNavigate} from "react-router-dom"
 import UserForm from "./UserForm";
+import { UserContext } from "../context/UserContext";
 
-function Login({userInformation, onSetShowLogin, setError}){
-    const navigate = useNavigate()
+function Login({userInformation}){
+    const {setShowLogin, setError} = useContext(UserContext)
+    const navigate = useNavigate() 
 
     function handleSubmitLogin(values){
         fetch("/api/login", {
@@ -14,7 +16,7 @@ function Login({userInformation, onSetShowLogin, setError}){
             if (r.ok) {
                 r.json().then(user => {
                     userInformation(user)
-                    onSetShowLogin(null)
+                    setShowLogin(null)
                     navigate('/')
                 })
             } else {

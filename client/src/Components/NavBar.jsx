@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
-function NavBar({setUser}){
+function NavBar(){
+    const {setUser} = useContext(UserContext)
     function handleLogoutClick(e){
         fetch('/api/logout', {method: 'DELETE'})
         .then(r => {

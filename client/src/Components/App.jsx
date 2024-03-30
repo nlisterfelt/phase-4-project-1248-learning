@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useContext} from "react";
 import {Route, Routes} from "react-router-dom";
 import NavBar from './NavBar'
 import Home from './Home'
@@ -8,13 +8,12 @@ import Login from './Login'
 import Signup from './Signup'
 import NewCard from "./NewCard";
 import Review from "./Review";
+import { UserContext } from "../context/UserContext";
 
 function App() {
-    const [user, setUser] = useState(null)
-    const [showLogin, setShowLogin] = useState(null)
+    const {user, setUser, showLogin, setShowLogin, error, setError} = useContext(UserContext)
     const [deckItems, setDeckItems]=useState([])
     const [cardItems, setCardItems]=useState([])
-    const [error, setError]=useState(null)
     const [reviewDeck, setReviewDeck]=useState([])
     const [deckOptions, setDeckOptions]=useState([])
     const [isFront, setIsFront] = useState(true)
@@ -187,13 +186,13 @@ function App() {
                 <div>
                     <button value={'signup'} onClick={handleLoginClick}>Sign Up</button>
                     <button value={'login'} onClick={handleLoginClick}>Log in</button>
-                    {showLogin==='login'? (<Login userInformation={userInformation} onSetShowLogin={setShowLogin} setError={setError}/>): null }
-                    {showLogin==='signup'? (<Signup userInformation={userInformation} onSetShowLogin={setShowLogin} setError={setError}/>): null } 
+                    {showLogin==='login'? (<Login userInformation={userInformation} />): null }
+                    {showLogin==='signup'? (<Signup userInformation={userInformation} />): null } 
                     <Home levelColors={levelColors} sessionAdvances={sessionAdvances}/>
                 </div>
             ) : (
                 <div>
-                    <NavBar setUser={setUser}/>
+                    <NavBar />
                     
                     <Routes>
                         <Route exact path="/" element={<Home levelColors={levelColors} sessionAdvances={sessionAdvances}/>} />
@@ -202,7 +201,7 @@ function App() {
 
                         <Route exact path="/cards" element={<AllCards onEditDeck={handleEditDeck} cardItems={cardItems} setCardItems={setCardItems} deckItems={deckItems} deckOptions={deckOptions} onEditCard={handleEditCard} onEditReview={handleEditReview} sessionAdvances={sessionAdvances} onReviewPatch={handleReviewPatch} isFront={isFront} setIsFront={setIsFront} onDeleteReview={handleDeleteReview} onNewReview={handleNewReview} isNewCard={isNewCard} setIsNewCard={setIsNewCard} setError={setError} />} />
 
-                        <Route path="/cards/new" element={<NewCard deckItems={deckItems} setError={setError} user={user} cardItems={cardItems} setCardItems={setCardItems} onEditDeck={handleEditDeck} deckOptions={deckOptions} isNewCard={isNewCard} />} />
+                        <Route path="/cards/new" element={<NewCard deckItems={deckItems} setError={setError} cardItems={cardItems} setCardItems={setCardItems} onEditDeck={handleEditDeck} deckOptions={deckOptions} isNewCard={isNewCard} />} />
 
                         <Route path="/review" element={<Review reviewDeck={reviewDeck} deckOptions={deckOptions} findReviewDeck={findReviewDeck} levelColors={levelColors} sessionAdvances={sessionAdvances} onEditReview={handleEditReview} onReviewPatch={handleReviewPatch} isFront={isFront} setIsFront={setIsFront} currentReview={currentReview} setCurrentReview={setCurrentReview} chooseNewReviewCard={chooseNewReviewCard} sessionOneReviews={sessionOneReviews} setSessionOneReviews={setSessionOneReviews} reviewCard={reviewCard} setReviewCard={setReviewCard} isDone={isDone} setIsDone={setIsDone}/>} />
                         <Route path="*" element={'404 Not Found'} />
