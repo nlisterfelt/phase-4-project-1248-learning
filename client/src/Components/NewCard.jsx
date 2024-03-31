@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import CardForm from "./CardForm";
 import { CardContext } from "../context/CardContext";
 import { UserContext } from "../context/UserContext";
+import TranslateForm from "./TranslateForm";
 
 const NewCard = () => {
     const {setError}=useContext(UserContext)
@@ -74,6 +75,7 @@ const NewCard = () => {
         <div>
             <button onClick={e => navigate('/cards')}>Back to All Cards</button>
             <CardForm onSubmitCard={handleSubmitCard} initialVal={initialVal} />
+            <TranslateForm />
         </div>
     )
 }

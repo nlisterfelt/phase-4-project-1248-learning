@@ -5,7 +5,7 @@ import CardView from "./CardView";
 import { CardContext } from "../context/CardContext";
 
 const AllCards = () => {
-    const {deckItems, cardItems, setCardItems, deckOptions, setIsNewCard, handleEditDeck}=useContext(CardContext)
+    const {cardItems, deckOptions, setIsNewCard}=useContext(CardContext)
     const [category, setCategory] = useState('all_decks')
     const [isView, setIsView]=useState(false)
     const [editCard, setEditCard]=useState({})
@@ -17,7 +17,7 @@ const AllCards = () => {
         .map(deck=><option key={deck.value} id={deck.value} value={deck.label}>{deck.label}</option>)
     const cardList = cardItems
         .sort((a,b)=>a.front_title>b.front_title?1:-1)
-        .filter(card=>filterCards(card)).map(card=><Card key={card.id} id={card.id} card={card}  onDeleteCard={handleDeleteCard} onViewCard={handleViewCard}/>)
+        .filter(card=>filterCards(card)).map(card=><Card key={card.id} id={card.id} card={card}  onViewCard={handleViewCard}/>)
     
     function filterCards(card){
         if(category==='all_decks'){
@@ -31,24 +31,7 @@ const AllCards = () => {
         }     
         return false
     }
-    function handleDeleteCard(card) {
-        fetch(`/api/cards/${card.id}`, {
-            method: 'DELETE'
-        }).then(r=>{
-            if (r.ok){
-                const newCardItems = cardItems.filter(item=>item.id !== card.id)
-                setCardItems(newCardItems)
-                for(let i=0; i<card.decks.length; i++){
-                    const updatedDeck = deckItems.find(item=>item.id===card.decks[i].id)
-                    if(updatedDeck){
-                        const filteredCardsList = updatedDeck.cards.filter(item=>item.id!==card.id)
-                        const newUpdatedDeck = {...updatedDeck, cards: filteredCardsList}
-                        handleEditDeck(newUpdatedDeck)
-                    }
-                }
-            }
-        })
-    }
+    
     function handleViewCard(card){
         setIsNewCard(false)
         setIsView(true)
