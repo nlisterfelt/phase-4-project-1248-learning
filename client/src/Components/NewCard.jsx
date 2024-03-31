@@ -4,7 +4,7 @@ import CardForm from "./CardForm";
 import { CardContext } from "../context/CardContext";
 import { UserContext } from "../context/UserContext";
 
-const NewCard = ({onEditDeck, deckOptions, isNewCard}) => {
+const NewCard = ({onEditDeck, deckOptions}) => {
     const {setError}=useContext(UserContext)
     const {deckItems, cardItems, setCardItems}=useContext(CardContext)
     const navigate = useNavigate()
@@ -73,7 +73,7 @@ const NewCard = ({onEditDeck, deckOptions, isNewCard}) => {
     return (
         <div>
             <button onClick={e => navigate('/cards')}>Back to All Cards</button>
-            <CardForm onSubmitCard={handleSubmitCard} deckOptions={deckOptions} isNewCard={isNewCard} initialVal={initialVal} />
+            <CardForm onSubmitCard={handleSubmitCard} deckOptions={deckOptions} initialVal={initialVal} />
         </div>
     )
 }

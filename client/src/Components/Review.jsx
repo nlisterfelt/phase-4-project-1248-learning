@@ -5,8 +5,8 @@ import Select from "react-select";
 import ReviewCard from "./ReviewCard";
 import { CardContext } from "../context/CardContext";
 
-const Review = ({deckOptions, findReviewDeck, onReviewPatch, currentReview, setCurrentReview, chooseNewReviewCard, sessionOneReviews, setSessionOneReviews, reviewCard, setReviewCard, isDone, setIsDone}) => {
-    const {levelColors, sessionAdvances, reviewDeck, setIsFront}=useContext(CardContext)
+const Review = ({deckOptions, findReviewDeck, onReviewPatch, chooseNewReviewCard}) => {
+    const {levelColors, sessionAdvances, reviewDeck, setIsFront, currentReview, setCurrentReview, sessionOneReviews, setSessionOneReviews, reviewCard, setReviewCard, isDone, setIsDone}=useContext(CardContext)
     const [isReview, setIsReview] = useState(false)
     const [isReviewsEmpty, setIsReviewsEmpty]=useState(false)
 

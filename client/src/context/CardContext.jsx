@@ -10,9 +10,14 @@ const CardProvider = ({children}) => {
     const [reviewDeck, setReviewDeck]=useState([])
     const [deckOptions, setDeckOptions]=useState([])
     const [isFront, setIsFront] = useState(true)
+    const [currentReview, setCurrentReview]=useState({})
+    const [sessionOneReviews, setSessionOneReviews]=useState([])
+    const [reviewCard, setReviewCard] = useState([])
+    const [isDone, setIsDone]=useState(false)
+    const [isNewCard, setIsNewCard]=useState(false)
 
-    const valueObject = {levelColors, sessionAdvances, deckItems, setDeckItems, cardItems, setCardItems, reviewDeck, setReviewDeck, deckOptions, setDeckOptions, isFront, setIsFront}
-    
+    const valueObject = {levelColors, sessionAdvances, deckItems, setDeckItems, cardItems, setCardItems, reviewDeck, setReviewDeck, deckOptions, setDeckOptions, isFront, setIsFront, currentReview, setCurrentReview, sessionOneReviews, setSessionOneReviews, reviewCard, setReviewCard, isDone, setIsDone, isNewCard, setIsNewCard}
+
     return <CardContext.Provider value = {valueObject}>{children}</CardContext.Provider>
 }
 

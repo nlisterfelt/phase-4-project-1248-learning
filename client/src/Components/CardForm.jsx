@@ -4,8 +4,8 @@ import * as yup from "yup"
 import Select from "react-select";
 import { CardContext } from "../context/CardContext";
 
-const CardForm = ({onSubmitCard, isNewCard, initialVal}) => {
-    const {deckOptions}=useContext(CardContext)
+const CardForm = ({onSubmitCard, initialVal}) => {
+    const {deckOptions, isNewCard}=useContext(CardContext)
     const formSchema=yup.object().shape({
         front_title: yup.string().required("The front of a card must have a sentence.").min(1).max(100),
         front_description: yup.string().max(500),
