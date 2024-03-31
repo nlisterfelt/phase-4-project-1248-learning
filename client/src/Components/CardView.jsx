@@ -5,7 +5,7 @@ import ReviewListCard from "./ReviewListCard";
 import CardForm from "./CardForm";
 import { UserContext } from "../context/UserContext";
 
-const CardView = ({card, deckOptions, deckItems, onReviewPatch, isFront, setIsFront, onDeleteReview, onNewReview, isNewCard, onEditCard, setIsView}) => {
+const CardView = ({card, deckOptions, onReviewPatch, isFront, setIsFront, onDeleteReview, onNewReview, isNewCard, onEditCard, setIsView}) => {
     const {setError}=useContext(UserContext)
     const [isEdit, setIsEdit]=useState(false)
     const initialVal = {
@@ -31,7 +31,7 @@ const CardView = ({card, deckOptions, deckItems, onReviewPatch, isFront, setIsFr
         
     const reviewList = card.reviews
         .filter(review=>deckOptions.find(option=>option.value===review.deck_id)!=='undefined')
-        .map(review=><ReviewListCard key={review.id} id={review.id} deckItems={deckItems} review={review} onReviewDelete={e=>handleReviewDelete(review.deck_id)} onReviewPatch={onReviewPatch}/>)
+        .map(review=><ReviewListCard key={review.id} id={review.id} review={review} onReviewDelete={e=>handleReviewDelete(review.deck_id)} onReviewPatch={onReviewPatch}/>)
 
     const filteredDeckOptions = deckOptions.filter(deck=>{
         for(let i=0; i<card.decks.length; i++){
@@ -83,7 +83,7 @@ const CardView = ({card, deckOptions, deckItems, onReviewPatch, isFront, setIsFr
             <div>
                 <h4>Decks</h4>
                 <ul>{deckList}</ul>
-                <DeckForm filteredDeckOptions={filteredDeckOptions} card={card} deckItems={deckItems} onNewReview={onNewReview} setIsView={setIsView}/>
+                <DeckForm filteredDeckOptions={filteredDeckOptions} card={card} onNewReview={onNewReview} setIsView={setIsView}/>
                 <h4>Reviews</h4>
                 <ul>{reviewList}</ul>
             </div>}

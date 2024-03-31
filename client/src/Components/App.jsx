@@ -13,9 +13,7 @@ import { CardContext } from "../context/CardContext";
 
 function App() {
     const {user, setUser, showLogin, setShowLogin, error, setError} = useContext(UserContext)
-    const {sessionAdvances} = useContext(CardContext)
-    const [deckItems, setDeckItems]=useState([])
-    const [cardItems, setCardItems]=useState([])
+    const {sessionAdvances, deckItems, setDeckItems, cardItems, setCardItems} = useContext(CardContext)
     const [reviewDeck, setReviewDeck]=useState([])
     const [deckOptions, setDeckOptions]=useState([])
     const [isFront, setIsFront] = useState(true)
@@ -198,11 +196,11 @@ function App() {
                     <Routes>
                         <Route exact path="/" element={<Home />} />
                         
-                        <Route path="/decks" element={<Deck deckItems={deckItems} setDeckItems={setDeckItems} onNewDeck={handleNewDeck} onDeleteDeck={handleDeleteDeck} onEditDeck={handleEditDeck}/>} />
+                        <Route path="/decks" element={<Deck onNewDeck={handleNewDeck} onDeleteDeck={handleDeleteDeck} onEditDeck={handleEditDeck}/>} />
 
-                        <Route exact path="/cards" element={<AllCards onEditDeck={handleEditDeck} cardItems={cardItems} setCardItems={setCardItems} deckItems={deckItems} deckOptions={deckOptions} onEditCard={handleEditCard} onEditReview={handleEditReview} onReviewPatch={handleReviewPatch} isFront={isFront} setIsFront={setIsFront} onDeleteReview={handleDeleteReview} onNewReview={handleNewReview} isNewCard={isNewCard} setIsNewCard={setIsNewCard}/>} />
+                        <Route exact path="/cards" element={<AllCards onEditDeck={handleEditDeck} deckOptions={deckOptions} onEditCard={handleEditCard} onEditReview={handleEditReview} onReviewPatch={handleReviewPatch} isFront={isFront} setIsFront={setIsFront} onDeleteReview={handleDeleteReview} onNewReview={handleNewReview} isNewCard={isNewCard} setIsNewCard={setIsNewCard}/>} />
 
-                        <Route path="/cards/new" element={<NewCard deckItems={deckItems} cardItems={cardItems} setCardItems={setCardItems} onEditDeck={handleEditDeck} deckOptions={deckOptions} isNewCard={isNewCard} />} />
+                        <Route path="/cards/new" element={<NewCard onEditDeck={handleEditDeck} deckOptions={deckOptions} isNewCard={isNewCard} />} />
 
                         <Route path="/review" element={<Review reviewDeck={reviewDeck} deckOptions={deckOptions} findReviewDeck={findReviewDeck} onEditReview={handleEditReview} onReviewPatch={handleReviewPatch} isFront={isFront} setIsFront={setIsFront} currentReview={currentReview} setCurrentReview={setCurrentReview} chooseNewReviewCard={chooseNewReviewCard} sessionOneReviews={sessionOneReviews} setSessionOneReviews={setSessionOneReviews} reviewCard={reviewCard} setReviewCard={setReviewCard} isDone={isDone} setIsDone={setIsDone}/>} />
                         <Route path="*" element={'404 Not Found'} />

@@ -2,8 +2,10 @@ import React, {useContext, useState} from "react";
 import Card from "./Card";
 import {useNavigate} from "react-router-dom"
 import CardView from "./CardView";
+import { CardContext } from "../context/CardContext";
 
-const AllCards = ({cardItems, setCardItems, deckItems, onEditDeck, deckOptions, onEditReview, onReviewPatch, isFront, setIsFront, onDeleteReview, onNewReview, isNewCard, setIsNewCard, onEditCard}) => {
+const AllCards = ({onEditDeck, deckOptions, onEditReview, onReviewPatch, isFront, setIsFront, onDeleteReview, onNewReview, isNewCard, setIsNewCard, onEditCard}) => {
+    const {deckItems, cardItems, setCardItems}=useContext(CardContext)
     const [category, setCategory] = useState('all_decks')
     const [isView, setIsView]=useState(false)
     const [editCard, setEditCard]=useState({})
@@ -73,7 +75,7 @@ const AllCards = ({cardItems, setCardItems, deckItems, onEditDeck, deckOptions, 
                 </div>:
                 <div>
                     <button onClick={e=>setIsView(false)}>Back to All cards</button>
-                    <CardView card={editCard} deckOptions={deckOptions} onEditReview={onEditReview} deckItems={deckItems} onReviewPatch={onReviewPatch} isFront={isFront} setIsFront={setIsFront} onDeleteReview={onDeleteReview} onNewReview={onNewReview} isNewCard={isNewCard} onEditCard={onEditCard} setIsView={setIsView}/>
+                    <CardView card={editCard} deckOptions={deckOptions} onEditReview={onEditReview} onReviewPatch={onReviewPatch} isFront={isFront} setIsFront={setIsFront} onDeleteReview={onDeleteReview} onNewReview={onNewReview} isNewCard={isNewCard} onEditCard={onEditCard} setIsView={setIsView}/>
                 </div>
             }
         </div>
