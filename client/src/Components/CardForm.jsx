@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import * as yup from "yup"
 import Select from "react-select";
 import { CardContext } from "../context/CardContext";
+import TranslateForm from "./TranslateForm";
 
 const CardForm = ({onSubmitCard, initialVal}) => {
     const {deckOptions, isNewCard}=useContext(CardContext)
@@ -78,6 +79,7 @@ const CardForm = ({onSubmitCard, initialVal}) => {
                 {formik.errors.deck_id ? <div className="errors">{formik.errors.deck_id}</div> : null}
                 <button type='Submit'>Submit</button>
             </form>
+            <TranslateForm />
         </div>
     )
 }

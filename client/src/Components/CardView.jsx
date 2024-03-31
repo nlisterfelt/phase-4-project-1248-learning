@@ -19,7 +19,6 @@ const CardView = ({card, setIsView}) => {
         back_image: card.back_image,
         deck_id: 1
     }
-
     const deckList = card.decks
         .filter(deck=>deckOptions.find(option=>option.value===deck.id)!=='undefined')
         .map(deck=>{
