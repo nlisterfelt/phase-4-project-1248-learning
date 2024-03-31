@@ -31,7 +31,7 @@ const Signup = ({userInformation}) => {
     return (
         <div>
             <h3>Sign Up form</h3>
-            <UserForm onSubmitUser={handleSubmitUser} setError={setError}/>
+            <UserForm onSubmitUser={handleSubmitUser}/>
         </div>
         
     )

@@ -1,8 +1,10 @@
-import React, {useEffect} from "react";
+import React, {useContext, useEffect} from "react";
 import * as yup from "yup";
 import { useFormik } from "formik";
+import { UserContext } from "../context/UserContext";
 
-const UserForm = ({onSubmitUser,setError}) => {
+const UserForm = ({onSubmitUser}) => {
+    const {setError}=useContext(UserContext)
     useEffect(()=>{
         return () => {setError(null)}
     }, [])

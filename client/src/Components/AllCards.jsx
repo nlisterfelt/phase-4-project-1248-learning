@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom"
 import CardView from "./CardView";
 import { CardContext } from "../context/CardContext";
 
-const AllCards = ({onNewReview}) => {
+const AllCards = () => {
     const {deckItems, cardItems, setCardItems, deckOptions, setIsNewCard, handleEditDeck}=useContext(CardContext)
     const [category, setCategory] = useState('all_decks')
     const [isView, setIsView]=useState(false)
@@ -75,7 +75,7 @@ const AllCards = ({onNewReview}) => {
                 </div>:
                 <div>
                     <button onClick={e=>setIsView(false)}>Back to All cards</button>
-                    <CardView card={editCard} onNewReview={onNewReview} setIsView={setIsView}/>
+                    <CardView card={editCard} setIsView={setIsView}/>
                 </div>
             }
         </div>

@@ -2,7 +2,7 @@ import React, {useContext, useState} from "react";
 import DeckNameForm from "./DeckNameForm";
 import { CardContext } from "../context/CardContext";
 
-function DeckCard({deck}){
+const DeckCard = ({deck}) => {
     const [isEdit, setIsEdit]=useState(false)
     const {deckItems, setDeckItems, deckOptions, setDeckOptions, handleEditDeck, handleDeleteReview}=useContext(CardContext)
 

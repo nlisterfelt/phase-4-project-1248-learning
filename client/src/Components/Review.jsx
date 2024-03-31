@@ -6,7 +6,7 @@ import ReviewCard from "./ReviewCard";
 import { CardContext } from "../context/CardContext";
 
 const Review = () => {
-    const {levelColors, sessionAdvances, reviewDeck, setIsFront, currentReview, setCurrentReview, sessionOneReviews, setSessionOneReviews, reviewCard, setReviewCard, isDone, setIsDone, handleReviewPatch, chooseNewReviewCard, deckOptions, setReviewDeck}=useContext(CardContext)
+    const {deckItems, sessionAdvances, reviewDeck, setIsFront, currentReview, setCurrentReview, sessionOneReviews, setSessionOneReviews, reviewCard, setReviewCard, isDone, setIsDone, handleReviewPatch, chooseNewReviewCard, deckOptions, setReviewDeck}=useContext(CardContext)
     const [isReview, setIsReview] = useState(false)
     const [isReviewsEmpty, setIsReviewsEmpty]=useState(false)
 
@@ -133,7 +133,7 @@ const Review = () => {
                     <p>End the review session to start this deck again or select a different deck.</p>
                 </div> :
                 <div>
-                    <ReviewCard card={reviewCard} color={levelColors[currentReview.level]} /> 
+                    <ReviewCard /> 
                     <div style={{display: 'flex', justifyContent: 'center'}}>
                         <button onClick={e=>handleWrongReview(currentReview)} style={{marginRight: '20px', borderColor: 'red', backgroundColor: 'white', width: '100px'}}>
                             Wrong 

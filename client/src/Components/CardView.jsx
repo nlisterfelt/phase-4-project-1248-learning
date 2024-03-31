@@ -6,7 +6,7 @@ import CardForm from "./CardForm";
 import { UserContext } from "../context/UserContext";
 import { CardContext } from "../context/CardContext";
 
-const CardView = ({card, onNewReview, setIsView}) => {
+const CardView = ({card, setIsView}) => {
     const {setError}=useContext(UserContext)
     const {deckOptions, setIsFront, handleEditCard, handleDeleteReview}=useContext(CardContext)
     const [isEdit, setIsEdit]=useState(false)
@@ -85,7 +85,7 @@ const CardView = ({card, onNewReview, setIsView}) => {
             <div>
                 <h4>Decks</h4>
                 <ul>{deckList}</ul>
-                <DeckForm filteredDeckOptions={filteredDeckOptions} card={card} onNewReview={onNewReview} setIsView={setIsView}/>
+                <DeckForm filteredDeckOptions={filteredDeckOptions} card={card} setIsView={setIsView}/>
                 <h4>Reviews</h4>
                 <ul>{reviewList}</ul>
             </div>}

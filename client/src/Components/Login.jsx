@@ -28,7 +28,7 @@ function Login({userInformation}){
     return (
         <div>
             <h3>Log In form</h3>
-            <UserForm onSubmitUser={handleSubmitLogin} setError={setError}/>
+            <UserForm onSubmitUser={handleSubmitLogin}/>
         </div>
     )
 }

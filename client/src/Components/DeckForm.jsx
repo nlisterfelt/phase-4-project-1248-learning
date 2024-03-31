@@ -3,9 +3,11 @@ import Select from "react-select"
 import * as yup from "yup"
 import { useFormik } from "formik";
 import { UserContext } from "../context/UserContext";
+import { CardContext } from "../context/CardContext";
 
-const DeckForm = ({filteredDeckOptions, card, onNewReview, setIsView}) => {
+const DeckForm = ({filteredDeckOptions, card, setIsView}) => {
     const {setError}=useContext(UserContext)
+    const {cardItems, deckItems, handleEditCard, handleEditDeck}=useContext(CardContext)
     const formSchema=yup.object().shape({
         deck_id: yup.number().positive().integer().required("A deck is required.")
     })
@@ -30,7 +32,7 @@ const DeckForm = ({filteredDeckOptions, card, onNewReview, setIsView}) => {
         }).then(r=>{
             if(r.ok){
                 r.json().then(data=>{
-                    onNewReview(data)
+                    handleNewReview(data)
                     setIsView(false)
                 })
             } else {
@@ -40,6 +42,17 @@ const DeckForm = ({filteredDeckOptions, card, onNewReview, setIsView}) => {
     }
     const defaultValue = (options, value) => {
         return options ? options.find(option=>option.value===value):""
+    }
+    function handleNewReview(review){
+        const card = cardItems.find(item=>item.id===review.card_id)
+        card['reviews'].push(review)
+        const deck = deckItems.find(item=>item.id===review.deck_id)
+        deck['reviews'].push(review)
+
+        card['decks'].push(deck)
+        deck['cards'].push(card)
+        handleEditCard(card)
+        handleEditDeck(deck)
     }
     
     return (

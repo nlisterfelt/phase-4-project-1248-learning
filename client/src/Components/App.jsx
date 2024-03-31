@@ -13,7 +13,7 @@ import { CardContext } from "../context/CardContext";
 
 function App() {
     const {user, setUser, showLogin, setShowLogin, error, setError} = useContext(UserContext)
-    const {deckItems, setDeckItems, cardItems, setCardItems, setDeckOptions, handleEditDeck, handleEditCard} = useContext(CardContext)
+    const {setDeckItems, setCardItems, setDeckOptions} = useContext(CardContext)
     
     useEffect(() => {
         fetch('/api/check_session')
@@ -61,18 +61,6 @@ function App() {
         }
     }
     
-    const handleNewReview = (review)=>{
-        const card = cardItems.find(item=>item.id===review.card_id)
-        card['reviews'].push(review)
-        const deck = deckItems.find(item=>item.id===review.deck_id)
-        deck['reviews'].push(review)
-
-        card['decks'].push(deck)
-        deck['cards'].push(card)
-        handleEditCard(card)
-        handleEditDeck(deck)
-    }
-
     return (
         <div>
             <h1 className="header">1248 Learning</h1>
@@ -91,13 +79,9 @@ function App() {
                     
                     <Routes>
                         <Route exact path="/" element={<Home />} />
-                        
                         <Route path="/decks" element={<Deck />} />
-
-                        <Route exact path="/cards" element={<AllCards onNewReview={handleNewReview}/>} />
-
+                        <Route exact path="/cards" element={<AllCards />} />
                         <Route path="/cards/new" element={<NewCard />} />
-
                         <Route path="/review" element={<Review />} />
                         <Route path="*" element={'404 Not Found'} />
                     </Routes>
