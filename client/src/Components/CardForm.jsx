@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup"
 import Select from "react-select";
+import { CardContext } from "../context/CardContext";
 
-const CardForm = ({onSubmitCard, deckOptions, isNewCard, initialVal}) => {
+const CardForm = ({onSubmitCard, isNewCard, initialVal}) => {
+    const {deckOptions}=useContext(CardContext)
     const formSchema=yup.object().shape({
         front_title: yup.string().required("The front of a card must have a sentence.").min(1).max(100),
         front_description: yup.string().max(500),

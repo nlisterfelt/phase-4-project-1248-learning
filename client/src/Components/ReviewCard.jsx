@@ -1,6 +1,8 @@
-import React from "react"
+import React, { useContext } from "react"
+import { CardContext } from "../context/CardContext"
 
-const ReviewCard = ({card, color, isFront, setIsFront}) => {
+const ReviewCard = ({card, color}) => {
+    const {isFront, setIsFront}=useContext(CardContext)
     return (
             <div className="large_card" style={{borderColor: color}} onClick={e=>setIsFront(!isFront)}>
             {isFront ? <div >

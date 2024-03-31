@@ -4,9 +4,11 @@ import DeckForm from "./DeckForm";
 import ReviewListCard from "./ReviewListCard";
 import CardForm from "./CardForm";
 import { UserContext } from "../context/UserContext";
+import { CardContext } from "../context/CardContext";
 
-const CardView = ({card, deckOptions, onReviewPatch, isFront, setIsFront, onDeleteReview, onNewReview, isNewCard, onEditCard, setIsView}) => {
+const CardView = ({card, onReviewPatch, onDeleteReview, onNewReview, isNewCard, onEditCard, setIsView}) => {
     const {setError}=useContext(UserContext)
+    const {deckOptions, setIsFront}=useContext(CardContext)
     const [isEdit, setIsEdit]=useState(false)
     const initialVal = {
         front_title: card.front_title,
@@ -76,10 +78,10 @@ const CardView = ({card, deckOptions, onReviewPatch, isFront, setIsFront, onDele
     }
     return (
         <div>
-            <ReviewCard card={card} color={'black'} isFront={isFront} setIsFront={setIsFront}/>
+            <ReviewCard card={card} color={'black'} />
             <button onClick={handleEditClick}>{isEdit ? "Edit decks and reviews" : "Edit card"}</button>
             {isEdit?
-            <CardForm onSubmitCard={handleSubmitCard} deckOptions={{}} isNewCard={isNewCard} initialVal={initialVal}/> :
+            <CardForm onSubmitCard={handleSubmitCard} isNewCard={isNewCard} initialVal={initialVal}/> :
             <div>
                 <h4>Decks</h4>
                 <ul>{deckList}</ul>
