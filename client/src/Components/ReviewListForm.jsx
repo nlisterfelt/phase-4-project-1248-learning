@@ -3,8 +3,8 @@ import * as yup from "yup"
 import { useFormik } from "formik";
 import { CardContext } from "../context/CardContext";
 
-const ReviewListForm = ({review, setIsEditReview, onReviewPatch}) => {
-    const {sessionAdvances}=useContext(CardContext)
+const ReviewListForm = ({review, setIsEditReview}) => {
+    const {sessionAdvances, handleReviewPatch}=useContext(CardContext)
     const formSchema = yup.object().shape({
         session: yup.number().positive().integer().required("Session required").min(1).max(1000),
         level: yup.number().integer().positive().min(1).max(sessionAdvances.length-1).required("Level required")
@@ -20,7 +20,7 @@ const ReviewListForm = ({review, setIsEditReview, onReviewPatch}) => {
 
     function submitEditReview(values){
         setIsEditReview(false)
-        onReviewPatch(review, values.session, values.level)
+        handleReviewPatch(review, values.session, values.level)
         
     }
     return (

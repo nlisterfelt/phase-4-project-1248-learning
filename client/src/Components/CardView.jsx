@@ -6,9 +6,9 @@ import CardForm from "./CardForm";
 import { UserContext } from "../context/UserContext";
 import { CardContext } from "../context/CardContext";
 
-const CardView = ({card, onReviewPatch, onDeleteReview, onNewReview, onEditCard, setIsView}) => {
+const CardView = ({card, onNewReview, setIsView}) => {
     const {setError}=useContext(UserContext)
-    const {deckOptions, setIsFront}=useContext(CardContext)
+    const {deckOptions, setIsFront, handleEditCard, handleDeleteReview}=useContext(CardContext)
     const [isEdit, setIsEdit]=useState(false)
     const initialVal = {
         front_title: card.front_title,
@@ -33,7 +33,7 @@ const CardView = ({card, onReviewPatch, onDeleteReview, onNewReview, onEditCard,
         
     const reviewList = card.reviews
         .filter(review=>deckOptions.find(option=>option.value===review.deck_id)!=='undefined')
-        .map(review=><ReviewListCard key={review.id} id={review.id} review={review} onReviewDelete={e=>handleReviewDelete(review.deck_id)} onReviewPatch={onReviewPatch}/>)
+        .map(review=><ReviewListCard key={review.id} id={review.id} review={review} onReviewDelete={e=>handleReviewDelete(review.deck_id)} />)
 
     const filteredDeckOptions = deckOptions.filter(deck=>{
         for(let i=0; i<card.decks.length; i++){
@@ -49,7 +49,7 @@ const CardView = ({card, onReviewPatch, onDeleteReview, onNewReview, onEditCard,
             method: 'DELETE',
         }).then(r=> {
             if (r.ok) {
-                onDeleteReview(review)
+                handleDeleteReview(review)
             }
         })
     }
@@ -64,7 +64,7 @@ const CardView = ({card, onReviewPatch, onDeleteReview, onNewReview, onEditCard,
         }).then(r=>{
             if(r.ok){
                 r.json().then(data=>{
-                    onEditCard(data)
+                    handleEditCard(data)
                     setIsView(false)
                     setIsFront(true)
                 })

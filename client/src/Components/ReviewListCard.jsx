@@ -2,7 +2,7 @@ import React, {useContext, useState} from "react";
 import ReviewListForm from "./ReviewListForm";
 import { CardContext } from "../context/CardContext";
 
-const ReviewListCard = ({review, onReviewDelete, onReviewPatch}) => {
+const ReviewListCard = ({review, onReviewDelete}) => {
     const {deckItems}=useContext(CardContext)
     const[isEditReview, setIsEditReview]=useState(false)
     const deckInfo = deckItems.find(item=>item.id===review.deck_id)
@@ -15,7 +15,7 @@ const ReviewListCard = ({review, onReviewDelete, onReviewPatch}) => {
                     <button onClick={e=>onReviewDelete(review.deck_id)}>X</button>
                 </li>
             }
-            {isEditReview ? <ReviewListForm review={review} setIsEditReview={setIsEditReview} onReviewPatch={onReviewPatch} deckInfo={deckInfo}/> : null}
+            {isEditReview ? <ReviewListForm review={review} setIsEditReview={setIsEditReview} deckInfo={deckInfo}/> : null}
         </div> 
     )
 }

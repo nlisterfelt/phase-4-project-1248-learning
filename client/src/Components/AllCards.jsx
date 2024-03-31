@@ -4,8 +4,8 @@ import {useNavigate} from "react-router-dom"
 import CardView from "./CardView";
 import { CardContext } from "../context/CardContext";
 
-const AllCards = ({onEditDeck, onEditReview, onReviewPatch, onDeleteReview, onNewReview, onEditCard}) => {
-    const {deckItems, cardItems, setCardItems, deckOptions, setIsNewCard}=useContext(CardContext)
+const AllCards = ({onNewReview}) => {
+    const {deckItems, cardItems, setCardItems, deckOptions, setIsNewCard, handleEditDeck}=useContext(CardContext)
     const [category, setCategory] = useState('all_decks')
     const [isView, setIsView]=useState(false)
     const [editCard, setEditCard]=useState({})
@@ -43,7 +43,7 @@ const AllCards = ({onEditDeck, onEditReview, onReviewPatch, onDeleteReview, onNe
                     if(updatedDeck){
                         const filteredCardsList = updatedDeck.cards.filter(item=>item.id!==card.id)
                         const newUpdatedDeck = {...updatedDeck, cards: filteredCardsList}
-                        onEditDeck(newUpdatedDeck)
+                        handleEditDeck(newUpdatedDeck)
                     }
                 }
             }
@@ -75,7 +75,7 @@ const AllCards = ({onEditDeck, onEditReview, onReviewPatch, onDeleteReview, onNe
                 </div>:
                 <div>
                     <button onClick={e=>setIsView(false)}>Back to All cards</button>
-                    <CardView card={editCard} onEditReview={onEditReview} onReviewPatch={onReviewPatch} onDeleteReview={onDeleteReview} onNewReview={onNewReview} onEditCard={onEditCard} setIsView={setIsView}/>
+                    <CardView card={editCard} onNewReview={onNewReview} setIsView={setIsView}/>
                 </div>
             }
         </div>

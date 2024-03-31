@@ -4,9 +4,16 @@ import DeckNameForm from "./DeckNameForm";
 import { UserContext } from "../context/UserContext";
 import { CardContext } from "../context/CardContext";
 
-const Deck = ({onNewDeck, onDeleteDeck, onEditDeck}) => {
+const Deck = () => {
     const {setError}=useContext(UserContext)
-    const {deckItems}=useContext(CardContext)
+    const {deckItems, setDeckItems, deckOptions, setDeckOptions}=useContext(CardContext)
+    
+    const handleNewDeck = (deck)=>{
+        const newDeckItems =[...deckItems, deck]
+        setDeckItems(newDeckItems)
+        const newDeckOptions=[...deckOptions, {value: deck.id, label: deck.name}]
+        setDeckOptions(newDeckOptions)
+    }
     function handleNewDeckSubmit(values){
         fetch('/api/decks', {
             method: "POST",
@@ -15,7 +22,7 @@ const Deck = ({onNewDeck, onDeleteDeck, onEditDeck}) => {
         }).then(r=>{
             if (r.ok){
                 r.json().then(deck =>{
-                    onNewDeck(deck)
+                    handleNewDeck(deck)
                     setError(null)
                 })
             } else {
@@ -26,12 +33,13 @@ const Deck = ({onNewDeck, onDeleteDeck, onEditDeck}) => {
 
     const deckList = deckItems
         .sort((a,b)=>a.name>b.name?1:-1)
-        .map(deck => <DeckCard key={deck.id} deck={deck} onEditDeck={onEditDeck} onDeleteDeck={onDeleteDeck} setError={setError}/>)
+        .map(deck => <DeckCard key={deck.id} deck={deck}/>)
 
+    
     return(
         <div>
             <h4>New Deck Form</h4>
-            <DeckNameForm onSubmitName={handleNewDeckSubmit} setError={setError}/>
+            <DeckNameForm onSubmitName={handleNewDeckSubmit}/>
             <h4>Decks of Cards</h4>
             <div className="card_container">
                 {deckList}   

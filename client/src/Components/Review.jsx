@@ -5,8 +5,8 @@ import Select from "react-select";
 import ReviewCard from "./ReviewCard";
 import { CardContext } from "../context/CardContext";
 
-const Review = ({deckOptions, findReviewDeck, onReviewPatch, chooseNewReviewCard}) => {
-    const {levelColors, sessionAdvances, reviewDeck, setIsFront, currentReview, setCurrentReview, sessionOneReviews, setSessionOneReviews, reviewCard, setReviewCard, isDone, setIsDone}=useContext(CardContext)
+const Review = () => {
+    const {levelColors, sessionAdvances, reviewDeck, setIsFront, currentReview, setCurrentReview, sessionOneReviews, setSessionOneReviews, reviewCard, setReviewCard, isDone, setIsDone, handleReviewPatch, chooseNewReviewCard, deckOptions, setReviewDeck}=useContext(CardContext)
     const [isReview, setIsReview] = useState(false)
     const [isReviewsEmpty, setIsReviewsEmpty]=useState(false)
 
@@ -46,7 +46,7 @@ const Review = ({deckOptions, findReviewDeck, onReviewPatch, chooseNewReviewCard
     }
     const handleWrongReview = (review) => {
         if(review.level > 1){
-            onReviewPatch(review, 1, 1)
+            handleReviewPatch(review, 1, 1)
         } else {
             chooseNewReviewCard(sessionOneReviews)
         }
@@ -57,13 +57,13 @@ const Review = ({deckOptions, findReviewDeck, onReviewPatch, chooseNewReviewCard
         const newLevel = review.level + 1
         if(newLevel<sessionAdvances.length+1){
             if(newSession>0){
-                onReviewPatch(review, newSession, newLevel)
+                handleReviewPatch(review, newSession, newLevel)
             } else {
-                onReviewPatch(review, 1, newLevel)
+                handleReviewPatch(review, 1, newLevel)
             }
         } else {
             const finalLevel = sessionAdvances[sessionAdvances.length-1]
-            onReviewPatch(review, finalLevel, finalLevel)
+            handleReviewPatch(review, finalLevel, finalLevel)
         }
         chooseNewReviewCard(sessionOneReviews)
         setIsFront(true)
@@ -88,18 +88,23 @@ const Review = ({deckOptions, findReviewDeck, onReviewPatch, chooseNewReviewCard
             for(let i=0; i<reviews.length; i++){
                 if(reviews[i].level!=='retire' && reviews[i].session>1){
                     if(lowestSession===2){
-                        onReviewPatch(reviews[i], reviews[i].session-1, reviews[i].level)
+                        handleReviewPatch(reviews[i], reviews[i].session-1, reviews[i].level)
                     } else if (lowestSession>2) {
                         const newSession = reviews[i].session-lowestSession+1
-                        onReviewPatch(reviews[i], newSession, reviews[i].level)
+                        handleReviewPatch(reviews[i], newSession, reviews[i].level)
                     }
                 } else if (reviews[i].level!=='retire' && reviews[i].session<1){
-                    onReviewPatch(reviews[i], 1, reviews[i].level)
+                    handleReviewPatch(reviews[i], 1, reviews[i].level)
                 }
             } 
         } else {
             setIsDone(true)
         }
+    }
+    function findReviewDeck(id){
+        const selectReviewDeck = deckItems.find(deck => deck.id === id)
+        setReviewDeck(selectReviewDeck)
+        return selectReviewDeck
     }
     return(
         <div>
