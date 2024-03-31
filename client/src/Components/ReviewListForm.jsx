@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import * as yup from "yup"
 import { useFormik } from "formik";
+import { CardContext } from "../context/CardContext";
 
-const ReviewListForm = ({sessionAdvances, review, setIsEditReview, onReviewPatch}) => {
+const ReviewListForm = ({review, setIsEditReview, onReviewPatch}) => {
+    const {sessionAdvances}=useContext(CardContext)
     const formSchema = yup.object().shape({
         session: yup.number().positive().integer().required("Session required").min(1).max(1000),
         level: yup.number().integer().positive().min(1).max(sessionAdvances.length-1).required("Level required")

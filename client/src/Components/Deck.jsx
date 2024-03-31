@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import DeckCard from "./DeckCard";
 import DeckNameForm from "./DeckNameForm";
+import { UserContext } from "../context/UserContext";
 
-const Deck = ({deckItems, onNewDeck, onDeleteDeck, onEditDeck, setError}) => {
-    
+const Deck = ({deckItems, onNewDeck, onDeleteDeck, onEditDeck}) => {
+    const {setError}=useContext(UserContext)
     function handleNewDeckSubmit(values){
         fetch('/api/decks', {
             method: "POST",

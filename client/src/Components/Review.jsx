@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import * as yup from "yup"
 import { useFormik } from "formik";
 import Select from "react-select";
 import ReviewCard from "./ReviewCard";
+import { CardContext } from "../context/CardContext";
 
-const Review = ({deckOptions, reviewDeck, findReviewDeck, levelColors, sessionAdvances, onReviewPatch, isFront, setIsFront, currentReview, setCurrentReview, chooseNewReviewCard, sessionOneReviews, setSessionOneReviews, reviewCard, setReviewCard, isDone, setIsDone}) => {
+const Review = ({deckOptions, reviewDeck, findReviewDeck, onReviewPatch, isFront, setIsFront, currentReview, setCurrentReview, chooseNewReviewCard, sessionOneReviews, setSessionOneReviews, reviewCard, setReviewCard, isDone, setIsDone}) => {
+    const {levelColors, sessionAdvances}=useContext(CardContext)
     const [isReview, setIsReview] = useState(false)
     const [isReviewsEmpty, setIsReviewsEmpty]=useState(false)
 

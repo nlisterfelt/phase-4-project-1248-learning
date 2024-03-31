@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import Select from "react-select"
 import * as yup from "yup"
 import { useFormik } from "formik";
+import { UserContext } from "../context/UserContext";
 
-const DeckForm = ({filteredDeckOptions, card, onNewReview, setError, setIsView}) => {
+const DeckForm = ({filteredDeckOptions, card, onNewReview, setIsView}) => {
+    const {setError}=useContext(UserContext)
     const formSchema=yup.object().shape({
         deck_id: yup.number().positive().integer().required("A deck is required.")
     })

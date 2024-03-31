@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
+import { CardContext } from "../context/CardContext";
 
-function Home({levelColors, sessionAdvances}){
+function Home(){
+    const {levelColors, sessionAdvances}=useContext(CardContext)
     const levelInfo = sessionAdvances
         .filter(level=>sessionAdvances.indexOf(level)!==sessionAdvances.length-1)
         .map(level=><li key={sessionAdvances.indexOf(level)+1} style={{textDecoration: 'underline', textDecorationColor: levelColors[sessionAdvances.indexOf(level)+1]}}>Level {sessionAdvances.indexOf(level)+1}  -  {sessionAdvances[sessionAdvances.indexOf(level)]} session later</li>)

@@ -2,7 +2,8 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CardForm from "./CardForm";
 
-const NewCard = ({deckItems, setError, cardItems, setCardItems, onEditDeck, deckOptions, isNewCard}) => {
+const NewCard = ({deckItems, cardItems, setCardItems, onEditDeck, deckOptions, isNewCard}) => {
+    const {setError}=useContext(UserContext)
     const navigate = useNavigate()
 
     useEffect(()=>{

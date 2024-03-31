@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import ReviewListForm from "./ReviewListForm";
 
-const ReviewListCard = ({deckItems, review, onReviewDelete, sessionAdvances, onReviewPatch}) => {
+const ReviewListCard = ({deckItems, review, onReviewDelete, onReviewPatch}) => {
     const[isEditReview, setIsEditReview]=useState(false)
     const deckInfo = deckItems.find(item=>item.id===review.deck_id)
     return (
@@ -13,7 +13,7 @@ const ReviewListCard = ({deckItems, review, onReviewDelete, sessionAdvances, onR
                     <button onClick={e=>onReviewDelete(review.deck_id)}>X</button>
                 </li>
             }
-            {isEditReview ? <ReviewListForm sessionAdvances={sessionAdvances} review={review} setIsEditReview={setIsEditReview} onReviewPatch={onReviewPatch} deckInfo={deckInfo}/> : null}
+            {isEditReview ? <ReviewListForm review={review} setIsEditReview={setIsEditReview} onReviewPatch={onReviewPatch} deckInfo={deckInfo}/> : null}
         </div> 
     )
 }

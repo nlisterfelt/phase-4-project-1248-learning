@@ -1,10 +1,12 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import ReviewCard from "./ReviewCard";
 import DeckForm from "./DeckForm";
 import ReviewListCard from "./ReviewListCard";
 import CardForm from "./CardForm";
+import { UserContext } from "../context/UserContext";
 
-const CardView = ({card, deckOptions, deckItems, sessionAdvances, onReviewPatch, isFront, setIsFront, onDeleteReview, onNewReview, isNewCard, setError, onEditCard, setIsView}) => {
+const CardView = ({card, deckOptions, deckItems, onReviewPatch, isFront, setIsFront, onDeleteReview, onNewReview, isNewCard, onEditCard, setIsView}) => {
+    const {setError}=useContext(UserContext)
     const [isEdit, setIsEdit]=useState(false)
     const initialVal = {
         front_title: card.front_title,
@@ -29,7 +31,7 @@ const CardView = ({card, deckOptions, deckItems, sessionAdvances, onReviewPatch,
         
     const reviewList = card.reviews
         .filter(review=>deckOptions.find(option=>option.value===review.deck_id)!=='undefined')
-        .map(review=><ReviewListCard key={review.id} id={review.id} deckItems={deckItems} review={review} onReviewDelete={e=>handleReviewDelete(review.deck_id)} sessionAdvances={sessionAdvances} onReviewPatch={onReviewPatch}/>)
+        .map(review=><ReviewListCard key={review.id} id={review.id} deckItems={deckItems} review={review} onReviewDelete={e=>handleReviewDelete(review.deck_id)} onReviewPatch={onReviewPatch}/>)
 
     const filteredDeckOptions = deckOptions.filter(deck=>{
         for(let i=0; i<card.decks.length; i++){
@@ -81,7 +83,7 @@ const CardView = ({card, deckOptions, deckItems, sessionAdvances, onReviewPatch,
             <div>
                 <h4>Decks</h4>
                 <ul>{deckList}</ul>
-                <DeckForm filteredDeckOptions={filteredDeckOptions} card={card} deckItems={deckItems} onNewReview={onNewReview} setError={setError} setIsView={setIsView}/>
+                <DeckForm filteredDeckOptions={filteredDeckOptions} card={card} deckItems={deckItems} onNewReview={onNewReview} setIsView={setIsView}/>
                 <h4>Reviews</h4>
                 <ul>{reviewList}</ul>
             </div>}
