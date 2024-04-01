@@ -2,62 +2,61 @@ import React, {useState} from "react";
 import { useFormik } from "formik";
 import * as yup from "yup"
 import Select from "react-select"
+import axios from "axios";
 
+const API_KEY = "AIzaSyCd2LzbLKlVEp8WH5ntDBiJKiU4Y52p1nA"
+const project_number = "learning-418920"
 
-const TranslateForm = () => {
-    const [translatedSentence, setTranslatedSentence]=useState("")
-    const languageOptions = [{value: 1, label: "English"}, {value: 2, label: "Spanish"}]
+const TranslateForm = ({sentence}) => {
+    const [isTranslate, setIsTranslate]=useState(false)
+    const [translated, setTranslated]=useState("")    
+    const languageOptions = [{value: "es", label: "Spanish"}, {value: "fr", label: "French"}]
+    const API_URL = `https://translation.googleapis.com/language/translate/v2`
+
     const formSchema = yup.object().shape({
-        sentence: yup.string().required("Sentence is required."),
-        first_language: yup.string().required("A starting language is required."),
-        second_language: yup.string().required("A translating language is required.")
+        language: yup.string().required("A translating language is required.")
     })
     const formik = useFormik({
         initialValues: {
-            sentence: "",
-            first_language: "",
-            second_language: ""
+            language: ""
         },
         validationSchema: formSchema,
         onSubmit: handleSubmit
     })
+
     function handleSubmit(values){
-        setTranslatedSentence(formik.values.sentence)
+        setIsTranslate(true)
+        async function doTranslation(){
+            const {data}=await axios.post(API_URL, {}, {
+                params: {
+                    q: sentence,
+                    target: values.language,
+                    key: API_KEY
+                }
+            })
+            setTranslated(data.data.translations[0].translatedText)
+        }
+        doTranslation()
     }
+    
     const defaultValue = (options, value) => {
         return options ? options.find(option=>option.value===value):""
     }
-    
     return (
         <div>
-            <h3>Translate Form</h3>
-            <form onSubmit={formik.handleSubmit} onReset={formik.handleReset}>
-                <label htmlFor="">Starting language</label>
-                <Select 
-                    name="first_language"
-                    id="first_language"
-                    value={defaultValue(languageOptions, formik.values.first_language)}
-                    options={languageOptions}
-                    onChange={value=>formik.setFieldValue('first_language', value.value)}
-                />
-                {formik.errors.first_language ? <div className="errors">{formik.errors.first_language}</div> : null}
-                <div style={{paddingTop: "20px", paddingBottom: "20px"}}>
-                    <label htmlFor="sentence">Sentence</label>
-                    <input type="text" name="sentence" id="sentence" values={formik.values.sentence} onChange={formik.handleChange}/>
-                    {formik.errors.sentence ? <div className="errors">{formik.errors.sentence}</div> : null}
-                </div>
-                
-                <label htmlFor="second_language">Translating language</label>
+            <h3>Translate Front Sentence</h3>
+            <form onSubmit={formik.handleSubmit}>
+                <label htmlFor="language">Language</label>
                 <Select
-                    name="second_language"
-                    id="second_language"
-                    value={defaultValue(languageOptions, formik.values.second_language)}
+                    name="language"
+                    id="language"
+                    value={defaultValue(languageOptions, formik.values.language)}
                     options={languageOptions}
-                    onChange={value=>formik.setFieldValue('second_language', value.value)}
+                    onChange={value=>formik.setFieldValue('language', value.value)}
                 />
-                {formik.errors.second_language? <div className="errors">{formik.errors.second_language}</div> : null}
+                <div className="errors">{formik.errors.language}</div>
                 <button type="Submit">Translate</button>
-                {translatedSentence ? <p>Translated sentence: {translatedSentence}</p> : null}
+                {isTranslate ? <div>Translated sentence: {translated}</div> : null}
             </form>
         </div>
     )

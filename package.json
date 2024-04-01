@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@google-cloud/translate": "^8.1.0",
     "axios": "^1.6.8",
     "react-router-dom": "^6.21.0",
     "react-select": "^5.8.0"

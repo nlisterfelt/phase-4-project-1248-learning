@@ -9,6 +9,7 @@ const Review = () => {
     const {deckItems, sessionAdvances, reviewDeck, setIsFront, currentReview, setCurrentReview, sessionOneReviews, setSessionOneReviews, reviewCard, setReviewCard, isDone, setIsDone, handleReviewPatch, chooseNewReviewCard, deckOptions, setReviewDeck, levelColors}=useContext(CardContext)
     const [isReview, setIsReview] = useState(false)
     const [isReviewsEmpty, setIsReviewsEmpty]=useState(false)
+    
 
     const formSchema=yup.object().shape({
         deck_id: yup.number().integer().positive().required("A deck is required to start reviewing.") 
@@ -106,6 +107,7 @@ const Review = () => {
         setReviewDeck(selectReviewDeck)
         return selectReviewDeck
     }
+  
     return(
         <div>
             {!isReview ? <div >
@@ -127,7 +129,7 @@ const Review = () => {
                 </form>
             </div> :
             <div>
-                {isDone && reviewCard ? 
+                {(isDone && reviewCard!=null) ? 
                 <div style={{textAlign: 'center'}}>
                     <h3>All cards are reviewed in session 1.</h3>
                     <p>End the review session to start this deck again or select a different deck.</p>

@@ -79,7 +79,7 @@ const CardForm = ({onSubmitCard, initialVal}) => {
                 {formik.errors.deck_id ? <div className="errors">{formik.errors.deck_id}</div> : null}
                 <button type='Submit'>Submit</button>
             </form>
-            <TranslateForm />
+            <TranslateForm sentence={formik.values.front_title}/>
         </div>
     )
 }

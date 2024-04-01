@@ -14,7 +14,7 @@ const CardProvider = ({children}) => {
     const [sessionOneReviews, setSessionOneReviews]=useState([])
     const [reviewCard, setReviewCard] = useState([])
     const [isDone, setIsDone]=useState(false)
-    const [isNewCard, setIsNewCard]=useState(false)
+    const [isNewCard, setIsNewCard]=useState(true)
 
     const handleEditDeck = (newDeck) => {
         const newDeckItems = deckItems.map(deck=>deck.id===newDeck.id ? newDeck : deck)
