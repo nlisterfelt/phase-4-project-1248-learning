@@ -54,7 +54,7 @@ const TranslateForm = ({sentence}) => {
                     options={languageOptions}
                     onChange={value=>formik.setFieldValue('language', value.value)}
                 />
-                <div className="errors">{formik.errors.language}</div>
+                {formik.errors.language ? <div className="errors">{formik.errors.language}</div> : null}
                 <button type="Submit">Translate</button>
                 {isTranslate ? <div>Translated sentence: {translated}</div> : null}
             </form>
