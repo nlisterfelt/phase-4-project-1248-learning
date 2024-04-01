@@ -10,7 +10,7 @@ const project_number = "learning-418920"
 const TranslateForm = ({sentence}) => {
     const [isTranslate, setIsTranslate]=useState(false)
     const [translated, setTranslated]=useState("")    
-    const languageOptions = [{value: "es", label: "Spanish"}, {value: "fr", label: "French"}]
+    const languageOptions = [{value: "fr", label: "French"}, {value: "pl", label: "Polish"}, {value: "es", label: "Spanish"}]
     const API_URL = `https://translation.googleapis.com/language/translate/v2`
 
     const formSchema = yup.object().shape({
